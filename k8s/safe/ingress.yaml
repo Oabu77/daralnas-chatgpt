@@ -1,0 +1,19 @@
+# NOTE: Use a distinct host or a distinct path to avoid collisions
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mcp-tasks-ing
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"   # why: SSE / streaming for MCP
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /mcp-sample
+            pathType: Prefix
+            backend:
+              service:
+                name: mcp-tasks-svc
+                port: { number: 80 }
