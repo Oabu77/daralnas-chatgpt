@@ -69,6 +69,20 @@ The script checks dependencies, confirms you're logged into Cloudflare, installs
    npx wrangler tail
    ```
 
+### CI/CD with Cloudflare Workers
+
+This repository includes a GitHub Actions workflow that automatically tests and deploys the Worker when code is merged to `main`.
+To enable deployments:
+
+1. Create a [Cloudflare API token](https://developers.cloudflare.com/workers/wrangler/cli-wrangler/authentication/#generate-an-api-token) with **Edit Cloudflare Workers** and **Edit Cloudflare D1** permissions.
+2. Add two repository secrets:
+   - `CLOUDFLARE_API_TOKEN` – the API token created above.
+   - `CLOUDFLARE_ACCOUNT_ID` – your Cloudflare account ID.
+3. Push to `main`. The `.github/workflows/deploy.yml` pipeline will:
+   - Run `npm test` (wrangler dry-run + Vitest).
+   - Apply pending D1 migrations using `cloudflare/wrangler-action@v3`.
+   - Deploy the Worker with the same action so the latest code goes live automatically.
+
 ## Testing
 
 This template includes integration tests using [Vitest](https://vitest.dev/). To run the tests locally:
