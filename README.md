@@ -1,141 +1,55 @@
-# OpenAPI Template with ChatGPT Integration
+# Dar al-Nas Telegram Infrastructure
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/chanfana-openapi-template)
+Production-ready foundation for the Dar al-Nas ecosystem, aligned with halal, governance-first requirements. The stack is Telegram-native (bots + Mini Apps), runs on Railway with Python 3.10+, and keeps AI strictly educational.
 
-![OpenAPI Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/91076b39-1f5b-46f6-7f14-536a6f183000/public)
+## Architecture
+- **FastAPI + python-telegram-bot 20.x**: webhook server with `/webhook` for Telegram updates, `/health` for monitoring, and static Mini Apps at `/miniapps/{name}`.
+- **Modules**: `/daralnas`, `/quranchain`, `/meshtalk`, `/fungi`, `/donate`, `/ask`, and `/start` are wired into a single Telegram Application instance.
+- **AI guardrails**: replies are ≤120 words, avoid advice/rulings, and escalate sensitive topics to humans. OpenAI is optional; canned messaging is used if the key is absent.
+- **Jurisdiction gating**: optional `ALLOWED_COUNTRIES` env var forces a country declaration (e.g., `Country: UAE`) before regulated flows like `/ask`.
+- **Founder economics**: surfaced transparently (gas-fee shares, IP licensing, governance stipends) without speculative language.
+- **No custody**: Telegram is the interface only; no keys are stored or requested.
 
-<!-- dash-content-start -->
-
-This is a Cloudflare Worker with OpenAPI 3.1 Auto Generation and Validation using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono), enhanced with ChatGPT integration via the OpenAI API.
-
-This is an example project made to be used as a quick start into building OpenAPI compliant Workers that generates the
-`openapi.json` schema automatically from code and validates the incoming request to the defined parameters or request body.
-
-This template includes various endpoints, a D1 database, ChatGPT integration, and integration tests using [Vitest](https://vitest.dev/) as examples. In endpoints, you will find [chanfana D1 AutoEndpoints](https://chanfana.com/endpoints/auto/d1), a [normal endpoint](https://chanfana.com/endpoints/defining-endpoints), and a ChatGPT endpoint to serve as examples for your projects.
-
-Besides being able to see the OpenAPI schema (openapi.json) in the browser, you can also extract the schema locally no hassle by running this command `npm run schema`.
-
-<!-- dash-content-end -->
-
-> [!IMPORTANT]
-> When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/openapi-template#setup-steps) before deploying.
-
-## Getting Started
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
-
-```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/openapi-template
-```
-
-A live public deployment of this template is available at [https://openapi-template.templates.workers.dev](https://openapi-template.templates.workers.dev)
-
-## Setup Steps
-
-If you prefer a guided setup, run the helper script and follow the prompts:
-
-```bash
-./scripts/setup.sh
-```
-
-The script is executable in the repository so you can run it immediately after cloning.
-
-The script checks dependencies, confirms you're logged into Cloudflare, installs `npm` packages, creates or reuses a D1 database with your real ID (validated as a UUID), backs up and updates `wrangler.jsonc` even when it contains JSONC comments, and can run migrations for you.
-
-1. Install the project dependencies with a package manager of your choice:
+## Local development
+1. Create a virtual environment and install dependencies:
    ```bash
-   npm install
+   python -m venv .venv
+   source .venv/bin/activate
+   pip install -r requirements.txt
    ```
-2. Create a [D1 database](https://developers.cloudflare.com/d1/get-started/) with the name "openapi-template-db":
+2. Set required secrets:
    ```bash
-   npx wrangler d1 create openapi-template-db
+   export BOT_TOKEN="<telegram-bot-token>"
+   export ADMIN_ID="<numeric-admin-id>"  # optional
+   export OPENAI_API_KEY="<optional-openai-key>"
+   export WEBHOOK_URL="https://<your-public-url>"  # optional for local testing with tunnels
+   export ALLOWED_COUNTRIES="UAE,SA,UK"  # optional
    ```
-   ...and update the `database_id` field in `wrangler.json` with the new database ID.
-3. Run the following db migration to initialize the database (notice the `migrations` directory in this project):
+3. Run the server (single command startup):
    ```bash
-   npx wrangler d1 migrations apply DB --remote
+   python -m daralnas_bot.server
    ```
-4. Configure the OpenAI API key as a secret (required for the ChatGPT endpoint):
-   ```bash
-   npx wrangler secret put OPENAI_API_KEY
-   ```
-   When prompted, paste your OpenAI API key. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys).
-5. Deploy the project!
-   ```bash
-   npx wrangler deploy
-   ```
-6. Monitor your worker
-   ```bash
-   npx wrangler tail
-   ```
+   Health check: `curl http://localhost:8000/health`
 
-## Testing
+## Deployment (Railway)
+1. Create a new Railway service from this repository.
+2. Set environment variables in the Railway dashboard: `BOT_TOKEN`, `OPENAI_API_KEY` (optional), `ADMIN_ID` (optional), `WEBHOOK_URL` (public HTTPS endpoint), and `ALLOWED_COUNTRIES` if gating is needed.
+3. Railway uses the provided `Procfile`: `web: python -m daralnas_bot.server`.
+4. Configure Telegram webhook to `${WEBHOOK_URL}/webhook` (the server auto-sets it during startup when `WEBHOOK_URL` is provided).
+5. Enable auto-redeploys and logging in Railway for operational visibility.
 
-This template includes integration tests using [Vitest](https://vitest.dev/). To run the tests locally:
+## Mini Apps
+Static educational shells live under `daralnas_bot/templates`:
+- `daralnas.html` – halal financing primer and pre-qualification disclaimer
+- `quranchain.html` – settlement transparency and infrastructure fees
+- `meshtalk.html` – governance and deliberation UX
+- `fungi.html` – reputation and trust visualization
 
-```bash
-npm run test
-```
+These are intentionally simple HTML/JS entry points and can be expanded with Telegram Mini App JS SDK while keeping ethics, gating, and transparency.
 
-Test files are located in the `tests/` directory, with examples demonstrating how to test your endpoints and database interactions.
-
-## Project structure
-
-1. Your main router is defined in `src/index.ts`.
-2. Each endpoint has its own file in `src/endpoints/`.
-3. Integration tests are located in the `tests/` directory.
-4. For more information read the [chanfana documentation](https://chanfana.com/), [Hono documentation](https://hono.dev/docs), and [Vitest documentation](https://vitest.dev/guide/).
-
-## ChatGPT Integration
-
-This project includes a ChatGPT integration endpoint that allows you to send messages to OpenAI's ChatGPT models and receive responses.
-
-### Endpoint: POST /chatgpt
-
-**Request Body:**
-```json
-{
-  "message": "Your message to ChatGPT",
-  "model": "gpt-3.5-turbo",  // Optional, defaults to gpt-3.5-turbo
-  "temperature": 0.7          // Optional, range: 0-2, defaults to 0.7
-}
-```
-
-**Response (Success):**
-```json
-{
-  "success": true,
-  "result": {
-    "message": "ChatGPT's response",
-    "model": "gpt-3.5-turbo",
-    "usage": {
-      "prompt_tokens": 10,
-      "completion_tokens": 20,
-      "total_tokens": 30
-    }
-  }
-}
-```
-
-**Response (Error):**
-```json
-{
-  "success": false,
-  "errors": [
-    {
-      "code": 4001,
-      "message": "OpenAI API key not configured"
-    }
-  ]
-}
-```
-
-**Example Usage:**
-```bash
-curl -X POST https://your-worker.workers.dev/chatgpt \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "Explain quantum computing in simple terms",
-    "temperature": 0.5
-  }'
-```
+## Compliance and ethics defaults
+- No riba, speculative yield, or guaranteed returns.
+- Jurisdiction-aware flows with human review escalation.
+- AI is educational only; no approvals, fatwas, or financial advice.
+- Secrets are sourced from environment variables only.
+- Logging is enabled at startup; extend with Railway log drains for audits.
