@@ -8,6 +8,10 @@
 
 This is a Cloudflare Worker with OpenAPI 3.1 Auto Generation and Validation using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono), enhanced with ChatGPT integration via the OpenAI API.
 
+## QuranChain architecture
+
+The project now includes a full end-to-end reference for the QuranChain commerce stack (agentic commerce, routing, relayer boundaries, ledger, and fulfillment). See [`docs/quranchain-spec.md`](docs/quranchain-spec.md) for the production-ready specification that maps user intent in ChatGPT through cross-chain settlement, fulfillment, accounting, and auditability. For a quick directory overview, refer to [`docs/file-map.md`](docs/file-map.md).
+
 This is an example project made to be used as a quick start into building OpenAPI compliant Workers that generates the
 `openapi.json` schema automatically from code and validates the incoming request to the defined parameters or request body.
 
