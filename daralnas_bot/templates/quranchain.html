@@ -5,15 +5,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QuranChain Mini App</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 16px; }
-    .card { border: 1px solid #14532d; padding: 12px; border-radius: 8px; }
+    body { font-family: Arial, sans-serif; margin: 16px; background: #f7fafc; color: #0f172a; }
+    .card { border: 1px solid #14532d; padding: 16px; border-radius: 10px; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    ul { padding-left: 18px; }
+    .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #dcfce7; color: #065f46; margin-right: 6px; font-size: 12px; }
+    .disclaimer { margin-top: 12px; color: #0f172a; font-size: 13px; background: #e4f0e5; padding: 10px; border-radius: 8px; }
   </style>
 </head>
 <body>
   <div class="card">
+    <div>
+      <span class="pill">Read-only</span>
+      <span class="pill">Transparent fees</span>
+      <span class="pill">Audit-friendly</span>
+    </div>
     <h2>QuranChain</h2>
-    <p>Settlement, audit anchoring, and governance visibility with predictable gas fees.</p>
-    <p>Infrastructure operators earn defined fee shares—no speculative returns, just transparent work-based compensation.</p>
+    <p>Settlement and transparency layer for Dar al-Nas operations.</p>
+    <ul>
+      <li>Anchors audit trails and governance events.</li>
+      <li>Predictable infrastructure fees for operators—no speculative returns.</li>
+      <li>Optimized for observability; no custody or approvals inside Telegram.</li>
+    </ul>
+    <div class="disclaimer">Education only. Use official dashboards for any regulated action.</div>
   </div>
 </body>
 </html>

@@ -43,9 +43,9 @@ FUNGI = dedent(
 
 DONATE = dedent(
     """
-    Donations support audits, compliance, and community education. Founder compensation is
-    transparent: infrastructure gas shares, IP licensing, and governance-approved stipends.
-    No hidden fees or investor-style promises.
+    Donations support audits, compliance, and community education. Funds are applied to
+    transparency tooling, human moderation, and outreach. No hidden fees or investor-style
+    promises.
     """
 ).strip()
 

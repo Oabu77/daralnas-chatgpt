@@ -7,7 +7,6 @@ Production-ready foundation for the Dar al-Nas ecosystem, aligned with halal, go
 - **Modules**: `/daralnas`, `/quranchain`, `/meshtalk`, `/fungi`, `/donate`, `/ask`, and `/start` are wired into a single Telegram Application instance.
 - **AI guardrails**: replies are ≤120 words, avoid advice/rulings, and escalate sensitive topics to humans. OpenAI is optional; canned messaging is used if the key is absent.
 - **Jurisdiction gating**: optional `ALLOWED_COUNTRIES` env var forces a country declaration (e.g., `Country: UAE`) before regulated flows like `/ask`.
-- **Founder economics**: surfaced transparently (gas-fee shares, IP licensing, governance stipends) without speculative language.
 - **No custody**: Telegram is the interface only; no keys are stored or requested.
 
 ## Local development
@@ -53,3 +52,20 @@ These are intentionally simple HTML/JS entry points and can be expanded with Tel
 - AI is educational only; no approvals, fatwas, or financial advice.
 - Secrets are sourced from environment variables only.
 - Logging is enabled at startup; extend with Railway log drains for audits.
+
+## Public launch defaults
+- Telegram bot is webhook-driven and responds to `/start`, `/ask`, `/daralnas`, `/quranchain`, `/meshtalk`, `/fungi`, and `/donate` without gated content.
+- Mini Apps are read-only education shells with clear "education only" disclaimers and no approvals.
+- Bot responses are capped at 120 words with guardrails appended to each message.
+
+## CI/CD
+- GitHub Actions workflow (`.github/workflows/ci.yml`) runs on pushes and pull requests to `main`.
+- Python job installs dependencies, runs bytecode compilation, and verifies dependency health.
+- Worker job installs Node dependencies without side effects and ensures a current Wrangler CLI is available (version-agnostic, no deprecated flags).
+- Concurrency is enabled to provide safe rollback by re-running the last known good commit if needed.
+
+## Maintenance and health
+- Health check: `GET /health` returns `{ "status": "ok" }` plus guardrail context for monitoring.
+- Logging: Python `logging` is initialized at startup; direct logs to Railway or a log drain for long-term retention.
+- Auto-restart: Railway will restart the process on failure via the Procfile command; use environment variables only for secrets.
+- Rollback: deployments remain stateless; redeploy the previous commit via Git history to roll back safely.

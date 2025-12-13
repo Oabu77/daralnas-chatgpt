@@ -5,15 +5,46 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dar al-Nas Mini App</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 16px; }
-    .card { border: 1px solid #0e7490; padding: 12px; border-radius: 8px; }
+    body { font-family: Arial, sans-serif; margin: 16px; background: #f7fafc; color: #0f172a; }
+    .card { border: 1px solid #0e7490; padding: 16px; border-radius: 10px; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #cffafe; color: #0f172a; margin-right: 6px; font-size: 12px; }
+    label { display: block; margin-top: 10px; font-weight: 600; }
+    input, textarea { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; }
+    .disclaimer { margin-top: 12px; color: #0f172a; font-size: 13px; background: #e0f2fe; padding: 10px; border-radius: 8px; }
+    .note { font-size: 12px; color: #475569; margin-top: 6px; }
   </style>
 </head>
 <body>
   <div class="card">
+    <div>
+      <span class="pill">Education-first</span>
+      <span class="pill">No custody</span>
+      <span class="pill">Human review</span>
+    </div>
     <h2>Dar al-Nas</h2>
-    <p>Halal financing with diminishing musharakah / ijara, human review, and transparent fees. Pre-qualification here is educational only.</p>
-    <p>No riba, no speculative yield, no approvals without jurisdiction checks.</p>
+    <p>
+      Halal financing patterns (e.g., diminishing musharakah / ijara) with transparent service fees
+      and human approvals. Telegram is an interface only—no wallet keys or private data are stored here.
+    </p>
+    <p>
+      This intake is non-binding and only used to help a human reviewer understand needs before any regulated steps.
+    </p>
+
+    <label for="name">Preferred name</label>
+    <input id="name" type="text" placeholder="e.g., Aisha" />
+
+    <label for="country">Country (for jurisdiction checks)</label>
+    <input id="country" type="text" placeholder="Country: UAE" />
+
+    <label for="needs">Describe your financing need</label>
+    <textarea id="needs" rows="4" placeholder="Property type, expected timeline, and any constraints"></textarea>
+
+    <div class="note">Copy this info and share with a human reviewer in chat. No approvals are issued here.</div>
+
+    <div class="disclaimer">
+      Education only. No promises, no investment offers, and no automated approvals. Sensitive or
+      regulated questions will be escalated to licensed staff.
+    </div>
   </div>
 </body>
 </html>

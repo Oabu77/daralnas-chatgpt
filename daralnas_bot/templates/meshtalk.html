@@ -5,15 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Meshtalk OS Mini App</title>
   <style>
-    body { font-family: Arial, sans-serif; margin: 16px; }
-    .card { border: 1px solid #6d28d9; padding: 12px; border-radius: 8px; }
+    body { font-family: Arial, sans-serif; margin: 16px; background: #f7fafc; color: #0f172a; }
+    .card { border: 1px solid #6d28d9; padding: 16px; border-radius: 10px; background: #ffffff; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .pill { display: inline-block; padding: 4px 10px; border-radius: 999px; background: #ede9fe; color: #4c1d95; margin-right: 6px; font-size: 12px; }
+    .timeline { margin-top: 10px; padding-left: 16px; }
+    .timeline li { margin-bottom: 6px; }
+    .disclaimer { margin-top: 12px; color: #0f172a; font-size: 13px; background: #f3e8ff; padding: 10px; border-radius: 8px; }
   </style>
 </head>
 <body>
   <div class="card">
+    <div>
+      <span class="pill">Governance</span>
+      <span class="pill">Public deliberation</span>
+      <span class="pill">AI summaries</span>
+    </div>
     <h2>Meshtalk OS</h2>
-    <p>Community proposals, deliberation, and AI summaries. Discussions stay public; sensitive items require human moderation.</p>
-    <p>AI avoids rulings or advice and keeps every response concise.</p>
+    <p>Read-only coordination feed. Use the main bot for education; sensitive steps are escalated to humans.</p>
+    <ul class="timeline">
+      <li><strong>Open calls</strong>: Proposal requests and agendas posted for review.</li>
+      <li><strong>Discussion</strong>: AI-curated summaries keep threads concise and neutral.</li>
+      <li><strong>Decisions</strong>: Human moderation confirms actions; no auto-approvals.</li>
+    </ul>
+    <div class="disclaimer">Education only. Participation remains voluntary and non-binding within Telegram.</div>
   </div>
 </body>
 </html>
