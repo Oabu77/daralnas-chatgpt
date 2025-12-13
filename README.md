@@ -32,6 +32,16 @@ A live public deployment of this template is available at [https://openapi-templ
 
 ## Setup Steps
 
+If you prefer a guided setup, run the helper script and follow the prompts:
+
+```bash
+./scripts/setup.sh
+```
+
+The script is executable in the repository so you can run it immediately after cloning.
+
+The script checks dependencies, confirms you're logged into Cloudflare, installs `npm` packages, creates or reuses a D1 database with your real ID (validated as a UUID), backs up and updates `wrangler.jsonc` even when it contains JSONC comments, and can run migrations for you.
+
 1. Install the project dependencies with a package manager of your choice:
    ```bash
    npm install
