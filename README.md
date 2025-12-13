@@ -90,6 +90,10 @@ Test files are located in the `tests/` directory, with examples demonstrating ho
 
 This project includes a ChatGPT integration endpoint that allows you to send messages to OpenAI's ChatGPT models and receive responses.
 
+### Monetization resources
+
+If you plan to launch a ChatGPT app, review the [Apps SDK monetization guide](https://developers.openai.com/apps-sdk/build/monetization) for details on pricing models, payout timelines, and implementation steps.
+
 ### Endpoint: POST /chatgpt
 
 **Request Body:**
