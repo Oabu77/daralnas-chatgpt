@@ -4,9 +4,17 @@ import { tasksRouter } from "./endpoints/tasks/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { ChatGPTEndpoint } from "./endpoints/chatgpt";
+import { RefreshWidgetEndpoint } from "./endpoints/refreshWidget";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
+
+app.get("/health", (c) =>
+        c.json({
+                status: "ok",
+                service: "quranchain-mcp",
+        }),
+);
 
 app.onError((err, c) => {
 	if (err instanceof ApiException) {
@@ -47,6 +55,7 @@ openapi.route("/tasks", tasksRouter);
 // Register other endpoints
 openapi.post("/dummy/:slug", DummyEndpoint);
 openapi.post("/chatgpt", ChatGPTEndpoint);
+openapi.post("/refresh_widget", RefreshWidgetEndpoint);
 
 // Export the Hono app
 export default app;
