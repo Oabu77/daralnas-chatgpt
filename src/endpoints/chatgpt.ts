@@ -106,8 +106,11 @@ export class ChatGPTEndpoint extends OpenAPIRoute {
 				temperature: data.body.temperature,
 			});
 
-			const responseMessage = completion.choices[0]?.message?.content;
-			if (!responseMessage) {
+			if (
+				!completion.choices ||
+				completion.choices.length === 0 ||
+				!completion.choices[0]?.message?.content
+			) {
 				return c.json(
 					{
 						success: false,
@@ -121,6 +124,8 @@ export class ChatGPTEndpoint extends OpenAPIRoute {
 					500,
 				);
 			}
+
+			const responseMessage = completion.choices[0].message.content;
 
 			return {
 				success: true,

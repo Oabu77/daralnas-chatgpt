@@ -1,6 +1,16 @@
 import { SELF } from "cloudflare:test";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
+interface ApiError {
+	code: number;
+	message: string;
+}
+
+interface ErrorResponse {
+	success: boolean;
+	errors: ApiError[];
+}
+
 describe("ChatGPT API Integration Tests", () => {
 	beforeEach(async () => {
 		vi.clearAllMocks();
@@ -16,7 +26,7 @@ describe("ChatGPT API Integration Tests", () => {
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify(requestBody),
 			});
-			const body = await response.json<{ success: boolean; errors: any[] }>();
+			const body = await response.json<ErrorResponse>();
 
 			expect(response.status).toBe(500);
 			expect(body.success).toBe(false);
