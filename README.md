@@ -69,6 +69,19 @@ The script checks dependencies, confirms you're logged into Cloudflare, installs
    npx wrangler tail
    ```
 
+### (Optional) Autonomous infrastructure bootstrap
+
+For environments where you need to provision supporting services (Redis, Nginx, Docker, Cloudflare WARP, and a GitHub MCP stack)
+on a fresh machine, the `scripts/autonomous_infra.sh` helper automates those steps. Run it as `root` on a Debian/Ubuntu host to
+install dependencies, lay down the audit logger, write the MCP `docker-compose.yml`, and start the stack.
+
+```bash
+sudo ./scripts/autonomous_infra.sh
+```
+
+After the script completes, place your GitHub App private key at `/opt/infra/mcp/keys/github.pem`, export `GITHUB_APP_ID` and
+`GITHUB_INSTALLATION_ID`, and rerun `docker compose up -d` inside `/opt/infra/mcp` to attach credentials.
+
 ## Testing
 
 This template includes integration tests using [Vitest](https://vitest.dev/). To run the tests locally:
