@@ -1,4 +1,4 @@
-# OpenAPI Template
+# OpenAPI Template with ChatGPT Integration
 
 [![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/chanfana-openapi-template)
 
@@ -6,12 +6,12 @@
 
 <!-- dash-content-start -->
 
-This is a Cloudflare Worker with OpenAPI 3.1 Auto Generation and Validation using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono).
+This is a Cloudflare Worker with OpenAPI 3.1 Auto Generation and Validation using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono), enhanced with ChatGPT integration via the OpenAI API.
 
 This is an example project made to be used as a quick start into building OpenAPI compliant Workers that generates the
 `openapi.json` schema automatically from code and validates the incoming request to the defined parameters or request body.
 
-This template includes various endpoints, a D1 database, and integration tests using [Vitest](https://vitest.dev/) as examples. In endpoints, you will find [chanfana D1 AutoEndpoints](https://chanfana.com/endpoints/auto/d1) and a [normal endpoint](https://chanfana.com/endpoints/defining-endpoints) to serve as examples for your projects.
+This template includes various endpoints, a D1 database, ChatGPT integration, and integration tests using [Vitest](https://vitest.dev/) as examples. In endpoints, you will find [chanfana D1 AutoEndpoints](https://chanfana.com/endpoints/auto/d1), a [normal endpoint](https://chanfana.com/endpoints/defining-endpoints), and a ChatGPT endpoint to serve as examples for your projects.
 
 Besides being able to see the OpenAPI schema (openapi.json) in the browser, you can also extract the schema locally no hassle by running this command `npm run schema`.
 
@@ -55,11 +55,16 @@ The script checks dependencies, confirms you're logged into Cloudflare, installs
    ```bash
    npx wrangler d1 migrations apply DB --remote
    ```
-4. Deploy the project!
+4. Configure the OpenAI API key as a secret (required for the ChatGPT endpoint):
+   ```bash
+   npx wrangler secret put OPENAI_API_KEY
+   ```
+   When prompted, paste your OpenAI API key. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys).
+5. Deploy the project!
    ```bash
    npx wrangler deploy
    ```
-5. Monitor your worker
+6. Monitor your worker
    ```bash
    npx wrangler tail
    ```
@@ -80,3 +85,57 @@ Test files are located in the `tests/` directory, with examples demonstrating ho
 2. Each endpoint has its own file in `src/endpoints/`.
 3. Integration tests are located in the `tests/` directory.
 4. For more information read the [chanfana documentation](https://chanfana.com/), [Hono documentation](https://hono.dev/docs), and [Vitest documentation](https://vitest.dev/guide/).
+
+## ChatGPT Integration
+
+This project includes a ChatGPT integration endpoint that allows you to send messages to OpenAI's ChatGPT models and receive responses.
+
+### Endpoint: POST /chatgpt
+
+**Request Body:**
+```json
+{
+  "message": "Your message to ChatGPT",
+  "model": "gpt-3.5-turbo",  // Optional, defaults to gpt-3.5-turbo
+  "temperature": 0.7          // Optional, range: 0-2, defaults to 0.7
+}
+```
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "result": {
+    "message": "ChatGPT's response",
+    "model": "gpt-3.5-turbo",
+    "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 20,
+      "total_tokens": 30
+    }
+  }
+}
+```
+
+**Response (Error):**
+```json
+{
+  "success": false,
+  "errors": [
+    {
+      "code": 4001,
+      "message": "OpenAI API key not configured"
+    }
+  ]
+}
+```
+
+**Example Usage:**
+```bash
+curl -X POST https://your-worker.workers.dev/chatgpt \
+  -H "Content-Type: application/json" \
+  -d '{
+    "message": "Explain quantum computing in simple terms",
+    "temperature": 0.5
+  }'
+```
