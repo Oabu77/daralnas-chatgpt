@@ -5,6 +5,8 @@ import os
 from dataclasses import dataclass
 from typing import Optional
 
+logger = logging.getLogger(__name__)
+
 
 @dataclass(frozen=True)
 class Settings:
@@ -40,7 +42,7 @@ class Settings:
             allowed_countries=allowed_countries,
         )
 
-        logging.getLogger(__name__).info(
+        logger.info(
             "Settings loaded: webhook=%s admin_id=%s allowed_countries=%s",
             settings.webhook_url or "<none>",
             settings.admin_id,
