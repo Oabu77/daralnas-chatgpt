@@ -189,6 +189,10 @@ dist
 # SvelteKit build / generate output
 .svelte-kit
 
+# Python cache artifacts
+__pycache__/
+*.pyc
+
 # End of https://www.toptal.com/developers/gitignore/api/macos,node,git
 
 ### Wrangler ###

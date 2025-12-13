@@ -1,0 +1,7 @@
+# © QuranChain™ | Dar Al-Nas™
+# Founder: Omar Mohammad Abunadi
+# Ownership Signature Enforced
+
+fastapi==0.111.1
+uvicorn==0.30.1
+pydantic==2.8.2
