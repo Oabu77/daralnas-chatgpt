@@ -1,0 +1,5 @@
+# Decisions Log
+
+| Date (UTC) | Decision | Context | Outcome |
+| --- | --- | --- | --- |
+| 2025-12-13 | Established baseline memory artifacts (state, lessons, issues, backlog, metrics). | Align repository with Codex persistent memory model requirements. | Memory scaffolding ready for iterative updates. |
