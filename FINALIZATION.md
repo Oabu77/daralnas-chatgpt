@@ -1,6 +1,6 @@
 # Cloudflare Tunnel Finalization Runbook
 
-The commands below must be run **as root** on the target host to finish wiring the Cloudflare tunnels, lock down raw ports, and verify the deployment. The sequence assumes MCP (port 3333) and Audit (port 4444) services are already running locally.
+The commands below must be run **as root** on the target host to finish wiring the Cloudflare tunnels, lock down raw ports, and verify the deployment. Run this only after rehearsing in a staging environment and capturing rollback steps; the sequence has not been production-tested in this repository. The steps assume MCP (port 3333) and Audit (port 4444) services are already running locally.
 
 ## 1) Verify local services
 ```bash
