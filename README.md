@@ -96,7 +96,7 @@ This project includes a ChatGPT integration endpoint that allows you to send mes
 ```json
 {
   "message": "Your message to ChatGPT",
-  "model": "gpt-3.5-turbo",  // Optional, defaults to gpt-3.5-turbo
+  "model": "gpt-4o-mini",  // Optional, defaults to gpt-4o-mini
   "temperature": 0.7          // Optional, range: 0-2, defaults to 0.7
 }
 ```
@@ -107,7 +107,7 @@ This project includes a ChatGPT integration endpoint that allows you to send mes
   "success": true,
   "result": {
     "message": "ChatGPT's response",
-    "model": "gpt-3.5-turbo",
+    "model": "gpt-4o-mini",
     "usage": {
       "prompt_tokens": 10,
       "completion_tokens": 20,

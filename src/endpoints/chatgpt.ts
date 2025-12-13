@@ -12,11 +12,11 @@ export class ChatGPTEndpoint extends OpenAPIRoute {
 			body: contentJson(
 				z.object({
 					message: z.string().min(1).describe("The message to send to ChatGPT"),
-					model: z
-						.string()
-						.optional()
-						.default("gpt-3.5-turbo")
-						.describe("The OpenAI model to use"),
+                                        model: z
+                                                .string()
+                                                .optional()
+                                                .default("gpt-4o-mini")
+                                                .describe("The OpenAI model to use"),
 					temperature: z
 						.number()
 						.min(0)
