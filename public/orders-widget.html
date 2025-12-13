@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tasks Widget</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0.75rem;
+      background: #f7f7f8;
+      color: #0f172a;
+    }
+    .card {
+      background: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+    form {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    input[type="text"] {
+      flex: 1;
+      min-width: 180px;
+      padding: 0.55rem 0.65rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      padding: 0.6rem 0.9rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #6366f1, #4338ca);
+      color: #fff;
+      transition: transform 120ms ease, box-shadow 120ms ease, opacity 120ms ease;
+    }
+    button:hover { transform: translateY(-1px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.3); }
+    button:active { transform: translateY(0); box-shadow: none; }
+    ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.5rem; }
+    li { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 0.65rem 0.75rem; display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; }
+    .title { flex: 1; word-break: break-word; }
+    .completed { text-decoration: line-through; color: #64748b; }
+    .muted { color: #475569; font-size: 0.9rem; }
+    .inline-button { background: #0ea5e9; }
+    .inline-button[disabled] { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
+    .status { font-size: 0.9rem; color: #475569; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Tasks</h1>
+    <p class="status" id="status"></p>
+    <form id="task-form">
+      <input id="task-input" type="text" name="title" placeholder="New task" autocomplete="off" required />
+      <button type="submit">Add</button>
+    </form>
+    <div id="empty" class="muted" style="display:none">No tasks yet.</div>
+    <ul id="task-list"></ul>
+  </div>
+  <script>
+    (() => {
+      const openai = window.openai || {};
+      const statusEl = document.getElementById('status');
+      const listEl = document.getElementById('task-list');
+      const emptyEl = document.getElementById('empty');
+      const form = document.getElementById('task-form');
+      const input = document.getElementById('task-input');
+
+      const initialTasks = Array.isArray(openai?.toolOutput?.structuredContent?.tasks)
+        ? openai.toolOutput.structuredContent.tasks
+        : [];
+
+      let tasks = initialTasks.map(t => ({ ...t }));
+
+      const notifyHeight = () => openai.notifyIntrinsicHeight && openai.notifyIntrinsicHeight();
+
+      const setStatus = (text) => {
+        statusEl.textContent = text || '';
+      };
+
+      const render = () => {
+        listEl.innerHTML = '';
+        if (!tasks.length) {
+          emptyEl.style.display = 'block';
+        } else {
+          emptyEl.style.display = 'none';
+        }
+        tasks.forEach(task => {
+          const li = document.createElement('li');
+          const title = document.createElement('span');
+          title.className = `title ${task.completed ? 'completed' : ''}`;
+          title.textContent = task.title;
+          li.appendChild(title);
+
+          const button = document.createElement('button');
+          button.className = 'inline-button';
+          button.textContent = task.completed ? 'Done' : 'Complete';
+          button.disabled = !!task.completed;
+          button.addEventListener('click', (event) => {
+            event.preventDefault();
+            completeTask(task.id);
+          });
+          li.appendChild(button);
+          listEl.appendChild(li);
+        });
+        notifyHeight();
+      };
+
+      const applyStructuredContent = (structuredContent) => {
+        if (structuredContent?.tasks) {
+          tasks = structuredContent.tasks.map(t => ({ ...t }));
+        }
+      };
+
+      const callToolSafely = async (name, args) => {
+        if (typeof openai.callTool !== 'function') {
+          return null;
+        }
+        setStatus('Working…');
+        const result = await openai.callTool(name, args);
+        applyStructuredContent(result?.structuredContent || {});
+        setStatus(result?.content || '');
+        render();
+        return result;
+      };
+
+      const completeTask = async (id) => {
+        if (openai.callTool) {
+          await callToolSafely('complete_task', { id });
+        } else {
+          tasks = tasks.map(t => (t.id === id ? { ...t, completed: true } : t));
+          setStatus('Completed locally (offline mode)');
+          render();
+        }
+      };
+
+      const addTask = async (title) => {
+        if (!title.trim()) return;
+        if (openai.callTool) {
+          await callToolSafely('add_task', { title });
+        } else {
+          const newTask = { id: String(Date.now()), title: title.trim(), completed: false };
+          tasks = [...tasks, newTask];
+          setStatus('Added locally (offline mode)');
+          render();
+        }
+      };
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const title = input.value;
+        input.value = '';
+        await addTask(title);
+      });
+
+      if (!tasks.length && !openai.callTool) {
+        tasks = [
+          { id: '1', title: 'Sample task', completed: false },
+        ];
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,55 +1,74 @@
-# Dar al-Nas Telegram Infrastructure
+# Tasks MCP Server
 
-Production-ready foundation for the Dar al-Nas ecosystem, aligned with halal, governance-first requirements. The stack is Telegram-native (bots + Mini Apps), runs on Railway with Python 3.10+, and keeps AI strictly educational.
+Minimal MCP server for the ChatGPT Apps SDK featuring a streamable HTTP transport, task tools, and an embedded widget resource.
 
-## Architecture
-- **FastAPI + python-telegram-bot 20.x**: webhook server with `/webhook` for Telegram updates, `/health` for monitoring, and static Mini Apps at `/miniapps/{name}`.
-- **Modules**: `/daralnas`, `/quranchain`, `/meshtalk`, `/fungi`, `/donate`, `/ask`, and `/start` are wired into a single Telegram Application instance.
-- **AI guardrails**: replies are ≤120 words, avoid advice/rulings, and escalate sensitive topics to humans. OpenAI is optional; canned messaging is used if the key is absent.
-- **Jurisdiction gating**: optional `ALLOWED_COUNTRIES` env var forces a country declaration (e.g., `Country: UAE`) before regulated flows like `/ask`.
-- **Founder economics**: surfaced transparently (gas-fee shares, IP licensing, governance stipends) without speculative language.
-- **No custody**: Telegram is the interface only; no keys are stored or requested.
+## Features
+- Pure Node HTTP server (no frameworks) with CORS-ready `/mcp` endpoint supporting POST, GET, DELETE, and preflight OPTIONS.
+- MCP tools: `list_tasks`, `add_task`, `complete_task`, and `health_check`, all returning `{ content, structuredContent, _meta }`.
+- Registered widget resource `ui://widget/tasks.html` served as `text/html+skybridge`, powered by `public/orders-widget.html`.
+- In-memory task state with zod validation and OpenAI widget metadata for seamless rendering.
+- Dockerfile for HTTPS-friendly deployments and instructions for local testing via ngrok.
 
-## Local development
-1. Create a virtual environment and install dependencies:
+## Requirements
+- Node.js 20+
+- npm 10+
+
+## Local Development
+1. Install dependencies:
    ```bash
-   python -m venv .venv
-   source .venv/bin/activate
-   pip install -r requirements.txt
+   npm install
    ```
-2. Set required secrets:
+2. Build and start:
    ```bash
-   export BOT_TOKEN="<telegram-bot-token>"
-   export ADMIN_ID="<numeric-admin-id>"  # optional
-   export OPENAI_API_KEY="<optional-openai-key>"
-   export WEBHOOK_URL="https://<your-public-url>"  # optional for local testing with tunnels
-   export ALLOWED_COUNTRIES="UAE,SA,UK"  # optional
+   npm run build
+   npm start
    ```
-3. Run the server (single command startup):
+   Server runs at `http://localhost:2091`. Health check: `GET /` → `MCP server alive`. MCP endpoint: `http://localhost:2091/mcp`.
+3. Development mode with auto-reload:
    ```bash
-   python -m daralnas_bot.server
+   npm run dev
    ```
-   Health check: `curl http://localhost:8000/health`
 
-## Deployment (Railway)
-1. Create a new Railway service from this repository.
-2. Set environment variables in the Railway dashboard: `BOT_TOKEN`, `OPENAI_API_KEY` (optional), `ADMIN_ID` (optional), `WEBHOOK_URL` (public HTTPS endpoint), and `ALLOWED_COUNTRIES` if gating is needed.
-3. Railway uses the provided `Procfile`: `web: python -m daralnas_bot.server`.
-4. Configure Telegram webhook to `${WEBHOOK_URL}/webhook` (the server auto-sets it during startup when `WEBHOOK_URL` is provided).
-5. Enable auto-redeploys and logging in Railway for operational visibility.
+## MCP Inspector
+Use the official inspector to exercise the tools and widget:
+```bash
+npx @modelcontextprotocol/inspector@latest http://localhost:2091/mcp
+```
 
-## Mini Apps
-Static educational shells live under `daralnas_bot/templates`:
-- `daralnas.html` – halal financing primer and pre-qualification disclaimer
-- `quranchain.html` – settlement transparency and infrastructure fees
-- `meshtalk.html` – governance and deliberation UX
-- `fungi.html` – reputation and trust visualization
+## Ngrok Testing
+Expose the server securely for ChatGPT connectors:
+```bash
+ngrok http 2091
+```
+Use the forwarded URL: `https://<subdomain>.ngrok.app/mcp` when configuring ChatGPT → Settings → Connectors.
 
-These are intentionally simple HTML/JS entry points and can be expanded with Telegram Mini App JS SDK while keeping ethics, gating, and transparency.
+## Deployment
+- Dockerfile is optimized for streaming-friendly platforms (Fly.io, Render, Railway, Cloud Run, Kubernetes). Ensure HTTPS termination and SSE/streamable HTTP pass-through are enabled.
+- Keep cold starts low; rely on environment variables for configuration (`PORT`, `MCP_PATH`). Store secrets in your platform’s secret manager—never hardcode them.
+- Container entrypoint: `node dist/server/src/index.js`. Exposes port `2091` by default.
 
-## Compliance and ethics defaults
-- No riba, speculative yield, or guaranteed returns.
-- Jurisdiction-aware flows with human review escalation.
-- AI is educational only; no approvals, fatwas, or financial advice.
-- Secrets are sourced from environment variables only.
-- Logging is enabled at startup; extend with Railway log drains for audits.
+## Tool Contract
+Every tool returns the strict shape:
+```json
+{
+  "content": "human-friendly narration",
+  "structuredContent": { /* reliable JSON payload */ },
+  "_meta": { /* UI-only metadata; optional */ }
+}
+```
+
+Metadata includes `openai/outputTemplate` and invocation messages so ChatGPT renders the widget `ui://widget/tasks.html`. Avoid placing secrets in any of these fields.
+
+## Widget Behavior
+The widget reads `window.openai.toolOutput.structuredContent.tasks`, renders the list with completion state, and calls tools via `window.openai.callTool`. If `callTool` is unavailable (offline/fallback), it simulates add/complete locally. It calls `window.openai.notifyIntrinsicHeight()` after layout changes for smooth embedding.
+
+## Repository Structure
+- `server/src/index.ts`: HTTP server, MCP server, tools, and resource registration.
+- `public/orders-widget.html`: Widget markup/logic for tasks.
+- `Dockerfile`, `.dockerignore`: Container packaging.
+- `tsconfig.json`, `package.json`: TypeScript build configuration and scripts.
+
+## Notes
+- `.well-known/*` paths intentionally return 404 to avoid auth noise.
+- CORS preflight on `/mcp` includes `Access-Control-Allow-Origin: *`, `Access-Control-Allow-Methods: POST, GET, DELETE, OPTIONS`, `Access-Control-Allow-Headers: content-type, mcp-session-id`, and `Access-Control-Expose-Headers: Mcp-Session-Id`.
+- Keep responses minimal and avoid embedding sensitive data in `content`, `structuredContent`, or `_meta`.

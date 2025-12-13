@@ -1,15 +1,14 @@
 {
-	"compilerOptions": {
-		"target": "esnext",
-		"lib": ["esnext"],
-		"module": "esnext",
-		"moduleResolution": "bundler",
-		"types": ["@types/node", "./worker-configuration.d.ts"],
-		"noEmit": true,
-		"isolatedModules": true,
-		"forceConsistentCasingInFileNames": true,
-		"skipLibCheck": true,
-		"strict": true
-	},
-	"include": ["src"]
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "skipLibCheck": true,
+    "lib": ["ES2022", "DOM"]
+  },
+  "include": ["server/src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
