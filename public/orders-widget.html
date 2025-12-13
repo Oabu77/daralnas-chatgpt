@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Tasks</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <style>
+      :root { font-family: system-ui, -apple-system, Segoe UI, Inter, sans-serif; }
+      body { margin: 0; padding: 12px; }
+      form { display: flex; gap: 8px; margin-bottom: 12px; }
+      ul { padding-left: 1rem; }
+      li[data-completed="true"] { text-decoration: line-through; opacity: 0.7; }
+      .meta { font-size: 12px; opacity: 0.7; margin-top: 8px; }
+    </style>
+  </head>
+  <body>
+    <form id="add-form">
+      <input id="title" placeholder="New task title" autocomplete="off" />
+      <button type="submit">Add</button>
+    </form>
+    <ul id="list"></ul>
+    <div class="meta" id="meta"></div>
+
+    <script>
+      const list = document.getElementById("list");
+      const form = document.getElementById("add-form");
+      const input = document.getElementById("title");
+      const meta = document.getElementById("meta");
+
+      function renderFrom(output) {
+        const tasks = output?.tasks ?? [];
+        list.innerHTML = "";
+        for (const t of tasks) {
+          const li = document.createElement("li");
+          li.dataset.id = t.id;
+          li.dataset.completed = String(!!t.completed);
+          li.textContent = t.title;
+          const btn = document.createElement("button");
+          btn.textContent = t.completed ? "✓" : "Done";
+          btn.disabled = !!t.completed;
+          btn.onclick = async () => {
+            await callTool("complete_task", { id: t.id });
+          };
+          li.prepend(btn);
+          list.appendChild(li);
+        }
+        meta.textContent = `${tasks.length} task(s)`;
+      }
+
+      async function callTool(name, payload) {
+        if (!window.openai?.callTool) {
+          mutateLocally(name, payload);
+          return;
+        }
+        const response = await window.openai.callTool(name, payload);
+        renderFrom(response?.structuredContent ?? {});
+      }
+
+      function mutateLocally(name, payload) {
+        const out = window.openai?.toolOutput ?? {};
+        let tasks = out.tasks ?? [];
+        if (name === "add_task") {
+          const id = "local-" + Math.random().toString(36).slice(2, 8);
+          tasks = tasks.concat([{ id, title: payload.title, completed: false }]);
+        } else if (name === "complete_task") {
+          tasks = tasks.map(t => t.id === payload.id ? { ...t, completed: true } : t);
+        }
+        renderFrom({ tasks });
+      }
+
+      renderFrom(window.openai?.toolOutput ?? {});
+      if (window.openai?.notifyIntrinsicHeight) {
+        const ro = new ResizeObserver(() => window.openai.notifyIntrinsicHeight());
+        ro.observe(document.body);
+      }
+
+      form.onsubmit = async (e) => {
+        e.preventDefault();
+        const title = input.value.trim();
+        if (!title) return;
+        await callTool("add_task", { title });
+        input.value = "";
+      };
+    </script>
+  </body>
+</html>

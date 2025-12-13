@@ -47,6 +47,30 @@ Static educational shells live under `daralnas_bot/templates`:
 
 These are intentionally simple HTML/JS entry points and can be expanded with Telegram Mini App JS SDK while keeping ethics, gating, and transparency.
 
+## MCP server (ChatGPT Apps SDK)
+- **Run locally**
+  ```bash
+  npm install
+  npm run build:mcp
+  npm run start:mcp
+  # -> http://localhost:2091/mcp
+  ```
+
+  Test via MCP Inspector:
+  ```bash
+  npx @modelcontextprotocol/inspector@latest http://localhost:2091/mcp
+  ```
+
+- **Expose to ChatGPT (dev)**
+  ```bash
+  ngrok http 2091
+  # use https://<subdomain>.ngrok.app/mcp in ChatGPT Settings → Connectors
+  ```
+
+- **Deploy**: Any HTTPS platform with streaming (Fly.io, Render, Railway, Cloud Run, K8s ingress). Keep `/mcp` warm to avoid cold starts.
+- **Security & auth**: Secrets belong in env vars/secret manager. If adding OAuth, implement `/.well-known/oauth-protected-resource` per Apps SDK guidance.
+- **Shape**: Tools reply with `{ content, structuredContent, _meta }`. The widget reads `window.openai.toolOutput` and renders `text/html+skybridge` content registered at `ui://widget/tasks.html`.
+
 ## Compliance and ethics defaults
 - No riba, speculative yield, or guaranteed returns.
 - Jurisdiction-aware flows with human review escalation.
