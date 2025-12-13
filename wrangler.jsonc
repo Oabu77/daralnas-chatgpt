@@ -3,12 +3,16 @@
 	"main": "src/index.ts",
 	"name": "daralnas-chatgpt",
 	"upload_source_maps": true,
-	"observability": {
-		"enabled": true
-	},
-	"d1_databases": [
-		{
-			"binding": "DB",
+        "observability": {
+                "enabled": true
+        },
+        "vars": {
+                "BTC_REVENUE_ADDRESS": "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh",
+                "USDC_REVENUE_ADDRESS": "0x1234567890abcdef1234567890abcdef12345678"
+        },
+        "d1_databases": [
+                {
+                        "binding": "DB",
 			"database_name": "openapi-template-db",
 			"database_id": "26b921d0-3226-485d-a105-dc820a9abdbc"
 		}

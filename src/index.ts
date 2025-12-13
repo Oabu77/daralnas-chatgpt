@@ -3,6 +3,7 @@ import { Hono } from "hono";
 import { tasksRouter } from "./endpoints/tasks/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
+import { TollRevenueEndpoint } from "./endpoints/blockchain/tollRevenue";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
@@ -45,6 +46,7 @@ openapi.route("/tasks", tasksRouter);
 
 // Register other endpoints
 openapi.post("/dummy/:slug", DummyEndpoint);
+openapi.get("/blockchain/toll-revenue", TollRevenueEndpoint);
 
 // Export the Hono app
 export default app;
