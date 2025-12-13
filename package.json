@@ -29,13 +29,14 @@
 		"wrangler": "4.51.0"
 	},
 	"private": true,
-	"scripts": {
-		"cf-typegen": "wrangler types",
-		"deploy": "wrangler deploy",
-		"dev": "pnpm seedLocalDb && wrangler dev",
-		"predeploy": "wrangler d1 migrations apply DB --remote",
-		"schema": "npx chanfana",
-		"seedLocalDb": "wrangler d1 migrations apply DB --local",
-		"test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
-	}
+        "scripts": {
+                "cf-typegen": "wrangler types",
+                "deploy": "wrangler deploy",
+                "dev": "pnpm seedLocalDb && wrangler dev",
+                "predeploy": "wrangler d1 migrations apply DB --remote",
+                "schema": "npx chanfana",
+                "seedLocalDb": "wrangler d1 migrations apply DB --local",
+                "bots": "npm run test",
+                "test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
+        }
 }

@@ -31,6 +31,15 @@ Production-ready foundation for the Dar al-Nas ecosystem, aligned with halal, go
    ```
    Health check: `curl http://localhost:8000/health`
 
+## Running the bots (automated checks)
+Use the bundled Node.js harness to dry-run the Worker deploy and execute the Vitest suite:
+
+```bash
+npm run bots
+```
+
+This keeps the Cloudflare Worker and API endpoints in sync with their tests before shipping.
+
 ## Deployment (Railway)
 1. Create a new Railway service from this repository.
 2. Set environment variables in the Railway dashboard: `BOT_TOKEN`, `OPENAI_API_KEY` (optional), `ADMIN_ID` (optional), `WEBHOOK_URL` (public HTTPS endpoint), and `ALLOWED_COUNTRIES` if gating is needed.
