@@ -69,6 +69,16 @@ The script checks dependencies, confirms you're logged into Cloudflare, installs
    npx wrangler tail
    ```
 
+### Optional: Install Cloudflare WARP locally
+
+If you want to use Cloudflare WARP on your development machine, run the helper script:
+
+```bash
+./scripts/install-cloudflare-warp.sh
+```
+
+The script adds the official Cloudflare package repository, imports its signing key, and installs the `cloudflare-warp` package using `apt`.
+
 ## Testing
 
 This template includes integration tests using [Vitest](https://vitest.dev/). To run the tests locally:
