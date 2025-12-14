@@ -5,6 +5,7 @@ import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { ChatGPTEndpoint } from "./endpoints/chatgpt";
 import { RefreshWidgetEndpoint } from "./endpoints/refreshWidget";
+import { WorkersAIChatEndpoint } from "./endpoints/workersAiChat";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
@@ -56,6 +57,7 @@ openapi.route("/tasks", tasksRouter);
 openapi.post("/dummy/:slug", DummyEndpoint);
 openapi.post("/chatgpt", ChatGPTEndpoint);
 openapi.post("/refresh_widget", RefreshWidgetEndpoint);
+openapi.post("/chat", WorkersAIChatEndpoint);
 
 // Export the Hono app
 export default app;
