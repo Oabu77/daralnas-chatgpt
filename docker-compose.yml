@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  oliveexpress-api:
+    build: .
+    ports:
+      - "8787:8787"
+    environment:
+      - NODE_ENV=production
+      - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+    volumes:
+      - ./migrations:/app/migrations
+      - ./.wrangler:/app/.wrangler
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8787/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Future services:
+  # - QuranChain node connector
+  # - DarCloud identity service
+  # - MeshTalk message broker
+  # - OliveAir integration service
+  # - Omar AI / AMĀN Control engine
