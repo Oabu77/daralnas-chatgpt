@@ -3,9 +3,11 @@
 QuranChain Founder Execution Agent
 Role-based command execution with audit logging and rate limiting
 """
+import hashlib
 import os
 import shlex
 import subprocess
+import sys
 import time
 from collections import deque, defaultdict
 from fastapi import FastAPI, Header, HTTPException, Request
@@ -80,7 +82,6 @@ def _audit(role: str, cmd: str, ok: bool, rc: int, elapsed: float):
             f.write(line)
     except Exception as e:
         # Log to stderr if audit logging fails (important for debugging)
-        import sys
         print(f"WARNING: Failed to write audit log: {e}", file=sys.stderr)
 
 
@@ -93,7 +94,6 @@ def run(payload: Cmd, request: Request, x_qc_token: str = Header(default="")):
     role = _role(x_qc_token)
 
     # rate limit per token (use token hash for privacy)
-    import hashlib
     token_hash = hashlib.sha256(x_qc_token.encode()).hexdigest()[:16]
     _rate_limit(token_hash)
 
