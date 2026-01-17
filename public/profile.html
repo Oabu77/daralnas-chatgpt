@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - OliveExpress™</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+        .header {
+            background: rgba(0,0,0,0.3);
+            padding: 20px 40px;
+            border-bottom: 2px solid #4a90e2;
+        }
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 30px 40px;
+        }
+        .profile-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 20px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4a90e2, #2ecc71);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 700;
+            margin-right: 20px;
+        }
+        .profile-info h2 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .profile-info p {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        .status-update-section {
+            margin-bottom: 30px;
+        }
+        .status-update-section h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #4a90e2;
+        }
+        .status-input-wrapper {
+            position: relative;
+        }
+        .status-input {
+            width: 100%;
+            min-height: 100px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.3s;
+        }
+        .status-input:focus {
+            outline: none;
+            border-color: #4a90e2;
+        }
+        .status-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+        .status-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+        .char-counter {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+        .char-counter.warning {
+            color: #f39c12;
+        }
+        .char-counter.error {
+            color: #e74c3c;
+        }
+        .post-button {
+            background: #4a90e2;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+        }
+        .post-button:hover {
+            background: #357abd;
+        }
+        .post-button:active {
+            transform: scale(0.98);
+        }
+        .post-button:disabled {
+            background: rgba(74, 144, 226, 0.4);
+            cursor: not-allowed;
+        }
+        .recent-updates {
+            margin-top: 30px;
+        }
+        .recent-updates h3 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #4a90e2;
+        }
+        .update-item {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid #4a90e2;
+        }
+        .update-item .timestamp {
+            font-size: 12px;
+            opacity: 0.6;
+            margin-bottom: 8px;
+        }
+        .update-item .content {
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            opacity: 0.6;
+        }
+        .empty-state p {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>👤 User Profile</h1>
+    </div>
+    
+    <div class="container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    JD
+                </div>
+                <div class="profile-info">
+                    <h2>John Doe</h2>
+                    <p>Member since January 2026 • Carrier Partner</p>
+                </div>
+            </div>
+
+            <div class="status-update-section">
+                <h3>What's happening?</h3>
+                <div class="status-input-wrapper">
+                    <textarea 
+                        id="statusInput" 
+                        class="status-input" 
+                        placeholder="Share an update with the community..."
+                        maxlength="280"
+                    ></textarea>
+                </div>
+                <div class="status-actions">
+                    <div class="char-counter" id="charCounter">0 / 280</div>
+                    <button class="post-button" id="postButton" disabled>Post Update</button>
+                </div>
+            </div>
+
+            <div class="recent-updates">
+                <h3>Recent Updates</h3>
+                <div id="updatesList">
+                    <div class="empty-state">
+                        <p>No updates yet. Be the first to share something!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const statusInput = document.getElementById('statusInput');
+        const charCounter = document.getElementById('charCounter');
+        const postButton = document.getElementById('postButton');
+        const updatesList = document.getElementById('updatesList');
+        
+        let updates = [];
+
+        // Load updates from localStorage
+        function loadUpdates() {
+            const stored = localStorage.getItem('userUpdates');
+            if (stored) {
+                updates = JSON.parse(stored);
+                renderUpdates();
+            }
+        }
+
+        // Save updates to localStorage
+        function saveUpdates() {
+            localStorage.setItem('userUpdates', JSON.stringify(updates));
+        }
+
+        // Update character counter
+        statusInput.addEventListener('input', function() {
+            const length = this.value.length;
+            charCounter.textContent = `${length} / 280`;
+            
+            if (length > 260) {
+                charCounter.classList.add('error');
+                charCounter.classList.remove('warning');
+            } else if (length > 240) {
+                charCounter.classList.add('warning');
+                charCounter.classList.remove('error');
+            } else {
+                charCounter.classList.remove('warning', 'error');
+            }
+            
+            postButton.disabled = length === 0 || length > 280;
+        });
+
+        // Post update
+        postButton.addEventListener('click', function() {
+            const content = statusInput.value.trim();
+            if (content) {
+                const update = {
+                    id: Date.now(),
+                    content: content,
+                    timestamp: new Date().toISOString()
+                };
+                
+                updates.unshift(update);
+                saveUpdates();
+                renderUpdates();
+                
+                statusInput.value = '';
+                charCounter.textContent = '0 / 280';
+                charCounter.classList.remove('warning', 'error');
+                postButton.disabled = true;
+            }
+        });
+
+        // Render updates
+        function renderUpdates() {
+            if (updates.length === 0) {
+                updatesList.innerHTML = `
+                    <div class="empty-state">
+                        <p>No updates yet. Be the first to share something!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            updatesList.innerHTML = updates.map(update => {
+                const date = new Date(update.timestamp);
+                const timeAgo = getTimeAgo(date);
+                
+                return `
+                    <div class="update-item">
+                        <div class="timestamp">${timeAgo}</div>
+                        <div class="content">${escapeHtml(update.content)}</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Get relative time
+        function getTimeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            
+            const intervals = {
+                year: 31536000,
+                month: 2592000,
+                week: 604800,
+                day: 86400,
+                hour: 3600,
+                minute: 60
+            };
+            
+            for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+                const interval = Math.floor(seconds / secondsInUnit);
+                if (interval >= 1) {
+                    return interval === 1 ? `1 ${unit} ago` : `${interval} ${unit}s ago`;
+                }
+            }
+            
+            return 'Just now';
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Initialize
+        loadUpdates();
+    </script>
+</body>
+</html>
