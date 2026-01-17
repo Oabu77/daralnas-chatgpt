@@ -30,9 +30,12 @@ if [ -d "${DEPLOY_DIR}/daralnas_bot" ]; then
 fi
 
 # Pull latest code (assuming repository is cloned at DEPLOY_DIR)
+# Note: This is redundant when using rsync from CI/CD, but useful for manual deployments
 if [ -d "${DEPLOY_DIR}/.git" ]; then
     echo "🔄 Pulling latest code from repository..."
     git fetch origin
+    # Using reset --hard is safe here as code is synced via rsync during CI/CD
+    # For manual runs, ensure no important uncommitted changes exist
     git reset --hard origin/main
     echo "✅ Code updated to latest version"
 else

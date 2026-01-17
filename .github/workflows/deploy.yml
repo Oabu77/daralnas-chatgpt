@@ -178,7 +178,7 @@ jobs:
           # Attempt health check via SSH
           ssh -i ~/.ssh/deploy_key \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
-            "curl -sf http://localhost:8000/health || echo 'Health check skipped - service may not expose health endpoint'" || true
+            "curl -sf http://localhost:8000/health && echo '✅ Health check passed' || echo '⚠️ Health check failed or not available'"
           
           echo "deployment_time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
 
@@ -193,7 +193,7 @@ jobs:
           name: linux-deployment-info
           path: |
             requirements.txt
-            Procfile
+            scripts/deploy-to-server.sh
           retention-days: 30
 
       - name: Notify deployment success

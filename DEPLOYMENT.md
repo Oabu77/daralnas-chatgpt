@@ -260,6 +260,7 @@ Create a systemd service for automatic startup and management:
 
 ```bash
 # On your Linux server
+# Replace YOUR_USERNAME with your actual username (e.g., ubuntu, deploy, etc.)
 sudo tee /etc/systemd/system/daralnas-bot.service > /dev/null <<EOF
 [Unit]
 Description=Dar Al-Nas Telegram Bot
@@ -267,7 +268,7 @@ After=network.target
 
 [Service]
 Type=simple
-User=$(whoami)
+User=YOUR_USERNAME
 WorkingDirectory=/opt/daralnas-chatgpt
 Environment="PATH=/opt/daralnas-chatgpt/.venv/bin"
 EnvironmentFile=/opt/daralnas-chatgpt/.env

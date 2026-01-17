@@ -265,14 +265,15 @@ ENABLE_SSH_DEPLOYMENT=true  # Set in repository variables to enable
 5. (Optional) Set up systemd service for automatic restart:
    ```bash
    # Create /etc/systemd/system/daralnas-bot.service
-   sudo tee /etc/systemd/system/daralnas-bot.service > /dev/null <<EOF
+   # Note: Replace YOUR_USERNAME with your actual username
+   sudo tee /etc/systemd/system/daralnas-bot.service > /dev/null <<'EOF'
    [Unit]
    Description=Dar Al-Nas Telegram Bot
    After=network.target
 
    [Service]
    Type=simple
-   User=$USER
+   User=YOUR_USERNAME
    WorkingDirectory=/opt/daralnas-chatgpt
    Environment="PATH=/opt/daralnas-chatgpt/.venv/bin"
    EnvironmentFile=/opt/daralnas-chatgpt/.env
