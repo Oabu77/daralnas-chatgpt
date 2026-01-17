@@ -172,6 +172,7 @@
     
     <div class="container">
         <div class="profile-card">
+            <!-- TODO: Replace hardcoded user data with dynamic data from API or URL parameters -->
             <div class="profile-header">
                 <div class="profile-avatar">
                     JD
@@ -210,6 +211,11 @@
     </div>
 
     <script>
+        // Constants
+        const MAX_CHARACTERS = 280;
+        const WARNING_THRESHOLD = 240;
+        const ERROR_THRESHOLD = 260;
+        
         const statusInput = document.getElementById('statusInput');
         const charCounter = document.getElementById('charCounter');
         const postButton = document.getElementById('postButton');
@@ -219,10 +225,15 @@
 
         // Load updates from localStorage
         function loadUpdates() {
-            const stored = localStorage.getItem('userUpdates');
-            if (stored) {
-                updates = JSON.parse(stored);
-                renderUpdates();
+            try {
+                const stored = localStorage.getItem('userUpdates');
+                if (stored) {
+                    updates = JSON.parse(stored);
+                    renderUpdates();
+                }
+            } catch (error) {
+                console.error('Failed to load updates from localStorage:', error);
+                updates = [];
             }
         }
 
@@ -234,19 +245,19 @@
         // Update character counter
         statusInput.addEventListener('input', function() {
             const length = this.value.length;
-            charCounter.textContent = `${length} / 280`;
+            charCounter.textContent = `${length} / ${MAX_CHARACTERS}`;
             
-            if (length > 260) {
+            if (length > ERROR_THRESHOLD) {
                 charCounter.classList.add('error');
                 charCounter.classList.remove('warning');
-            } else if (length > 240) {
+            } else if (length > WARNING_THRESHOLD) {
                 charCounter.classList.add('warning');
                 charCounter.classList.remove('error');
             } else {
                 charCounter.classList.remove('warning', 'error');
             }
             
-            postButton.disabled = length === 0 || length > 280;
+            postButton.disabled = length === 0 || length > MAX_CHARACTERS;
         });
 
         // Post update
@@ -254,7 +265,7 @@
             const content = statusInput.value.trim();
             if (content) {
                 const update = {
-                    id: Date.now(),
+                    id: crypto.randomUUID(),
                     content: content,
                     timestamp: new Date().toISOString()
                 };
