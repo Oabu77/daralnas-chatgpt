@@ -10,7 +10,7 @@ import subprocess
 import sys
 import time
 from collections import deque, defaultdict
-from fastapi import FastAPI, Header, HTTPException, Request
+from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel
 
 APP = FastAPI(title="QuranChain Founder Execution Agent")
@@ -86,7 +86,7 @@ def _audit(role: str, cmd: str, ok: bool, rc: int, elapsed: float):
 
 
 @APP.post("/run")
-def run(payload: Cmd, request: Request, x_qc_token: str = Header(default="")):
+def run(payload: Cmd, x_qc_token: str = Header(default="")):
     # If caller didn't provide token, deny (no anonymous use)
     if not x_qc_token:
         raise HTTPException(401, "Missing X-QC-Token")
@@ -110,7 +110,19 @@ def run(payload: Cmd, request: Request, x_qc_token: str = Header(default="")):
         # allow only status/is-active/restart for qc-agent and cloudflared-tunnel
         safe_units = {"qc-agent", "cloudflared-tunnel", "wg-quick@wg0"}
         safe_verbs = {"status", "is-active", "restart", "start", "stop"}
-        if len(parts) < 3 or parts[1] not in safe_verbs or parts[2] not in safe_units:
+        
+        # Find the verb and unit, handling flags like --no-pager
+        verb = None
+        unit = None
+        for i, part in enumerate(parts[1:], start=1):
+            if not part.startswith("-"):
+                if verb is None:
+                    verb = part
+                elif unit is None:
+                    unit = part
+                    break
+        
+        if verb not in safe_verbs or unit not in safe_units:
             raise HTTPException(403, "systemctl restricted to qc-agent/cloudflared-tunnel/wg-quick@wg0 with safe verbs")
 
     if parts[0] == "journalctl":
