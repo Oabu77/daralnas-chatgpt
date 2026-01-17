@@ -238,6 +238,7 @@ docker-compose up
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide and infrastructure
 - [LIVE_STATUS.md](./LIVE_STATUS.md) - Live system confirmation and statistics
 - [API_TESTS.md](./API_TESTS.md) - Complete API testing guide
+- [INFRASTRUCTURE_AUDIT.md](./INFRASTRUCTURE_AUDIT.md) - DarCloud host infrastructure audit and port manifest
 
 ## Telegram Bot (Legacy)
 
