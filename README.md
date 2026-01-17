@@ -4,6 +4,8 @@
 
 Production-ready logistics platform for the Dar Al-Nas ecosystem with full-scale operations across USA, Mexico, and Jordan. Includes QuranChain smart contracts, AI-powered dispatch (Omar AI / AMĀN Control), multi-modal transport, and humanitarian corridor support.
 
+> **🔧 DarCloud Operations**: For host diagnostics, tunnel setup, and infrastructure operations, see [DARCLOUD_SETUP_INDEX.md](./DARCLOUD_SETUP_INDEX.md)
+
 ## 🚀 Platform Overview
 
 OliveExpress™ is a complete, revenue-generating logistics network featuring:
@@ -238,7 +240,9 @@ docker-compose up
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide and infrastructure
 - [LIVE_STATUS.md](./LIVE_STATUS.md) - Live system confirmation and statistics
 - [API_TESTS.md](./API_TESTS.md) - Complete API testing guide
-- [DARCLOUD_OPERATIONS.md](./DARCLOUD_OPERATIONS.md) - DarCloud host operations and tunnel setup
+- [DARCLOUD_SETUP_INDEX.md](./DARCLOUD_SETUP_INDEX.md) - **DarCloud host setup and operations (START HERE for infrastructure)**
+  - [DARCLOUD_QUICKREF.md](./DARCLOUD_QUICKREF.md) - Quick reference for diagnostics
+  - [DARCLOUD_OPERATIONS.md](./DARCLOUD_OPERATIONS.md) - Complete operations guide
 
 ## Telegram Bot (Legacy)
 
