@@ -16,7 +16,7 @@ export class ContractDeploy extends OpenAPIRoute<HandleArgs> {
 							shipper_wallet: z.string(),
 							carrier_wallet: z.string(),
 							contract_value_usd: z.number(),
-							royalty_rate: z.number().default(0.025),
+							royalty_rate: z.number().default(0.30),
 						}),
 					},
 				},
@@ -208,7 +208,7 @@ export class EscrowRelease extends OpenAPIRoute<HandleArgs> {
 				`INSERT INTO founder_royalties 
 				(contract_id, shipment_id, transaction_value_usd, royalty_rate, 
 				 royalty_amount_usd, royalty_status, collected_at, created_at)
-				VALUES (?, ?, ?, 0.025, ?, 'COLLECTED', datetime('now'), datetime('now'))`
+				VALUES (?, ?, ?, 0.30, ?, 'COLLECTED', datetime('now'), datetime('now'))`
 			).bind(
 				escrow.contract_id,
 				body.shipment_id,

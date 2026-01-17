@@ -15,7 +15,7 @@ OliveExpress™ is a complete, revenue-generating logistics network featuring:
 - **Cross-Border**: Mexico-USA and international customs handling
 - **Humanitarian Corridors**: Zakat-exempt NGO routes, emergency logistics
 - **On-Chain Settlement**: 100% QuranChain, zero traditional banking
-- **Founder Economics**: 2.5% royalty on commercial (0% on humanitarian)
+- **Founder Economics**: 30% royalty on commercial (0% on humanitarian)
 
 ## Architecture
 
@@ -125,7 +125,7 @@ See [API_TESTS.md](./API_TESTS.md) for complete API testing guide.
 - Shipment smart contracts
 - Automated escrow (funded → released on delivery)
 - Dispute resolution workflow
-- Founder royalty enforcement (2.5% commercial, 0% humanitarian)
+- Founder royalty enforcement (30% commercial, 0% humanitarian)
 - Zakat-exempt route tracking
 
 ### MeshTalk OS™ Communication

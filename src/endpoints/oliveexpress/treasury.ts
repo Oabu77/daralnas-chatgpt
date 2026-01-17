@@ -58,7 +58,7 @@ export class InvoiceGenerate extends OpenAPIRoute<HandleArgs> {
 			});
 		}
 
-		const royalty_rate = body.invoice_type === 'NGO' ? 0 : 0.025;
+		const royalty_rate = body.invoice_type === 'NGO' ? 0 : 0.30;
 		const founder_royalty = total_amount * royalty_rate;
 		const net_amount = total_amount - founder_royalty;
 
@@ -176,7 +176,7 @@ export class RevenueAnalytics extends OpenAPIRoute<HandleArgs> {
 		// Calculate revenue estimates
 		const analytics = (result.results || []).map((row: any) => {
 			const gross_revenue = row.total_cargo_value * 0.15; // 15% freight rate
-			const royalty_rate = row.shipment_type === 'NGO' || row.shipment_type === 'HUMANITARIAN' ? 0 : 0.025;
+			const royalty_rate = row.shipment_type === 'NGO' || row.shipment_type === 'HUMANITARIAN' ? 0 : 0.30;
 			const founder_royalty = gross_revenue * royalty_rate;
 			const net_revenue = gross_revenue - founder_royalty;
 

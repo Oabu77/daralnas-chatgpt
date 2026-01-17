@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#16a34a">
+    <title>OliveExpress - Global Halal Logistics</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/icons/icon-192x192.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #16a34a;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 0;
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn:hover {
+            background: #15803d;
+        }
+
+        .tracking-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #16a34a;
+            border-radius: 10px;
+            font-size: 1rem;
+            margin: 10px 0;
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .feature-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📦 OliveExpress</h1>
+            <p>Global Halal Logistics Platform</p>
+        </div>
+
+        <div class="card">
+            <h2>Track Your Shipment</h2>
+            <input type="text" class="tracking-input" id="trackingNumber" placeholder="Enter tracking number">
+            <button class="btn" onclick="trackShipment()">Track</button>
+            <div id="trackingResult"></div>
+        </div>
+
+        <div class="card">
+            <h2>Quick Actions</h2>
+            <button class="btn" onclick="createShipment()">📦 Create Shipment</button>
+            <button class="btn" onclick="viewShipments()">📋 My Shipments</button>
+            <button class="btn" onclick="getQuote()">💰 Get Quote</button>
+        </div>
+
+        <div class="features">
+            <h3 style="margin-bottom: 15px;">🌟 Features</h3>
+            <div class="feature-item">
+                <strong>🌍 Global Coverage</strong><br>
+                USA 🇺🇸 · Mexico 🇲🇽 · Jordan 🇯🇴
+            </div>
+            <div class="feature-item">
+                <strong>📿 QuranChain Integration</strong><br>
+                Smart contracts & escrow protection
+            </div>
+            <div class="feature-item">
+                <strong>🤖 AI-Powered Dispatch</strong><br>
+                Optimized routing & carrier selection
+            </div>
+            <div class="feature-item">
+                <strong>💰 Transparent Pricing</strong><br>
+                30% founder royalty - halal compliance
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function trackShipment() {
+            const trackingNumber = document.getElementById('trackingNumber').value;
+            if (!trackingNumber) {
+                alert('Please enter a tracking number');
+                return;
+            }
+
+            const result = document.getElementById('trackingResult');
+            result.innerHTML = '<p style="margin-top: 15px;">🔍 Tracking shipment...</p>';
+
+            try {
+                const response = await fetch(`/oliveexpress/shipments?tracking_number=${trackingNumber}`);
+                const data = await response.json();
+                
+                if (data.success && data.result.length > 0) {
+                    const shipment = data.result[0];
+                    result.innerHTML = `
+                        <div style="margin-top: 15px; padding: 15px; background: #f0fdf4; border-radius: 10px;">
+                            <p><strong>Status:</strong> ${shipment.status}</p>
+                            <p><strong>Origin:</strong> ${shipment.origin_country}</p>
+                            <p><strong>Destination:</strong> ${shipment.destination_country}</p>
+                            <p><strong>Carrier:</strong> ${shipment.carrier || 'Assigning...'}</p>
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = '<p style="margin-top: 15px; color: #dc2626;">Shipment not found</p>';
+                }
+            } catch (error) {
+                result.innerHTML = '<p style="margin-top: 15px; color: #dc2626;">Error tracking shipment</p>';
+            }
+        }
+
+        function createShipment() {
+            alert('📦 Create Shipment - Opens QuranChain contract deployment');
+            window.location.href = '/quranchain';
+        }
+
+        function viewShipments() {
+            alert('📋 View all your shipments');
+        }
+
+        function getQuote() {
+            alert('💰 Get shipping quote - Feature coming soon!');
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>
