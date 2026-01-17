@@ -6,6 +6,7 @@ import { OpenAPIRoute } from "chanfana";
 import { Context } from "hono";
 import { TriggerReportSchema, ReportResponseSchema } from "./models";
 import { performInfrastructureVerification, detectStateChanges } from "./sentinel";
+import { InfrastructureState } from "./types";
 import {
 	formatSentinelReport,
 	toJSONReport,
@@ -15,7 +16,7 @@ import {
 } from "./formatter";
 
 // In-memory store for previous state (in production, this would be in a database)
-let previousState: any = null;
+let previousState: InfrastructureState | null = null;
 
 export class SentinelReportEndpoint extends OpenAPIRoute {
 	schema = {

@@ -51,14 +51,16 @@ export async function verifyControlPlane(): Promise<ControlPlaneState> {
 					healthCheck = "FAIL";
 					qcAgentStatus = "DEGRADED";
 				}
-			} catch {
+			} catch (healthError) {
 				healthCheck = "FAIL";
 				qcAgentStatus = "DEGRADED";
+				console.error("Health check failed:", healthError);
 			}
 		}
-	} catch {
+	} catch (error) {
 		qcAgentStatus = "OFFLINE";
 		healthCheck = "FAIL";
+		console.error("Control plane verification failed:", error);
 	}
 
 	return {
@@ -77,7 +79,8 @@ async function checkPortListening(host: string, port: number): Promise<boolean> 
 		// This is a simplified check - in production, you'd use actual network utilities
 		// For demonstration, we'll return false (service not running)
 		return false;
-	} catch {
+	} catch (error) {
+		console.error(`Error checking port ${host}:${port}:`, error);
 		return false;
 	}
 }
@@ -198,6 +201,23 @@ export function determineInfrastructureStatus(
 }
 
 /**
+ * Get current host/environment identifier
+ */
+function getCurrentHost(): string {
+	// Try multiple environment detection strategies
+	if (typeof process !== "undefined") {
+		// Node.js environment
+		return process.env.HOSTNAME || 
+		       process.env.HOST || 
+		       process.env.COMPUTERNAME || 
+		       "unknown-host";
+	}
+	
+	// Cloudflare Workers environment
+	return "cloudflare-worker";
+}
+
+/**
  * Perform complete infrastructure verification
  * Follows the mandated verification order:
  * 1. Local control-plane health
@@ -212,7 +232,7 @@ export async function performInfrastructureVerification(
 ): Promise<InfrastructureState> {
 	const notes: string[] = [];
 	const timestamp = new Date().toISOString();
-	const host = typeof process !== "undefined" ? (process.env.HOSTNAME || "unknown") : "cloudflare-worker";
+	const host = getCurrentHost();
 
 	try {
 		// Step 1: Verify control plane

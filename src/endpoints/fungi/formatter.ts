@@ -6,40 +6,58 @@
 import { InfrastructureState, SentinelReport } from "./types";
 
 /**
+ * Report template constant for consistent formatting
+ */
+const REPORT_TEMPLATE = `🔔 DARCloud Tunnel Status Update
+
+Status: {STATUS}
+Timestamp (UTC): {TIMESTAMP}
+Host / Node: {HOST}
+Environment: {ENVIRONMENT}
+
+Control Plane:
+- qc-agent: {QC_AGENT_STATUS}
+- Health Check: {HEALTH_CHECK}
+
+Tunnel:
+- Type: {TUNNEL_TYPE}
+- Public URL / Hostname: {PUBLIC_URL}
+- Process State: {PROCESS_STATE}
+
+Ports:
+{PORTS}
+
+MeshTalk Data Plane:
+- Overlay: {OVERLAY}
+- Status: {MESHTALK_STATUS}
+
+Redundancy:
+- Primary Tunnel: {PRIMARY_TUNNEL}
+- Secondary Tunnel: {SECONDARY_TUNNEL}
+
+Notes:
+{NOTES}`;
+
+/**
  * Format infrastructure state into the mandatory report format
  */
 export function formatSentinelReport(state: InfrastructureState): string {
-	const report = `🔔 DARCloud Tunnel Status Update
-
-Status: ${state.status}
-Timestamp (UTC): ${state.timestamp}
-Host / Node: ${state.host}
-Environment: ${state.environment}
-
-Control Plane:
-- qc-agent: ${state.controlPlane.qcAgentStatus}
-- Health Check: ${state.controlPlane.healthCheck}
-
-Tunnel:
-- Type: ${formatTunnelType(state.tunnel.type)}
-- Public URL / Hostname: ${state.tunnel.publicUrl || state.tunnel.hostname || "NOT AVAILABLE"}
-- Process State: ${state.tunnel.processState}
-
-Ports:
-${formatPorts(state)}
-
-MeshTalk Data Plane:
-- Overlay: ${formatOverlay(state.meshTalkDataPlane.overlay)}
-- Status: ${state.meshTalkDataPlane.status}
-
-Redundancy:
-- Primary Tunnel: ${state.redundancy.primaryTunnel}
-- Secondary Tunnel: ${state.redundancy.secondaryTunnel}
-
-Notes:
-${formatNotes(state.notes)}`;
-
-	return report;
+	return REPORT_TEMPLATE
+		.replace("{STATUS}", state.status)
+		.replace("{TIMESTAMP}", state.timestamp)
+		.replace("{HOST}", state.host)
+		.replace("{ENVIRONMENT}", state.environment)
+		.replace("{QC_AGENT_STATUS}", state.controlPlane.qcAgentStatus)
+		.replace("{HEALTH_CHECK}", state.controlPlane.healthCheck)
+		.replace("{TUNNEL_TYPE}", formatTunnelType(state.tunnel.type))
+		.replace("{PUBLIC_URL}", state.tunnel.publicUrl || state.tunnel.hostname || "NOT AVAILABLE")
+		.replace("{PROCESS_STATE}", state.tunnel.processState)
+		.replace("{PORTS}", formatPorts(state))
+		.replace("{OVERLAY}", formatOverlay(state.meshTalkDataPlane.overlay))
+		.replace("{MESHTALK_STATUS}", state.meshTalkDataPlane.status)
+		.replace("{PRIMARY_TUNNEL}", state.redundancy.primaryTunnel)
+		.replace("{SECONDARY_TUNNEL}", state.redundancy.secondaryTunnel)
+		.replace("{NOTES}", formatNotes(state.notes));
 }
 
 /**
