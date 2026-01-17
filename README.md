@@ -272,6 +272,7 @@ docker-compose up
 - [LAUNCH_CONFIRMATION.md](./LAUNCH_CONFIRMATION.md) - Production launch details
 
 ### Operations & Deployment
+- [PRODUCTION_DEPLOY_GUIDE.md](./PRODUCTION_DEPLOY_GUIDE.md) - **Complete production deployment guide** 🚀
 - [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md) - **Pre-deployment verification checklist** ✅
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide and infrastructure
 - [API_TESTS.md](./API_TESTS.md) - Complete API testing guide
