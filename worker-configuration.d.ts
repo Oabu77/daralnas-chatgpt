@@ -5,10 +5,14 @@ declare namespace Cloudflare {
 	interface GlobalProps {
 		mainModule: typeof import("./src/index");
 	}
-	interface Env {
-		DB: D1Database;
-		OPENAI_API_KEY: string;
-	}
+        interface Env {
+                DB: D1Database;
+                OPENAI_API_KEY: string;
+                PLATFORM_FEE_BPS: string;
+                FOUNDER_ROYALTY_BPS: string;
+                SHARIA_BLOCKLIST: string;
+                ZAKAT_REVIEW_THRESHOLD_CENTS: string;
+        }
 }
 interface Env extends Cloudflare.Env {}
 

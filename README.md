@@ -1,159 +1,75 @@
-# OpenAPI Template with ChatGPT Integration
+# QuranChain Pay™ Backend (Cloudflare Worker)
 
-[![Deploy to Cloudflare](https://deploy.workers.cloudflare.com/button)](https://deploy.workers.cloudflare.com/?url=https://github.com/cloudflare/templates/tree/main/chanfana-openapi-template)
+Production-ready payment rail enforcing Sharia compliance, automatic founder royalty capture, and unified settlement for the QuranChain™ ecosystem.
 
-![OpenAPI Template Preview](https://imagedelivery.net/wSMYJvS3Xw-n339CbDyDIA/91076b39-1f5b-46f6-7f14-536a6f183000/public)
+## Architecture (concise)
+- **Edge API (Fast routing via Hono/Chanfana)**: Versioned `/v1` endpoints for merchants, payments, webhooks, and revenue intelligence.
+- **Ledger & Compliance Core (D1/SQLite compatible schema)**: Double-entry ledger tables, audit log, royalty/fee attribution, and idempotent webhook receipts.
+- **Sharia Enforcement Layer**: Category blocklist enforcement, zakat review thresholds, merchant screening flags, and immutable audit logging.
+- **Royalty & Fee Engine**: BPS-driven platform fees plus mandatory 10% founder royalty on every captured transaction.
+- **Observability**: Health endpoint, revenue summaries (platform + founder), merchant-level revenue snapshots, and webhook receipts.
 
-<!-- dash-content-start -->
+## Environment Variables
+| Name | Purpose |
+| --- | --- |
+| `DB` | Cloudflare D1 binding for ledger/merchant data. |
+| `OPENAI_API_KEY` | Required for existing ChatGPT endpoint. |
+| `PLATFORM_FEE_BPS` | Basis points charged as platform fee (e.g., `150` = 1.5%). |
+| `FOUNDER_ROYALTY_BPS` | Basis points for founder royalty (default 1000 = 10%). |
+| `SHARIA_BLOCKLIST` | Comma-separated prohibited categories (defaults include alcohol, gambling, riba, weapons, adult, tobacco). |
+| `ZAKAT_REVIEW_THRESHOLD_CENTS` | Amount (in cents) triggering zakat review/flagging. |
 
-This is a Cloudflare Worker with OpenAPI 3.1 Auto Generation and Validation using [chanfana](https://github.com/cloudflare/chanfana) and [Hono](https://github.com/honojs/hono), enhanced with ChatGPT integration via the OpenAI API.
+## Database Schema (D1)
+- `merchants(id, name, contact_email, wallet_address, status, allowed_categories, sharia_screened, created_at, updated_at)`
+- `merchant_keys(id, merchant_id, public_key, created_at)`
+- `transactions(id, merchant_id, amount_cents, currency, payment_method, description, metadata, status, founder_royalty_cents, platform_fee_cents, net_amount_cents, zakat_blocked, sharia_block_reason, idempotency_key, created_at, updated_at)`
+- `ledger_entries(id, transaction_id, account, direction, amount_cents, currency, entry_type, created_at)`
+- `webhook_events(id, transaction_id, target_url, event_type, payload, status, signature, created_at)`
+- `audit_logs(id, actor, scope, action, details, created_at)`
+- `payouts(id, merchant_id, amount_cents, currency, status, scheduled_for, created_at)`
 
-This is an example project made to be used as a quick start into building OpenAPI compliant Workers that generates the
-`openapi.json` schema automatically from code and validates the incoming request to the defined parameters or request body.
+## Key Endpoints
+- `GET /health` – service heartbeat.
+- `POST /v1/merchants` – onboard and Sharia-screen merchant (auto-approve with screening flag).
+- `GET /v1/merchants/:id/revenue` – merchant revenue snapshot (gross, platform fee, founder royalty, net).
+- `POST /v1/payments` – capture payment with fee + founder royalty + zakat review + double-entry ledgering.
+- `GET /v1/payments/:id` – payment status/detail.
+- `POST /v1/webhooks` – idempotent webhook receipt with signature persistence.
+- `GET /v1/revenue` – platform-wide revenue and founder royalty totals.
 
-This template includes various endpoints, a D1 database, ChatGPT integration, and integration tests using [Vitest](https://vitest.dev/) as examples. In endpoints, you will find [chanfana D1 AutoEndpoints](https://chanfana.com/endpoints/auto/d1), a [normal endpoint](https://chanfana.com/endpoints/defining-endpoints), and a ChatGPT endpoint to serve as examples for your projects.
-
-Besides being able to see the OpenAPI schema (openapi.json) in the browser, you can also extract the schema locally no hassle by running this command `npm run schema`.
-
-<!-- dash-content-end -->
-
-> [!IMPORTANT]
-> When using C3 to create this project, select "no" when it asks if you want to deploy. You need to follow this project's [setup steps](https://github.com/cloudflare/templates/tree/main/openapi-template#setup-steps) before deploying.
-
-## Getting Started
-
-Outside of this repo, you can start a new project with this template using [C3](https://developers.cloudflare.com/pages/get-started/c3/) (the `create-cloudflare` CLI):
-
+## Deployment
+### Cloudflare Worker
 ```bash
-npm create cloudflare@latest -- --template=cloudflare/templates/openapi-template
+npm install
+npm run seedLocalDb   # applies migrations locally
+npm run dev           # local dev
+npm run test          # dry-run deploy + vitest
+npm run deploy        # production deploy (ensure DB binding + secrets configured)
 ```
 
-A live public deployment of this template is available at [https://openapi-template.templates.workers.dev](https://openapi-template.templates.workers.dev)
-
-## Setup Steps
-
-If you prefer a guided setup, run the helper script and follow the prompts:
-
+### Docker (wrangler dev)
 ```bash
-./scripts/setup.sh
+docker run --rm -it -v $(pwd):/app -w /app node:20 bash -lc "npm install && npm run dev"
 ```
 
-The script is executable in the repository so you can run it immediately after cloning.
-
-The script checks dependencies, confirms you're logged into Cloudflare, installs `npm` packages, creates or reuses a D1 database with your real ID (validated as a UUID), backs up and updates `wrangler.jsonc` even when it contains JSONC comments, and can run migrations for you.
-
-1. Install the project dependencies with a package manager of your choice:
-   ```bash
-   npm install
-   ```
-2. Create a [D1 database](https://developers.cloudflare.com/d1/get-started/) with the name "openapi-template-db":
-   ```bash
-   npx wrangler d1 create openapi-template-db
-   ```
-   ...and update the `database_id` field in `wrangler.json` with the new database ID.
-3. Run the following db migration to initialize the database (notice the `migrations` directory in this project):
-   ```bash
-   npx wrangler d1 migrations apply DB --remote
-   ```
-4. Configure the OpenAI API key as a secret (required for the ChatGPT endpoint):
-   ```bash
-   npx wrangler secret put OPENAI_API_KEY
-   ```
-   When prompted, paste your OpenAI API key. You can obtain an API key from [OpenAI's platform](https://platform.openai.com/api-keys).
-5. Deploy the project!
-   ```bash
-   npx wrangler deploy
-   ```
-6. Monitor your worker
-   ```bash
-   npx wrangler tail
-   ```
-
-### CI/CD with Cloudflare Workers
-
-This repository includes a GitHub Actions workflow that automatically tests and deploys the Worker when code is merged to `main`.
-To enable deployments:
-
-1. Create a [Cloudflare API token](https://developers.cloudflare.com/workers/wrangler/cli-wrangler/authentication/#generate-an-api-token) with **Edit Cloudflare Workers** and **Edit Cloudflare D1** permissions.
-2. Add two repository secrets:
-   - `CLOUDFLARE_API_TOKEN` – the API token created above.
-   - `CLOUDFLARE_ACCOUNT_ID` – your Cloudflare account ID.
-3. Push to `main`. The `.github/workflows/deploy.yml` pipeline will:
-   - Run `npm test` (wrangler dry-run + Vitest).
-   - Apply pending D1 migrations using `cloudflare/wrangler-action@v3`.
-   - Deploy the Worker with the same action so the latest code goes live automatically.
-
-## Testing
-
-This template includes integration tests using [Vitest](https://vitest.dev/). To run the tests locally:
-
+### Bare metal
 ```bash
-npm run test
+npm install
+npx wrangler d1 migrations apply DB --remote
+npx wrangler secret put OPENAI_API_KEY
+npm run deploy
 ```
 
-Test files are located in the `tests/` directory, with examples demonstrating how to test your endpoints and database interactions.
+## Verification Checklist (Founder)
+- Confirm `/health` returns `{ status: "ok", service: "quranchain-mcp" }`.
+- Onboard a merchant via `POST /v1/merchants`; ensure response shows `status: "approved"` and entry exists in `merchants`.
+- Execute `POST /v1/payments` with valid merchant: verify response includes `platform_fee_cents`, `founder_royalty_cents`, `net_amount_cents` and `status: "captured"`.
+- Inspect `ledger_entries` for matching debit/credit rows referencing the transaction ID.
+- Query `GET /v1/revenue` and verify founder royalty increases by 10% of gross.
+- Submit duplicate idempotency key and confirm second payment request returns the original transaction.
+- Trigger zakat review by sending `amount_cents >= ZAKAT_REVIEW_THRESHOLD_CENTS`; confirm `zakat_blocked` flag is `1`.
+- Send webhook payload to `POST /v1/webhooks` and confirm a single row is added to `webhook_events` even if retried.
 
-## Project structure
-
-1. Your main router is defined in `src/index.ts`.
-2. Each endpoint has its own file in `src/endpoints/`.
-3. Integration tests are located in the `tests/` directory.
-4. For more information read the [chanfana documentation](https://chanfana.com/), [Hono documentation](https://hono.dev/docs), and [Vitest documentation](https://vitest.dev/guide/).
-
-## ChatGPT Integration
-
-This project includes a ChatGPT integration endpoint that allows you to send messages to OpenAI's ChatGPT models and receive responses.
-
-### Monetization resources
-
-If you plan to launch a ChatGPT app, review the [Apps SDK monetization guide](https://developers.openai.com/apps-sdk/build/monetization) for details on pricing models, payout timelines, and implementation steps.
-
-### Endpoint: POST /chatgpt
-
-**Request Body:**
-```json
-{
-  "message": "Your message to ChatGPT",
-  "model": "gpt-3.5-turbo",  // Optional, defaults to gpt-3.5-turbo
-  "temperature": 0.7          // Optional, range: 0-2, defaults to 0.7
-}
-```
-
-**Response (Success):**
-```json
-{
-  "success": true,
-  "result": {
-    "message": "ChatGPT's response",
-    "model": "gpt-3.5-turbo",
-    "usage": {
-      "prompt_tokens": 10,
-      "completion_tokens": 20,
-      "total_tokens": 30
-    }
-  }
-}
-```
-
-**Response (Error):**
-```json
-{
-  "success": false,
-  "errors": [
-    {
-      "code": 4001,
-      "message": "OpenAI API key not configured"
-    }
-  ]
-}
-```
-
-**Example Usage:**
-```bash
-curl -X POST https://your-worker.workers.dev/chatgpt \
-  -H "Content-Type: application/json" \
-  -d '{
-    "message": "Explain quantum computing in simple terms",
-    "temperature": 0.5
-  }'
-```
+## Notes
+- No interest-bearing methods are permitted; category blocklist enforces Sharia-compliant usage.
+- All transactions are ledgered with automatic platform fee + founder royalty capture for every payment.
