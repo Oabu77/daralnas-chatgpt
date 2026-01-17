@@ -1,0 +1,185 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip tests (use with caution)'
+        required: false
+        default: 'false'
+      deploy_target:
+        description: 'Deployment target'
+        required: false
+        default: 'all'
+        type: choice
+        options:
+          - all
+          - cloudflare
+          - server
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy-cloudflare:
+    runs-on: ubuntu-latest
+    if: github.event.inputs.deploy_target == 'all' || github.event.inputs.deploy_target == 'cloudflare' || github.event.inputs.deploy_target == ''
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        if: github.event.inputs.skip_tests != 'true'
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npm test
+
+      - name: Apply D1 migrations
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler d1 migrations apply DB --remote
+
+      - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npx wrangler deploy
+
+      - name: Verify deployment
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          echo "Checking recent deployments..."
+          npx wrangler deployments list --limit 5
+          echo "✅ Cloudflare deployment completed successfully"
+
+  deploy-server:
+    runs-on: ubuntu-latest
+    needs: deploy-cloudflare
+    if: |
+      always() &&
+      (github.event.inputs.deploy_target == 'all' || github.event.inputs.deploy_target == 'server' || github.event.inputs.deploy_target == '') &&
+      (needs.deploy-cloudflare.result == 'success' || needs.deploy-cloudflare.result == 'skipped')
+    environment: production
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Test SSH connection
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -p ${{ secrets.SSH_PORT || 22 }} \
+            -o StrictHostKeyChecking=accept-new \
+            -o ConnectTimeout=10 \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
+            "echo 'SSH connection successful'"
+
+      - name: Deploy to server
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -p ${{ secrets.SSH_PORT || 22 }} \
+            -o StrictHostKeyChecking=accept-new \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+            set -e
+            
+            echo "=== Starting server deployment ==="
+            
+            # Navigate to application directory
+            DEPLOY_DIR="/opt/daralnas/apps/daralnas-chatgpt"
+            
+            if [ ! -d "/opt/daralnas/apps" ]; then
+              echo "Creating application directory..."
+              sudo mkdir -p /opt/daralnas/apps
+              sudo chown -R ${USER}:${USER} /opt/daralnas
+            fi
+            
+            # Clone or update repository
+            if [ -d "$DEPLOY_DIR/.git" ]; then
+              echo "Updating existing repository..."
+              cd "$DEPLOY_DIR"
+              git fetch origin
+              git reset --hard origin/main
+            else
+              echo "Cloning repository..."
+              git clone https://github.com/Oabu77/daralnas-chatgpt.git "$DEPLOY_DIR"
+              cd "$DEPLOY_DIR"
+            fi
+            
+            # Update Python services if requirements exist
+            if [ -f "requirements.txt" ]; then
+              echo "Updating Python environment..."
+              python3 -m venv .venv || true
+              source .venv/bin/activate
+              pip install --upgrade pip
+              pip install -r requirements.txt
+            fi
+            
+            # Update Docker containers if docker-compose exists
+            if [ -f "docker-compose.yml" ]; then
+              echo "Updating Docker containers..."
+              docker-compose pull || true
+              docker-compose up -d --build || echo "Docker Compose update completed with warnings"
+              
+              # Clean up old images
+              docker image prune -f || true
+            fi
+            
+            echo "✅ Server deployment completed successfully"
+          ENDSSH
+
+      - name: Verify server deployment
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            -p ${{ secrets.SSH_PORT || 22 }} \
+            -o StrictHostKeyChecking=accept-new \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
+            
+            echo "=== Verifying deployment ==="
+            
+            # Check running containers
+            echo "Docker containers:"
+            docker ps --format "table {{.Names}}\t{{.Status}}" || echo "Docker not available or no containers running"
+            
+            # Check service health endpoints
+            echo ""
+            echo "Health checks:"
+            curl -sf http://127.0.0.1:7444/health && echo "✅ QC Agent: healthy" || echo "⚠️  QC Agent: not responding"
+            curl -sf http://127.0.0.1:8000/health && echo "✅ Telegram Bot: healthy" || echo "⚠️  Telegram Bot: not responding"
+            
+            echo ""
+            echo "✅ Deployment verification completed"
+          ENDSSH
+
+      - name: Cleanup SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key

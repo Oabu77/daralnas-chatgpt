@@ -4,6 +4,18 @@
 
 Production-ready logistics platform for the Dar Al-Nas ecosystem with full-scale operations across USA, Mexico, and Jordan. Includes QuranChain smart contracts, AI-powered dispatch (Omar AI / AMĀN Control), multi-modal transport, and humanitarian corridor support.
 
+## 🤖 ChatGPT Deployment Agent
+
+This repository is configured with a **ChatGPT Deployment Agent** that enables autonomous deployment, monitoring, and self-upgrade capabilities. See [CHATGPT_DEPLOYMENT_AGENT.md](./CHATGPT_DEPLOYMENT_AGENT.md) for complete setup instructions.
+
+**Capabilities:**
+- ✅ Automated CI/CD pipelines (GitHub Actions)
+- ✅ Multi-target deployment (Cloudflare Workers + Linux Server)
+- ✅ Self-upgrade system (dependencies, security, configuration)
+- ✅ Comprehensive monitoring (Prometheus + Grafana)
+- ✅ Health check automation
+- ✅ Security vulnerability scanning
+
 ## 🚀 Platform Overview
 
 OliveExpress™ is a complete, revenue-generating logistics network featuring:
@@ -235,10 +247,12 @@ docker-compose up
 
 ## Documentation
 
+- [CHATGPT_DEPLOYMENT_AGENT.md](./CHATGPT_DEPLOYMENT_AGENT.md) - **ChatGPT deployment agent setup and automation**
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide and infrastructure
 - [LIVE_STATUS.md](./LIVE_STATUS.md) - Live system confirmation and statistics
 - [API_TESTS.md](./API_TESTS.md) - Complete API testing guide
 - [DARCLOUD_OPERATIONS.md](./DARCLOUD_OPERATIONS.md) - DarCloud host operations and tunnel setup
+- [monitoring/README.md](./monitoring/README.md) - Monitoring stack (Prometheus & Grafana)
 
 ## Telegram Bot (Legacy)
 
