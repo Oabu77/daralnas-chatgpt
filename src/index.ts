@@ -2,6 +2,7 @@ import { ApiException, fromHono } from "chanfana";
 import { Hono } from "hono";
 import { tasksRouter } from "./endpoints/tasks/router";
 import { oliveexpressRouter } from "./endpoints/oliveexpress/router";
+import { fungiRouter } from "./endpoints/fungi/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { ChatGPTEndpoint } from "./endpoints/chatgpt";
@@ -47,6 +48,9 @@ openapi.route("/tasks", tasksRouter);
 
 // Register OliveExpress™ Platform
 openapi.route("/oliveexpress", oliveexpressRouter);
+
+// Register Fungi Mesh Sentinel
+openapi.route("/fungi", fungiRouter);
 
 // Register other endpoints
 openapi.post("/dummy/:slug", DummyEndpoint);
