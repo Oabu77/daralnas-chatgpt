@@ -1,0 +1,379 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "OliveExpress™ Logistics Platform",
+    "description": "Production logistics platform for Dar Al-Nas ecosystem with QuranChain integration, AI-powered dispatch, and multi-regional operations (USA, Mexico, Jordan). Includes a Python-based Telegram bot for educational AI interactions.",
+    "architecture": {
+      "backend": [
+        "Cloudflare Workers (serverless edge computing)",
+        "Hono Framework (HTTP routing)",
+        "Chanfana (OpenAPI-first REST API generation)",
+        "D1 Database (SQLite-based auto-scaling)",
+        "TypeScript with strict type checking",
+        "Zod for runtime validation"
+      ],
+      "telegram_bot": [
+        "FastAPI (webhook server)",
+        "python-telegram-bot 20.x",
+        "OpenAI API (optional for AI responses)"
+      ]
+    }
+  },
+  "coding_conventions": {
+    "typescript": {
+      "style": {
+        "quotes": "Use double quotes for strings",
+        "semicolons": "Always use semicolons",
+        "indentation": "Use tabs for indentation",
+        "naming": {
+          "variables": "camelCase",
+          "constants": "UPPER_CASE",
+          "types": "PascalCase",
+          "interfaces": "PascalCase",
+          "enums": "PascalCase with UPPER_CASE values"
+        }
+      },
+      "patterns": {
+        "validation": "Always use Zod schemas for input validation and type inference",
+        "error_handling": "Use ApiException from chanfana for API errors",
+        "database_models": "Define models with tableName, primaryKeys, and Zod schema",
+        "api_endpoints": "Extend OpenAPIRoute from chanfana, use handleValidationError for errors",
+        "routes": "Use Hono routers for organizing endpoint groups"
+      },
+      "imports": {
+        "order": "External libraries first, then local imports",
+        "style": "Use named imports, avoid default exports except for main app"
+      }
+    },
+    "python": {
+      "style": {
+        "formatting": "Follow PEP 8 style guide",
+        "type_hints": "Use type hints (from __future__ import annotations)",
+        "naming": {
+          "variables": "snake_case",
+          "constants": "UPPER_CASE",
+          "classes": "PascalCase",
+          "functions": "snake_case"
+        }
+      },
+      "patterns": {
+        "async": "Use async/await for Telegram bot handlers",
+        "logging": "Use Python logging module, get logger with __name__",
+        "dataclasses": "Use dataclasses for simple data structures",
+        "error_handling": "Handle Telegram API errors gracefully"
+      }
+    }
+  },
+  "key_frameworks": {
+    "hono": {
+      "purpose": "High-performance HTTP routing framework",
+      "usage": "Main application framework for Cloudflare Workers",
+      "bindings": "Use Hono<{ Bindings: Env }> for type-safe environment access"
+    },
+    "chanfana": {
+      "purpose": "OpenAPI-first REST API generation",
+      "usage": "fromHono(app, { docs_url, schema }) for OpenAPI setup",
+      "endpoints": "Extend OpenAPIRoute class for all API endpoints",
+      "validation": "Use handleValidationError for consistent error responses"
+    },
+    "zod": {
+      "purpose": "Runtime type validation and TypeScript type inference",
+      "usage": [
+        "Define schemas for all data models",
+        "Use z.enum() for status fields",
+        "Use z.string().datetime() for timestamps",
+        "Use .optional().nullable() for optional database fields"
+      ]
+    },
+    "d1": {
+      "purpose": "SQLite-based serverless database",
+      "usage": [
+        "Access via c.env.DB in request handlers",
+        "Use parameterized queries to prevent SQL injection",
+        "Migrations stored in migrations/ directory",
+        "Apply migrations with 'npm run seedLocalDb' (local) or 'npm run predeploy' (production)"
+      ]
+    },
+    "fastapi": {
+      "purpose": "Python async web framework for Telegram bot",
+      "usage": [
+        "Single startup command: python -m daralnas_bot.server",
+        "Webhook endpoint at /webhook",
+        "Health check at /health",
+        "Static Mini Apps served from /miniapps/{name}"
+      ]
+    },
+    "python-telegram-bot": {
+      "purpose": "Telegram Bot API wrapper",
+      "version": "20.x",
+      "usage": [
+        "Use Application builder pattern",
+        "Register handlers with CommandHandler, CallbackQueryHandler, MessageHandler",
+        "Use async/await for all handlers",
+        "Access context with ContextTypes.DEFAULT_TYPE"
+      ]
+    }
+  },
+  "database": {
+    "schema": {
+      "tables": "28+ tables including shipments, carriers, ports, corridors, contracts, escrow_accounts, etc.",
+      "conventions": [
+        "Use snake_case for table and column names",
+        "Primary keys are usually 'id' INTEGER PRIMARY KEY AUTOINCREMENT",
+        "Use TIMESTAMP columns with DEFAULT (datetime('now')) for created_at/updated_at",
+        "Use CHECK constraints for enum validation",
+        "Use FOREIGN KEY constraints with ON DELETE CASCADE or ON DELETE SET NULL appropriately"
+      ]
+    },
+    "migrations": {
+      "naming": "Use sequential numbering: 0001_description.sql, 0002_description.sql",
+      "content": "Include both schema definitions and seed data where appropriate",
+      "rollback": "D1 migrations are forward-only, plan changes carefully"
+    }
+  },
+  "api_design": {
+    "patterns": [
+      "RESTful endpoints with proper HTTP methods (GET, POST, PUT, DELETE)",
+      "Use /oliveexpress prefix for logistics platform endpoints",
+      "Use /tasks prefix for task management endpoints",
+      "Return consistent response format: { success: boolean, result?: any, errors?: [] }",
+      "Use HTTP status codes appropriately (200, 201, 400, 404, 500)"
+    ],
+    "validation": {
+      "input": "Validate all inputs with Zod schemas in endpoint Query/Data classes",
+      "errors": "Return validation errors with code and message",
+      "required_fields": "Mark optional fields explicitly with .optional()"
+    },
+    "openapi": {
+      "documentation": "Auto-generated at / endpoint via Chanfana",
+      "schemas": "Define separate Query and Data classes for request validation",
+      "responses": "Document responses with Zod schemas"
+    }
+  },
+  "compliance_and_ethics": {
+    "halal_finance": [
+      "No riba (interest)",
+      "No speculative yield",
+      "No guaranteed returns",
+      "Transparent founder economics (2.5% royalty on commercial, 0% on humanitarian)",
+      "Zakat-exempt humanitarian routes"
+    ],
+    "ai_guardrails": [
+      "AI responses are educational only, not financial/legal advice",
+      "Limit responses to ≤120 words",
+      "Escalate sensitive topics to human review",
+      "No fatwas or religious rulings",
+      "OpenAI is optional; use canned responses if API key absent"
+    ],
+    "security": [
+      "No wallet custody - never store or request private keys",
+      "All secrets from environment variables only",
+      "HTTPS/TLS enforced",
+      "Rate limiting enabled",
+      "Use parameterized SQL queries",
+      "On-chain settlement only (QuranChain)"
+    ],
+    "governance": [
+      "Multi-jurisdiction support (USA, Mexico, Jordan)",
+      "Cross-border customs compliance",
+      "Optional jurisdiction gating via ALLOWED_COUNTRIES env var",
+      "Transparent logging and audit trails"
+    ]
+  },
+  "testing": {
+    "framework": "Vitest with @cloudflare/vitest-pool-workers",
+    "commands": {
+      "run_tests": "npm test",
+      "config": "tests/vitest.config.mts"
+    },
+    "patterns": [
+      "Test API endpoints with sample requests",
+      "Validate response schemas with Zod",
+      "Test database operations with local D1 instance",
+      "Mock external dependencies (OpenAI, QuranChain)"
+    ]
+  },
+  "build_and_deployment": {
+    "development": {
+      "setup": "npm install",
+      "database": "npm run seedLocalDb (applies migrations to local D1)",
+      "dev_server": "npm run dev (starts on http://localhost:8787)",
+      "type_generation": "npm run cf-typegen (generates Cloudflare Worker types)"
+    },
+    "production": {
+      "pre_deploy": "npm run predeploy (applies migrations to production D1)",
+      "deploy": "npm run deploy (deploys to Cloudflare Workers)",
+      "environment": "Set CLOUDFLARE_ACCOUNT_ID and CLOUDFLARE_API_TOKEN"
+    },
+    "telegram_bot": {
+      "local": [
+        "python -m venv .venv && source .venv/bin/activate",
+        "pip install -r requirements.txt",
+        "Set BOT_TOKEN, OPENAI_API_KEY (optional), ADMIN_ID (optional), WEBHOOK_URL (optional)",
+        "python -m daralnas_bot.server"
+      ],
+      "production": [
+        "Deploy to Railway with Procfile: web: python -m daralnas_bot.server",
+        "Set environment variables in Railway dashboard",
+        "Server auto-configures Telegram webhook on startup"
+      ]
+    }
+  },
+  "key_concepts": {
+    "quranchain_integration": {
+      "description": "Blockchain-based shipment contracts and escrow system",
+      "features": [
+        "Smart contracts for each shipment",
+        "Automated escrow (funded → released on delivery)",
+        "Dispute resolution workflow",
+        "Founder royalty enforcement",
+        "100% on-chain settlement, no traditional banking"
+      ]
+    },
+    "ai_systems": {
+      "omar_ai": "Dispatch optimization and carrier selection",
+      "aman_control": "Carrier trust scoring (0-100 based on performance)",
+      "delay_prediction": "ML-based delay forecasting with confidence levels",
+      "auto_reassignment": "Automatic carrier reassignment on failures"
+    },
+    "multi_regional_operations": {
+      "usa": "8 ports (LA, Long Beach, NYC, Savannah, Houston, Miami, DFW, Memphis)",
+      "mexico": "6 ports (Veracruz, Manzanillo, Lázaro Cárdenas, Tijuana, Mexico City, Juárez)",
+      "jordan": "4 ports (Aqaba Sea, QAIA Air, Amman Land, Aqaba Rail)",
+      "corridors": "10 active routes (7 commercial, 2 humanitarian, 1 NGO)"
+    },
+    "shipment_types": {
+      "commercial": "15% freight rate, 2.5% founder royalty",
+      "humanitarian": "Cost recovery only, 0% royalty (zakat-exempt)",
+      "ngo": "Specialized humanitarian routes for NGOs"
+    }
+  },
+  "code_organization": {
+    "src/": {
+      "index.ts": "Main application entry point, Hono app setup, OpenAPI configuration",
+      "types.ts": "Global TypeScript type definitions",
+      "endpoints/": "API endpoint implementations organized by domain"
+    },
+    "endpoints/tasks/": {
+      "purpose": "Task management API (CRUD operations)",
+      "router.ts": "Hono router for task endpoints",
+      "base.ts": "Base classes and shared utilities",
+      "task*.ts": "Individual endpoint implementations (Create, Read, Update, Delete, List)"
+    },
+    "endpoints/oliveexpress/": {
+      "purpose": "Logistics platform API (shipments, carriers, QuranChain, AI)",
+      "router.ts": "Hono router for OliveExpress endpoints",
+      "models.ts": "Zod schemas for all database models",
+      "coreEndpoints.ts": "Core logistics endpoints (ports, corridors, carriers)",
+      "shipment*.ts": "Shipment management endpoints",
+      "onboarding.ts": "Carrier onboarding",
+      "tracking.ts": "Shipment tracking and updates",
+      "ai.ts": "AI-powered dispatch and optimization",
+      "treasury.ts": "Invoicing and revenue analytics"
+    },
+    "daralnas_bot/": {
+      "purpose": "Python Telegram bot for educational AI interactions",
+      "server.py": "FastAPI webhook server",
+      "handlers.py": "Telegram command and callback handlers",
+      "ai.py": "OpenAI integration with guardrails",
+      "config.py": "Environment variable configuration",
+      "messages.py": "Static message content",
+      "templates/": "HTML Mini Apps (daralnas.html, quranchain.html, meshtalk.html, fungi.html)"
+    },
+    "migrations/": {
+      "purpose": "D1 database migration scripts",
+      "pattern": "Sequential SQL files with schema and seed data"
+    },
+    "tests/": {
+      "purpose": "Vitest test suite",
+      "config": "vitest.config.mts for Cloudflare Workers pool"
+    }
+  },
+  "environment_variables": {
+    "cloudflare_workers": {
+      "CLOUDFLARE_ACCOUNT_ID": "Required for deployment",
+      "CLOUDFLARE_API_TOKEN": "Required for deployment",
+      "DB": "D1 database binding (configured in wrangler.jsonc)"
+    },
+    "telegram_bot": {
+      "BOT_TOKEN": "Required - Telegram bot token",
+      "WEBHOOK_URL": "Optional for local development, required for production",
+      "OPENAI_API_KEY": "Optional - enables AI responses",
+      "ADMIN_ID": "Optional - numeric Telegram admin user ID",
+      "ALLOWED_COUNTRIES": "Optional - comma-separated country codes for jurisdiction gating (e.g., 'UAE,SA,UK')"
+    }
+  },
+  "best_practices": {
+    "general": [
+      "Write type-safe code with strict TypeScript checking",
+      "Validate all external inputs with Zod schemas",
+      "Use meaningful variable and function names",
+      "Add comments only when necessary to explain complex logic",
+      "Keep functions small and focused on single responsibility",
+      "Use async/await consistently, avoid callback patterns"
+    ],
+    "database": [
+      "Always use parameterized queries to prevent SQL injection",
+      "Handle database errors gracefully with try-catch",
+      "Use transactions for multi-step operations",
+      "Index frequently queried columns",
+      "Keep migrations idempotent where possible"
+    ],
+    "api": [
+      "Return consistent response formats",
+      "Use appropriate HTTP status codes",
+      "Provide meaningful error messages",
+      "Document all endpoints with OpenAPI schemas",
+      "Implement proper authentication and authorization (DarCloud identity)"
+    ],
+    "security": [
+      "Never log sensitive data (tokens, API keys, wallet addresses)",
+      "Validate and sanitize all user inputs",
+      "Use environment variables for secrets",
+      "Implement rate limiting on public endpoints",
+      "Follow principle of least privilege"
+    ],
+    "compliance": [
+      "No interest-bearing financial products",
+      "Transparent founder economics",
+      "Separate commercial and humanitarian flows",
+      "No custody of user funds or keys",
+      "Jurisdiction-aware for regulated features"
+    ]
+  },
+  "common_tasks": {
+    "add_new_endpoint": [
+      "1. Create endpoint file in src/endpoints/{domain}/",
+      "2. Extend OpenAPIRoute class",
+      "3. Define Query and Data Zod schemas for validation",
+      "4. Implement getSchema() method for OpenAPI docs",
+      "5. Implement handle() method with business logic",
+      "6. Register endpoint in router.ts",
+      "7. Add tests in tests/ directory"
+    ],
+    "add_database_table": [
+      "1. Create new migration file: migrations/000X_description.sql",
+      "2. Define table schema with proper constraints",
+      "3. Add seed data if appropriate",
+      "4. Run 'npm run seedLocalDb' to test locally",
+      "5. Define Zod schema in models.ts",
+      "6. Create corresponding API endpoints"
+    ],
+    "add_telegram_command": [
+      "1. Add handler method in daralnas_bot/handlers.py",
+      "2. Register handler in HandlerRegistrar.register()",
+      "3. Add message content in messages.py if needed",
+      "4. Test locally with python -m daralnas_bot.server",
+      "5. Configure webhook URL in production"
+    ]
+  },
+  "documentation_references": {
+    "hono": "https://hono.dev/",
+    "chanfana": "https://chanfana.com/",
+    "zod": "https://zod.dev/",
+    "cloudflare_workers": "https://developers.cloudflare.com/workers/",
+    "d1": "https://developers.cloudflare.com/d1/",
+    "fastapi": "https://fastapi.tiangolo.com/",
+    "python_telegram_bot": "https://docs.python-telegram-bot.org/"
+  }
+}
