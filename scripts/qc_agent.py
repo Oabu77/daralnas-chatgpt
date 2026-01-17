@@ -29,7 +29,11 @@ ALLOW_FOUNDER = set(ALLOW_WORKER) | {
     "systemctl", "journalctl", "docker", "git", "cloudflared", "curl", "jq"
 }
 
-AUDIT_PATH = os.path.expanduser("~/quranchain_fee/logs/agent_audit.log")
+# Audit log path - configurable via environment or defaults to user home
+AUDIT_PATH = os.environ.get(
+    "QC_AGENT_AUDIT_LOG",
+    os.path.expanduser("~/quranchain_fee/logs/agent_audit.log")
+)
 
 # simple in-memory rate limiter per token hash
 WINDOW = 60
@@ -66,22 +70,32 @@ def _rate_limit(key: str):
 
 def _audit(role: str, cmd: str, ok: bool, rc: int, elapsed: float):
     try:
+        # Ensure directory exists
+        audit_dir = os.path.dirname(AUDIT_PATH)
+        if audit_dir and not os.path.exists(audit_dir):
+            os.makedirs(audit_dir, exist_ok=True)
+        
         line = f"{time.strftime('%Y-%m-%d %H:%M:%S')} role={role} ok={ok} rc={rc} elapsed={elapsed:.3f}s cmd={cmd}\n"
         with open(AUDIT_PATH, "a", encoding="utf-8") as f:
             f.write(line)
-    except Exception:
-        pass
+    except Exception as e:
+        # Log to stderr if audit logging fails (important for debugging)
+        import sys
+        print(f"WARNING: Failed to write audit log: {e}", file=sys.stderr)
 
 
 @APP.post("/run")
 def run(payload: Cmd, request: Request, x_qc_token: str = Header(default="")):
-    role = _role(x_qc_token) if x_qc_token else DEFAULT_ROLE
     # If caller didn't provide token, deny (no anonymous use)
     if not x_qc_token:
         raise HTTPException(401, "Missing X-QC-Token")
+    
+    role = _role(x_qc_token)
 
-    # rate limit per token (don't log token)
-    _rate_limit(role)
+    # rate limit per token (use token hash for privacy)
+    import hashlib
+    token_hash = hashlib.sha256(x_qc_token.encode()).hexdigest()[:16]
+    _rate_limit(token_hash)
 
     parts = shlex.split(payload.cmd)
     if not parts:
