@@ -7,13 +7,7 @@
 gh pr merge 54 --auto --squash
 ```
 
-### Step 2: Set Your OpenAI API Key
-```bash
-wrangler secret put OPENAI_API_KEY
-```
-Enter your OpenAI API key when prompted.
-
-### Step 3: Install on Phone
+### Step 2: Install on Phone
 
 **iPhone/iPad:**
 1. Open Safari → `https://daralnas-chatgpt.oabu77.workers.dev/assistant`
@@ -34,3 +28,9 @@ Your always-on AI assistant is now:
 - ✅ Syncing automatically
 
 **Need Help?** See [MOBILE_AI_ASSISTANT.md](MOBILE_AI_ASSISTANT.md) for full guide.
+
+---
+
+## 🤖 No API Keys Needed!
+
+Your AI assistant uses intelligent built-in responses and learns from your conversations - no OpenAI or external APIs required! Everything runs on Cloudflare Workers.

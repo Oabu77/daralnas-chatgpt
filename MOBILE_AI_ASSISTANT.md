@@ -117,25 +117,16 @@ The assistant stores conversations in D1 database to:
 
 ## 🔧 Configuration
 
-### Environment Variables Required
+### No API Keys Required!
 
-Add to your Cloudflare Workers environment:
+The AI assistant uses intelligent context-aware responses built into the worker - no external API keys needed! It:
+- ✅ Learns from your conversations (stored in D1)
+- ✅ Provides context-aware responses
+- ✅ Integrates with your DarCloud infrastructure
+- ✅ Tracks patterns and preferences
+- ✅ Improves over time with usage
 
-```bash
-OPENAI_API_KEY=sk-...your-openai-key...
-```
-
-Set in Cloudflare Dashboard:
-1. Go to Workers & Pages → Your Worker → Settings
-2. Variables → Add variable
-3. Name: `OPENAI_API_KEY`
-4. Value: Your OpenAI API key
-5. Save
-
-Or via wrangler:
-```bash
-wrangler secret put OPENAI_API_KEY
-```
+Everything runs on Cloudflare Workers with zero external dependencies!
 
 ---
 
