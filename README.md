@@ -237,7 +237,10 @@ docker-compose up
 
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide and infrastructure
 - [LIVE_STATUS.md](./LIVE_STATUS.md) - Live system confirmation and statistics
+- [LAUNCH_CONFIRMATION.md](./LAUNCH_CONFIRMATION.md) - Production launch details
 - [API_TESTS.md](./API_TESTS.md) - Complete API testing guide
+- [INTEGRATION_STATUS.md](./INTEGRATION_STATUS.md) - Complete integration verification (ALL SYSTEMS WORKING)
+- [SYSTEM_INTEGRATION_MAP.md](./SYSTEM_INTEGRATION_MAP.md) - Quick reference map to all integrated code
 
 ## Telegram Bot (Legacy)
 
