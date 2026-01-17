@@ -245,11 +245,25 @@ describe("Feature API Integration Tests", () => {
 - **Tracking**: Transparent volume reporting per shipment type
 
 ### Compliance & Ethics
-- ❌ No riba (interest), speculative yield, guaranteed returns
-- ✅ Halal finance principles
-- ✅ Multi-jurisdiction support (USA, Mexico, Jordan)
-- ✅ Cross-border customs compliance
-- ✅ Humanitarian corridor prioritization
+
+**Halal Finance Implementation:**
+- ❌ **Never** add interest calculations, time-value-of-money adjustments, or profit guarantees
+- ❌ **Never** implement speculative financial instruments or derivatives
+- ✅ **Always** use fixed fee structures (e.g., 15% freight rate, 2.5% founder royalty)
+- ✅ **Always** make founder economics transparent and disclosed upfront
+- ✅ **Always** set founder royalty to 0% for humanitarian/NGO/zakat-exempt shipments
+- ✅ **Example**: Commercial shipment revenue = `cargo_value_usd * 0.15` (freight) + `cargo_value_usd * 0.025` (royalty)
+- ✅ **Example**: Humanitarian revenue = cost recovery only, no royalty
+
+**Multi-Jurisdiction Compliance:**
+- Support USA, Mexico, Jordan regional operations
+- Track jurisdiction-specific customs requirements
+- Maintain regional port configurations (see `migrations/0006_regional_seed_data.sql`)
+
+**Humanitarian Corridor Requirements:**
+- Prioritize NGO and humanitarian shipments in dispatch logic
+- Auto-flag zakat-exempt routes in shipment records
+- Transparent reporting on humanitarian vs commercial volume
 
 ## Development Workflow
 
