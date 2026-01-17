@@ -14,6 +14,7 @@ import { DispatchOptimize, CarrierScoring, DelayPredict, CarrierReassign } from 
 import { TrackingUpdate, LiveMap, PortCongestion } from "./tracking";
 import { InvoiceGenerate, RevenueAnalytics } from "./treasury";
 import { CarrierOnboard } from "./onboarding";
+import { RevenueStream, RevenueAnalytics as LiveRevenueAnalytics } from "./revenue";
 
 export const oliveexpressRouter = fromHono(new Hono());
 
@@ -61,6 +62,10 @@ oliveexpressRouter.get("/operations/port-congestion", PortCongestion);
 // Treasury
 oliveexpressRouter.post("/treasury/invoice/generate", InvoiceGenerate);
 oliveexpressRouter.get("/treasury/revenue/analytics", RevenueAnalytics);
+
+// Live Revenue Processing (30% Founder Royalty)
+oliveexpressRouter.post("/revenue/process", RevenueStream);
+oliveexpressRouter.get("/revenue/analytics", LiveRevenueAnalytics);
 
 // Carrier Onboarding
 oliveexpressRouter.post("/onboarding/carrier", CarrierOnboard);

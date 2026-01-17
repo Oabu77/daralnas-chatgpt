@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💰 Live Revenue Dashboard - Daralnas Platform</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1f2937;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 2em;
+            color: #10b981;
+            margin-bottom: 10px;
+        }
+        .live-indicator {
+            display: inline-block;
+            background: #ef4444;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: #6b7280;
+            margin-bottom: 10px;
+        }
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #10b981;
+        }
+        .stat-secondary {
+            font-size: 0.8em;
+            color: #9ca3af;
+            margin-top: 5px;
+        }
+        .revenue-chart {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .payment-form {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+        }
+        .submit-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+        .royalty-breakdown {
+            background: #f0fdf4;
+            border: 2px solid #10b981;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .royalty-breakdown h3 {
+            color: #059669;
+            margin-bottom: 15px;
+        }
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #d1fae5;
+        }
+        .breakdown-item:last-child {
+            border-bottom: none;
+        }
+        .refresh-btn {
+            background: #6366f1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .transaction-log {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 30px;
+        }
+        .transaction-item {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .success-badge {
+            background: #10b981;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💰 Live Revenue Dashboard</h1>
+            <span class="live-indicator">🔴 LIVE - EARNING NOW</span>
+            <p style="margin-top: 15px; color: #6b7280;">30% Founder Royalty on Every Transaction</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-label">Total Revenue Today</div>
+                <div class="stat-value">$<span id="total-revenue">0.00</span></div>
+                <div class="stat-secondary">All transactions</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Your Earnings (30%)</div>
+                <div class="stat-value">$<span id="founder-earnings">0.00</span></div>
+                <div class="stat-secondary">Founder royalty</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Transactions</div>
+                <div class="stat-value"><span id="transaction-count">0</span></div>
+                <div class="stat-secondary">Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Carrier Payments</div>
+                <div class="stat-value">$<span id="carrier-payments">0.00</span></div>
+                <div class="stat-secondary">70% distributed</div>
+            </div>
+        </div>
+
+        <div class="revenue-chart">
+            <h2 style="margin-bottom: 20px;">
+                Period: 
+                <select id="period-select" onchange="updateAnalytics()" style="padding: 8px; border-radius: 5px; border: 2px solid #e5e7eb;">
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="all">All Time</option>
+                </select>
+                <button class="refresh-btn" onclick="updateAnalytics()">🔄 Refresh</button>
+            </h2>
+            <div id="breakdown-container"></div>
+        </div>
+
+        <div class="payment-form">
+            <h2 style="margin-bottom: 25px;">💳 Process Payment & Collect Revenue</h2>
+            <form id="payment-form" onsubmit="processPayment(event)">
+                <div class="form-group">
+                    <label>Invoice ID</label>
+                    <input type="text" id="invoice-id" placeholder="INV-2026-001" required>
+                </div>
+                <div class="form-group">
+                    <label>Payment Amount (USD)</label>
+                    <input type="number" id="payment-amount" placeholder="1000.00" step="0.01" required oninput="calculateRoyalty()">
+                </div>
+                <div class="form-group">
+                    <label>Payment Method</label>
+                    <select id="payment-method">
+                        <option value="QURANCHAIN">QuranChain (Blockchain)</option>
+                        <option value="BANK_TRANSFER">Bank Transfer</option>
+                        <option value="MOBILE_WALLET">Mobile Wallet</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Payer Wallet Address</label>
+                    <input type="text" id="payer-wallet" placeholder="0x..." required>
+                </div>
+                <div class="form-group">
+                    <label>Transaction Hash (Optional - QuranChain)</label>
+                    <input type="text" id="tx-hash" placeholder="0x...">
+                </div>
+
+                <div class="royalty-breakdown">
+                    <h3>Revenue Split Preview</h3>
+                    <div class="breakdown-item">
+                        <span>Total Payment:</span>
+                        <strong>$<span id="preview-total">0.00</span></strong>
+                    </div>
+                    <div class="breakdown-item" style="color: #10b981;">
+                        <span>Your Royalty (30%):</span>
+                        <strong>$<span id="preview-royalty">0.00</span></strong>
+                    </div>
+                    <div class="breakdown-item">
+                        <span>Carrier Payment (70%):</span>
+                        <strong>$<span id="preview-carrier">0.00</span></strong>
+                    </div>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    💰 Process Payment & Earn $<span id="btn-royalty">0.00</span>
+                </button>
+            </form>
+        </div>
+
+        <div class="transaction-log" id="transaction-log">
+            <h2 style="margin-bottom: 20px;">Recent Transactions</h2>
+            <div id="transactions-list">
+                <p style="color: #9ca3af; text-align: center; padding: 40px;">No transactions yet. Process your first payment above!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+
+        function calculateRoyalty() {
+            const amount = parseFloat(document.getElementById('payment-amount').value) || 0;
+            const royalty = amount * 0.30;
+            const carrier = amount * 0.70;
+
+            document.getElementById('preview-total').textContent = amount.toFixed(2);
+            document.getElementById('preview-royalty').textContent = royalty.toFixed(2);
+            document.getElementById('preview-carrier').textContent = carrier.toFixed(2);
+            document.getElementById('btn-royalty').textContent = royalty.toFixed(2);
+        }
+
+        async function updateAnalytics() {
+            const period = document.getElementById('period-select').value;
+            try {
+                const response = await fetch(`${API_BASE}/oliveexpress/revenue/analytics?period=${period}`);
+                const data = await response.json();
+
+                document.getElementById('total-revenue').textContent = data.total_revenue.toFixed(2);
+                document.getElementById('founder-earnings').textContent = data.founder_earnings.toFixed(2);
+                document.getElementById('transaction-count').textContent = data.transaction_count;
+                document.getElementById('carrier-payments').textContent = data.carrier_earnings.toFixed(2);
+
+                // Show breakdown by type
+                if (data.breakdown_by_type && data.breakdown_by_type.length > 0) {
+                    const html = data.breakdown_by_type.map(item => `
+                        <div class="breakdown-item">
+                            <span>${item.invoice_type}: ${item.count} transactions</span>
+                            <strong>$${item.revenue.toFixed(2)} (Royalty: $${item.founder_cut.toFixed(2)})</strong>
+                        </div>
+                    `).join('');
+                    document.getElementById('breakdown-container').innerHTML = `
+                        <div class="royalty-breakdown">
+                            <h3>Breakdown by Type</h3>
+                            ${html}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Failed to fetch analytics:', error);
+            }
+        }
+
+        async function processPayment(event) {
+            event.preventDefault();
+
+            const payload = {
+                invoice_id: document.getElementById('invoice-id').value,
+                payment_amount: parseFloat(document.getElementById('payment-amount').value),
+                payment_method: document.getElementById('payment-method').value,
+                payer_wallet: document.getElementById('payer-wallet').value,
+                transaction_hash: document.getElementById('tx-hash').value || undefined
+            };
+
+            try {
+                const response = await fetch(`${API_BASE}/oliveexpress/revenue/process`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    alert(`✅ Payment Processed!\n\nTotal: $${result.revenue.total_payment}\nYour Royalty (30%): $${result.revenue.founder_royalty}\nCarrier Payment (70%): $${result.revenue.carrier_payment}\n\nTransaction ID: ${result.transaction_id}`);
+
+                    // Add to transaction log
+                    const logHTML = `
+                        <div class="transaction-item">
+                            <div>
+                                <strong>${result.transaction_id}</strong><br>
+                                <small>${new Date(result.timestamp).toLocaleString()}</small>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 1.3em; font-weight: bold; color: #10b981;">+$${result.revenue.founder_royalty.toFixed(2)}</div>
+                                <span class="success-badge">COMPLETED</span>
+                            </div>
+                        </div>
+                    `;
+                    const logList = document.getElementById('transactions-list');
+                    if (logList.querySelector('p')) {
+                        logList.innerHTML = '';
+                    }
+                    logList.insertAdjacentHTML('afterbegin', logHTML);
+
+                    // Reset form and refresh analytics
+                    document.getElementById('payment-form').reset();
+                    calculateRoyalty();
+                    updateAnalytics();
+                } else {
+                    alert('❌ Payment failed: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('❌ Error processing payment: ' + error.message);
+            }
+        }
+
+        // Auto-refresh analytics every 30 seconds
+        setInterval(updateAnalytics, 30000);
+        
+        // Initial load
+        updateAnalytics();
+    </script>
+</body>
+</html>
