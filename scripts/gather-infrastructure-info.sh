@@ -48,7 +48,7 @@ DarCloud Infrastructure Audit Report
 Generated: $(date)
 Hostname: $(hostname)
 Kernel: $(uname -r)
-Distribution: $(cat /etc/os-release | grep PRETTY_NAME | cut -d'"' -f2)
+Distribution: $(grep PRETTY_NAME /etc/os-release | cut -d'"' -f2 || echo "Unknown")
 
 EOF
 
@@ -77,7 +77,8 @@ ss -tulpenH | awk '{print $5,$7}' | sed 's/users:(("//; s/".*//' | sort -u >> "$
 # Section 5: Listening Processes Detail
 section "5. DETAILED PROCESS INFORMATION"
 log "Gathering detailed process info..."
-ss -tulpen | grep LISTEN | awk '{print $7}' | grep -oP 'pid=\K[0-9]+' | sort -u | while read pid; do
+# Use POSIX-compliant grep for broader compatibility
+ss -tulpen | grep LISTEN | awk '{print $7}' | grep -o 'pid=[0-9]*' | cut -d= -f2 | sort -u | while read pid; do
     if [ -n "$pid" ]; then
         echo "PID: $pid" >> "$OUTPUT_FILE"
         ps -p "$pid" -o pid,user,cmd --no-headers >> "$OUTPUT_FILE" 2>&1 || true
@@ -124,21 +125,27 @@ section "10. CLOUDFLARED TUNNEL CONFIGURATION"
 log "Checking for Cloudflared configuration..."
 echo "⚠️  WARNING: May contain sensitive tunnel credentials - review before sharing!" >> "$OUTPUT_FILE"
 echo "" >> "$OUTPUT_FILE"
-if [ -f "$HOME/.cloudflared/config.yml" ]; then
-    echo "Found at: $HOME/.cloudflared/config.yml" >> "$OUTPUT_FILE"
+
+# Get the actual user who invoked sudo (if applicable)
+REAL_USER="${SUDO_USER:-$USER}"
+REAL_HOME=$(getent passwd "$REAL_USER" | cut -d: -f6)
+
+# Check multiple possible locations
+if [ -f "/root/.cloudflared/config.yml" ]; then
+    echo "Found at: /root/.cloudflared/config.yml" >> "$OUTPUT_FILE"
     echo "" >> "$OUTPUT_FILE"
-    cat "$HOME/.cloudflared/config.yml" >> "$OUTPUT_FILE" 2>&1
+    cat "/root/.cloudflared/config.yml" >> "$OUTPUT_FILE" 2>&1
+elif [ -f "$REAL_HOME/.cloudflared/config.yml" ]; then
+    echo "Found at: $REAL_HOME/.cloudflared/config.yml" >> "$OUTPUT_FILE"
+    echo "" >> "$OUTPUT_FILE"
+    cat "$REAL_HOME/.cloudflared/config.yml" >> "$OUTPUT_FILE" 2>&1
 elif [ -f "/etc/cloudflared/config.yml" ]; then
     echo "Found at: /etc/cloudflared/config.yml" >> "$OUTPUT_FILE"
     echo "" >> "$OUTPUT_FILE"
     cat "/etc/cloudflared/config.yml" >> "$OUTPUT_FILE" 2>&1
-elif [ -f "/root/.cloudflared/config.yml" ]; then
-    echo "Found at: /root/.cloudflared/config.yml" >> "$OUTPUT_FILE"
-    echo "" >> "$OUTPUT_FILE"
-    cat "/root/.cloudflared/config.yml" >> "$OUTPUT_FILE" 2>&1
 else
     echo "No Cloudflared configuration found in standard locations" >> "$OUTPUT_FILE"
-    echo "Searched: ~/.cloudflared/config.yml, /etc/cloudflared/config.yml, /root/.cloudflared/config.yml" >> "$OUTPUT_FILE"
+    echo "Searched: /root/.cloudflared/config.yml, $REAL_HOME/.cloudflared/config.yml, /etc/cloudflared/config.yml" >> "$OUTPUT_FILE"
 fi
 
 # Section 11: /etc/hosts (for internal hostname mapping)
