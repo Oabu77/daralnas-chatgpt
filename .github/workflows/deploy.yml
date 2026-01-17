@@ -146,7 +146,7 @@ jobs:
 
       - name: Test SSH connection
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/deploy_key \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
             "echo '✅ SSH connection successful'"
 
@@ -160,12 +160,12 @@ jobs:
             --exclude='__pycache__' \
             --exclude='*.pyc' \
             --exclude='.env' \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            -e "ssh -i ~/.ssh/deploy_key" \
             ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_PATH || '/opt/daralnas-chatgpt' }}
 
       - name: Deploy on remote server
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/deploy_key \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
             "cd ${{ secrets.SERVER_PATH || '/opt/daralnas-chatgpt' }} && bash scripts/deploy-to-server.sh"
 
@@ -176,7 +176,7 @@ jobs:
           sleep 5
           
           # Attempt health check via SSH
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/deploy_key \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
             "curl -sf http://localhost:8000/health || echo 'Health check skipped - service may not expose health endpoint'" || true
           
