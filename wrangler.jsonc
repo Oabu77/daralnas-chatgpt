@@ -4,13 +4,26 @@
 	"name": "daralnas-chatgpt",
 	"upload_source_maps": true,
 	"observability": {
-		"enabled": true
+		"enabled": true,
+		"head_sampling_rate": 1
 	},
 	"d1_databases": [
 		{
 			"binding": "DB",
 			"database_name": "openapi-template-db",
 			"database_id": "26b921d0-3226-485d-a105-dc820a9abdbc"
+		}
+	],
+	"vars": {
+		"ENVIRONMENT": "production",
+		"AUTO_REPAIR_ENABLED": "true",
+		"FUNGI_MESH_ENABLED": "true",
+		"DARCLOUD_ENABLED": "true"
+	},
+	"routes": [
+		{
+			"pattern": "daralnas.com/*",
+			"custom_domain": true
 		}
 	]
 }

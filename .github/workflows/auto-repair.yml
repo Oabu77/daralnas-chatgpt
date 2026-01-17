@@ -1,0 +1,124 @@
+name: Auto-Repair & Health Monitor
+
+on:
+  schedule:
+    # Run health checks every 5 minutes
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+    inputs:
+      force_repair:
+        description: 'Force repair even if healthy'
+        required: false
+        default: 'false'
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  health-check:
+    runs-on: ubuntu-latest
+    outputs:
+      needs_repair: ${{ steps.check.outputs.needs_repair }}
+      status: ${{ steps.check.outputs.status }}
+    steps:
+      - name: Check Production Health
+        id: check
+        env:
+          WORKER_URL: ${{ secrets.WORKER_URL || 'https://daralnas-chatgpt.oabu77.workers.dev' }}
+        run: |
+          echo "Checking DarCloud & Fungi Mesh Network health..."
+          
+          # Check main health endpoint
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/health" || echo "000")
+          
+          # Check sentinel status
+          SENTINEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/status" || echo "000")
+          
+          # Check OliveExpress health
+          OLIVE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/oliveexpress/shipments" || echo "000")
+          
+          echo "Health Status: $HEALTH_STATUS"
+          echo "Sentinel Status: $SENTINEL_STATUS"
+          echo "OliveExpress Status: $OLIVE_STATUS"
+          
+          if [ "$HEALTH_STATUS" != "200" ] || [ "$SENTINEL_STATUS" != "200" ] || [ "$OLIVE_STATUS" != "200" ]; then
+            echo "needs_repair=true" >> $GITHUB_OUTPUT
+            echo "status=unhealthy" >> $GITHUB_OUTPUT
+            echo "⚠️ UNHEALTHY: Health=$HEALTH_STATUS, Sentinel=$SENTINEL_STATUS, Olive=$OLIVE_STATUS"
+          else
+            echo "needs_repair=false" >> $GITHUB_OUTPUT
+            echo "status=healthy" >> $GITHUB_OUTPUT
+            echo "✅ HEALTHY: All systems operational"
+          fi
+
+  auto-repair:
+    needs: health-check
+    if: needs.health-check.outputs.needs_repair == 'true' || github.event.inputs.force_repair == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Repair - Reapply Migrations
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          echo "🔧 Reapplying D1 migrations..."
+          npx wrangler d1 migrations apply DB --remote || true
+
+      - name: Repair - Redeploy Worker
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          echo "🚀 Redeploying worker..."
+          npx wrangler deploy
+
+      - name: Wait for service recovery
+        run: |
+          echo "⏳ Waiting 30 seconds for service to stabilize..."
+          sleep 30
+
+      - name: Verify repair
+        env:
+          WORKER_URL: ${{ secrets.WORKER_URL || 'https://daralnas-chatgpt.oabu77.workers.dev' }}
+        run: |
+          echo "🔍 Verifying repair..."
+          
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/health" || echo "000")
+          SENTINEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/status" || echo "000")
+          
+          if [ "$HEALTH_STATUS" = "200" ] && [ "$SENTINEL_STATUS" = "200" ]; then
+            echo "✅ REPAIR SUCCESSFUL - All systems operational"
+            exit 0
+          else
+            echo "❌ REPAIR FAILED - Health: $HEALTH_STATUS, Sentinel: $SENTINEL_STATUS"
+            exit 1
+          fi
+
+  notify:
+    needs: [health-check, auto-repair]
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report Status
+        run: |
+          if [ "${{ needs.health-check.outputs.status }}" = "healthy" ]; then
+            echo "✅ DarCloud & Fungi Mesh: OPERATIONAL"
+          elif [ "${{ needs.auto-repair.result }}" = "success" ]; then
+            echo "🔧 DarCloud & Fungi Mesh: REPAIRED AND OPERATIONAL"
+          else
+            echo "❌ DarCloud & Fungi Mesh: REPAIR NEEDED - Manual intervention required"
+          fi
