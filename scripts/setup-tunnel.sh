@@ -153,6 +153,10 @@ case "$setup_type" in
         
         # Get tunnel ID
         tunnel_id=$(cloudflared tunnel list | grep "$tunnel_name" | awk '{print $1}')
+        if [ -z "$tunnel_id" ]; then
+            print_error "Failed to get tunnel ID. Tunnel may not exist."
+            exit 1
+        fi
         print_info "Tunnel ID: $tunnel_id"
         echo ""
         
@@ -221,7 +225,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/bin/cloudflared tunnel run $tunnel_name
+ExecStart=/usr/bin/cloudflared tunnel run "$tunnel_name"
 Restart=always
 RestartSec=10
 StandardOutput=journal

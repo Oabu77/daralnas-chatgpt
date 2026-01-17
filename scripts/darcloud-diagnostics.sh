@@ -83,18 +83,23 @@ check_health() {
     echo ""
     
     if response=$(curl -sS -f "${HEALTH_ENDPOINT}"); then
-        echo "$response" | jq .
-        print_success "Health check succeeded"
-        
-        # Extract status if available
-        if status=$(echo "$response" | jq -r '.status // empty'); then
+        # First check if response is valid JSON
+        if echo "$response" | jq . >/dev/null 2>&1; then
+            echo "$response" | jq .
+            print_success "Health check succeeded"
+            
+            # Extract status if available
+            status=$(echo "$response" | jq -r '.status // empty')
             if [ -n "$status" ] && [ "$status" = "ok" ]; then
                 print_success "Service status: OK"
             elif [ -n "$status" ]; then
                 print_warning "Service status: $status"
+            else
+                print_info "No status field in response"
             fi
         else
-            print_warning "Could not parse status from response (invalid JSON or missing .status field)"
+            print_warning "Response is not valid JSON:"
+            echo "$response"
         fi
         
         return 0
