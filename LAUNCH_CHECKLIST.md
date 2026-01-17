@@ -83,7 +83,7 @@ DEPLOYMENT_URL=https://your-worker.workers.dev ./scripts/verify-deployment.sh
 
 ### API Health
 - [ ] OpenAPI documentation loads at `/`
-- [ ] Operations dashboard loads at `/dashboard.html`
+- [ ] Operations dashboard loads at `/dashboard`
 - [ ] Health check endpoints respond
 
 ### Regional Operations

@@ -262,15 +262,21 @@ echo ""
 # Test 10: Live Operations Map
 echo "Test 10: Live Operations Map"
 echo "-----------------------------"
+region_failures=0
 for region in USA MEXICO JORDAN ALL; do
     if response=$(curl -s -f "$BASE_URL/oliveexpress/operations/live-map?region=$region"); then
         echo "  ✓ $region region accessible"
     else
         echo "  ✗ $region region failed"
-        failed=$((failed + 1))
+        region_failures=$((region_failures + 1))
     fi
 done
-success "Live map endpoint tested for all regions"
+
+if [ $region_failures -eq 0 ]; then
+    success "Live map endpoint tested for all regions"
+else
+    fail "Some regions failed live map test ($region_failures failures)"
+fi
 echo ""
 
 # Test 11: Port Congestion Status
