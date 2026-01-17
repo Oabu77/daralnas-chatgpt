@@ -42,9 +42,9 @@ Once you have the output:
 
 1. **Copy** each command's output
 2. **Paste** into [INFRASTRUCTURE_AUDIT.md](./INFRASTRUCTURE_AUDIT.md) in the appropriate sections:
-   - Section 1: Port Manifest (TCP + UDP Listeners)
-   - Section 1: UDP Listeners
-   - Section 1: Process-to-Port Mapping
+   - Section 1: Port Manifest - TCP Listeners
+   - Section 1: Port Manifest - UDP Listeners  
+   - Section 1: Port Manifest - Process-to-Port Mapping
 
 3. **Review** the output to identify:
    - ✅ Every port → owning process → purpose

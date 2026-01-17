@@ -22,6 +22,12 @@ fi
 # Create output file with timestamp
 OUTPUT_FILE="infrastructure-audit-$(date +%Y%m%d-%H%M%S).txt"
 
+# Colors for output
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+
 # Helper function to add section headers
 section() {
     echo "" >> "$OUTPUT_FILE"
@@ -112,8 +118,12 @@ else
 fi
 
 # Section 10: Cloudflared Tunnel Configuration (if exists)
+# WARNING: This section may contain sensitive tunnel credentials
+# Review output file and redact credentials before sharing externally
 section "10. CLOUDFLARED TUNNEL CONFIGURATION"
 log "Checking for Cloudflared configuration..."
+echo "⚠️  WARNING: May contain sensitive tunnel credentials - review before sharing!" >> "$OUTPUT_FILE"
+echo "" >> "$OUTPUT_FILE"
 if [ -f "$HOME/.cloudflared/config.yml" ]; then
     echo "Found at: $HOME/.cloudflared/config.yml" >> "$OUTPUT_FILE"
     echo "" >> "$OUTPUT_FILE"
@@ -142,8 +152,10 @@ log "Gathering DNS configuration..."
 cat /etc/resolv.conf >> "$OUTPUT_FILE" 2>&1 || echo "Cannot read /etc/resolv.conf" >> "$OUTPUT_FILE"
 
 # Section 13: Running Processes Summary
+# Note: Update this filter if new services are added to the DarCloud ecosystem
 section "13. RUNNING PROCESSES (Filtered for DarCloud Services)"
 log "Gathering relevant processes..."
+# Services to filter for: cloudflared, nginx, node, python, oliveexpress, daralnas, meshtalk, darcloud
 ps aux | grep -E "cloudflared|nginx|node|python|oliveexpress|daralnas|meshtalk|darcloud" | grep -v grep >> "$OUTPUT_FILE" 2>&1 || echo "No relevant processes found" >> "$OUTPUT_FILE"
 
 # Section 14: Disk Usage
@@ -203,15 +215,19 @@ echo "================================================"
 echo ""
 echo "Report saved to: $OUTPUT_FILE"
 echo ""
+echo -e "${YELLOW}⚠️  IMPORTANT: Review for sensitive data before sharing!${NC}"
+echo ""
 echo "Next steps:"
-echo "1. Review the output file for sensitive information"
-echo "2. Redact any public IPs or sensitive hostnames if needed"
-echo "3. Copy the relevant sections to INFRASTRUCTURE_AUDIT.md"
+echo "1. ${RED}Review the output file for sensitive information${NC}"
+echo "   - Public IPs, API keys, tunnel credentials"
+echo "   - Redact as needed (ports + process names are safe)"
+echo "2. Copy the relevant sections to INFRASTRUCTURE_AUDIT.md"
+echo "3. Share with infrastructure team for analysis"
 echo ""
 echo "Key sections to review:"
 echo "  • Section 1: Complete port manifest"
 echo "  • Section 3: UDP listeners (Voice/TURN/VPN)"
 echo "  • Section 4: Process-to-port mapping"
-echo "  • Section 10: Cloudflared tunnel configuration"
+echo -e "  • ${YELLOW}Section 10: Cloudflared tunnel configuration (MAY CONTAIN CREDENTIALS)${NC}"
 echo "  • Section 11: Hostname mappings"
 echo ""
