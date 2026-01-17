@@ -137,12 +137,14 @@ def run(payload: Cmd, x_qc_token: str = Header(default="")):
         # also enforce max lines
         if "-n" in parts:
             nidx = parts.index("-n")
+            if nidx + 1 >= len(parts):
+                raise HTTPException(403, "journalctl -n requires a value")
             try:
                 n = int(parts[nidx + 1])
                 if n > 200:
                     raise HTTPException(403, "journalctl -n max 200")
-            except Exception:
-                raise HTTPException(403, "journalctl invalid -n")
+            except ValueError:
+                raise HTTPException(403, "journalctl -n must be a number")
         else:
             parts += ["-n", "120"]
 
