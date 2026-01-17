@@ -201,6 +201,30 @@ See [API_TESTS.md](./API_TESTS.md) for complete API testing guide.
 
 ## Deployment
 
+### Quick Deploy
+
+**Verify deployment readiness:**
+```bash
+# Run automated verification
+./scripts/verify-deployment-ready.sh
+
+# Or manually check
+npm test
+```
+
+**Deploy to production:**
+```bash
+# Option 1: Automated via GitHub Actions (recommended)
+# - Merge PR to main branch
+# - CI/CD will automatically deploy
+
+# Option 2: Manual deployment
+npm run predeploy  # Apply database migrations
+npm run deploy     # Deploy to Cloudflare Workers
+```
+
+See [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md) for complete pre-deployment verification.
+
 ### Infrastructure
 - **Hosting**: Cloudflare Workers (edge computing)
 - **Database**: D1 (SQLite, auto-scaling)
@@ -248,8 +272,10 @@ docker-compose up
 - [LAUNCH_CONFIRMATION.md](./LAUNCH_CONFIRMATION.md) - Production launch details
 
 ### Operations & Deployment
+- [DEPLOY_CHECKLIST.md](./DEPLOY_CHECKLIST.md) - **Pre-deployment verification checklist** ✅
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide and infrastructure
 - [API_TESTS.md](./API_TESTS.md) - Complete API testing guide
+- `scripts/verify-deployment-ready.sh` - Automated deployment readiness verification script
 
 ## Telegram Bot (Legacy)
 
