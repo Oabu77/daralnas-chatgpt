@@ -187,3 +187,211 @@ npm run predeploy
 **API Documentation**: Available at `/` (OpenAPI)
 
 For partner onboarding: Contact operations@daralnas.com
+
+---
+
+## 🤖 Telegram Bot Deployment (Linux Server)
+
+### Automated SSH Deployment via GitHub Actions
+
+The Telegram bot can be automatically deployed to a Linux server via SSH when enabled.
+
+#### Prerequisites
+1. A Linux server with SSH access
+2. Python 3.8+ installed on the server
+3. SSH key pair for GitHub Actions
+
+#### Setup Instructions
+
+**1. Prepare Your Linux Server**
+```bash
+# Create deployment directory
+sudo mkdir -p /opt/daralnas-chatgpt
+sudo chown $USER:$USER /opt/daralnas-chatgpt
+
+# Clone repository
+cd /opt/daralnas-chatgpt
+git clone https://github.com/Oabu77/daralnas-chatgpt.git .
+
+# Create environment file with required secrets
+cat > /opt/daralnas-chatgpt/.env <<EOF
+BOT_TOKEN=your-telegram-bot-token
+OPENAI_API_KEY=your-openai-api-key
+ADMIN_ID=your-admin-user-id
+WEBHOOK_URL=https://your-server.com
+ALLOWED_COUNTRIES=UAE,SA,UK
+EOF
+
+chmod 600 /opt/daralnas-chatgpt/.env
+```
+
+**2. Configure GitHub Secrets**
+
+Add the following secrets to your GitHub repository (Settings → Secrets and variables → Actions):
+
+| Secret Name | Description | Example |
+|------------|-------------|---------|
+| `SSH_PRIVATE_KEY` | Content of private SSH key | `-----BEGIN OPENSSH PRIVATE KEY-----...` |
+| `SERVER_HOST` | Server hostname or IP address | `bot.daralnas.com` or `192.168.1.100` |
+| `SERVER_USER` | SSH username | `ubuntu` or `deploy` |
+| `SERVER_PATH` | Deployment directory on server | `/opt/daralnas-chatgpt` |
+
+Add the following variable:
+
+| Variable Name | Value |
+|--------------|-------|
+| `ENABLE_SSH_DEPLOYMENT` | `true` |
+
+**3. Generate SSH Key Pair**
+```bash
+# On your local machine
+ssh-keygen -t ed25519 -C "github-actions-deploy" -f ~/.ssh/github_deploy
+
+# Copy public key to your server
+ssh-copy-id -i ~/.ssh/github_deploy.pub user@your-server.com
+
+# Display private key to copy to GitHub (copy entire output)
+cat ~/.ssh/github_deploy
+```
+
+**4. Set Up Systemd Service (Recommended)**
+
+Create a systemd service for automatic startup and management:
+
+```bash
+# On your Linux server
+sudo tee /etc/systemd/system/daralnas-bot.service > /dev/null <<EOF
+[Unit]
+Description=Dar Al-Nas Telegram Bot
+After=network.target
+
+[Service]
+Type=simple
+User=$(whoami)
+WorkingDirectory=/opt/daralnas-chatgpt
+Environment="PATH=/opt/daralnas-chatgpt/.venv/bin"
+EnvironmentFile=/opt/daralnas-chatgpt/.env
+ExecStart=/opt/daralnas-chatgpt/.venv/bin/python -m daralnas_bot.server
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+# Enable and start the service
+sudo systemctl daemon-reload
+sudo systemctl enable daralnas-bot
+sudo systemctl start daralnas-bot
+
+# Check status
+sudo systemctl status daralnas-bot
+```
+
+**5. Verify Deployment**
+
+After pushing to `main` branch:
+1. Check GitHub Actions workflow execution
+2. Verify bot service is running: `sudo systemctl status daralnas-bot`
+3. Check health endpoint: `curl http://localhost:8000/health`
+4. View logs: `sudo journalctl -u daralnas-bot -f`
+
+#### Manual Deployment
+
+If you need to deploy manually:
+
+```bash
+# SSH into your server
+ssh user@your-server.com
+
+# Navigate to deployment directory
+cd /opt/daralnas-chatgpt
+
+# Run deployment script
+bash scripts/deploy-to-server.sh
+```
+
+#### Rollback Procedure
+
+If deployment fails:
+
+```bash
+# SSH into your server
+ssh user@your-server.com
+
+# Navigate to deployment directory
+cd /opt/daralnas-chatgpt
+
+# Find available backups
+ls -lt backup-*
+
+# Restore from backup
+BACKUP_DIR=$(ls -dt backup-* | head -1)
+cp -r ${BACKUP_DIR}/* .
+
+# Restart service
+sudo systemctl restart daralnas-bot
+```
+
+#### Troubleshooting
+
+**Service fails to start:**
+```bash
+# Check service logs
+sudo journalctl -u daralnas-bot -n 50 --no-pager
+
+# Check if port 8000 is in use
+sudo lsof -i :8000
+
+# Verify environment variables
+sudo systemctl show daralnas-bot --property=Environment
+```
+
+**Health check fails:**
+```bash
+# Test locally on server
+curl http://localhost:8000/health
+
+# Check if service is listening
+netstat -tlnp | grep 8000
+
+# Verify Python dependencies
+source /opt/daralnas-chatgpt/.venv/bin/activate
+pip list
+```
+
+**SSH deployment fails:**
+```bash
+# Test SSH connection from GitHub Actions runner
+ssh -i ~/.ssh/deploy_key user@server "echo 'Connection successful'"
+
+# Verify file permissions on server
+ls -la /opt/daralnas-chatgpt/scripts/deploy-to-server.sh
+
+# Check rsync is installed
+which rsync
+```
+
+#### Security Recommendations
+
+1. **SSH Key Security:**
+   - Use ed25519 keys (more secure than RSA)
+   - Restrict key to specific commands if possible
+   - Rotate keys periodically
+
+2. **Server Hardening:**
+   - Use firewall to restrict access (ufw/iptables)
+   - Keep system packages updated
+   - Monitor access logs regularly
+
+3. **Environment Variables:**
+   - Never commit `.env` file to repository
+   - Use strong tokens and rotate them regularly
+   - Set restrictive file permissions (600) on `.env`
+
+4. **Service Isolation:**
+   - Run service as non-root user
+   - Consider using Docker for additional isolation
+   - Set resource limits in systemd service
+
+---

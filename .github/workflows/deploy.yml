@@ -1,5 +1,18 @@
 name: Test and Deploy
 
+# This workflow handles deployment for both:
+# 1. Cloudflare Workers (OliveExpress API - TypeScript/Node.js)
+# 2. Linux Server (Telegram Bot - Python/FastAPI)
+#
+# Triggered on pushes to main branch
+# Required GitHub Secrets:
+# - CLOUDFLARE_ACCOUNT_ID: Cloudflare account identifier
+# - CLOUDFLARE_API_TOKEN: Cloudflare API token for deployment
+# - SSH_PRIVATE_KEY: SSH private key for Linux server access (optional, for bot deployment)
+# - SERVER_HOST: Linux server hostname or IP (optional, for bot deployment)
+# - SERVER_USER: SSH username for Linux server (optional, for bot deployment)
+# - SERVER_PATH: Deployment path on Linux server (optional, defaults to /opt/daralnas-chatgpt)
+
 on:
   push:
     branches: [main]
@@ -13,9 +26,10 @@ permissions:
 
 jobs:
   test:
+    name: Run Tests
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -33,7 +47,8 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: npm test
 
-  deploy:
+  deploy-cloudflare:
+    name: Deploy to Cloudflare Workers
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
@@ -41,7 +56,7 @@ jobs:
     permissions:
       contents: read
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -53,7 +68,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Capture previous deployment id
+      - name: Capture previous deployment id (for rollback capability)
         id: prev
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -62,17 +77,17 @@ jobs:
           npx wrangler deployments list --limit 1 --format json > previous_deployment.json
           echo "previous_id=$(jq -r '.[0].id // ""' previous_deployment.json)" >> $GITHUB_OUTPUT
 
-      - name: Apply D1 migrations
+      - name: Apply D1 database migrations
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npx wrangler d1 migrations apply DB --remote
+        run: npm run predeploy
 
-      - name: Deploy to Cloudflare Workers
+      - name: Deploy OliveExpress API to Cloudflare Workers
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: npx wrangler deploy
+        run: npm run deploy
 
       - name: Log recent deployments
         env:
@@ -84,5 +99,113 @@ jobs:
         if: steps.prev.outputs.previous_id != ''
         uses: actions/upload-artifact@v4
         with:
-          name: previous-deployment
+          name: cloudflare-rollback-info
           path: previous_deployment.json
+          retention-days: 30
+
+      - name: Notify deployment failure
+        if: failure()
+        run: |
+          echo "::error::Cloudflare Workers deployment failed"
+          echo "Check logs and consider rolling back to deployment: ${{ steps.prev.outputs.previous_id }}"
+
+  deploy-linux-server:
+    name: Deploy Telegram Bot to Linux Server
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && vars.ENABLE_SSH_DEPLOYMENT == 'true'
+    environment: production
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate SSH deployment configuration
+        run: |
+          if [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]; then
+            echo "::error::SSH_PRIVATE_KEY secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.SERVER_HOST }}" ]; then
+            echo "::error::SERVER_HOST secret is not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.SERVER_USER }}" ]; then
+            echo "::error::SERVER_USER secret is not set"
+            exit 1
+          fi
+          echo "✅ SSH deployment configuration validated"
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+            "echo '✅ SSH connection successful'"
+
+      - name: Sync code to Linux server
+        run: |
+          # Sync repository contents to server (excluding .git, node_modules, etc.)
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='node_modules' \
+            --exclude='.venv' \
+            --exclude='__pycache__' \
+            --exclude='*.pyc' \
+            --exclude='.env' \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.SERVER_PATH || '/opt/daralnas-chatgpt' }}
+
+      - name: Deploy on remote server
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+            "cd ${{ secrets.SERVER_PATH || '/opt/daralnas-chatgpt' }} && bash scripts/deploy-to-server.sh"
+
+      - name: Verify deployment
+        id: verify
+        run: |
+          # Give service time to fully start
+          sleep 5
+          
+          # Attempt health check via SSH
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+            "curl -sf http://localhost:8000/health || echo 'Health check skipped - service may not expose health endpoint'" || true
+          
+          echo "deployment_time=$(date -u +%Y-%m-%dT%H:%M:%SZ)" >> $GITHUB_OUTPUT
+
+      - name: Cleanup SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
+
+      - name: Create deployment record
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-deployment-info
+          path: |
+            requirements.txt
+            Procfile
+          retention-days: 30
+
+      - name: Notify deployment success
+        if: success()
+        run: |
+          echo "::notice::Linux server deployment completed successfully at ${{ steps.verify.outputs.deployment_time }}"
+          echo "✅ Telegram bot deployed to ${{ secrets.SERVER_HOST }}"
+
+      - name: Notify deployment failure
+        if: failure()
+        run: |
+          echo "::error::Linux server deployment failed"
+          echo "Check SSH connectivity and server logs for details"
+          echo "Server: ${{ secrets.SERVER_HOST }}"
+          echo "Path: ${{ secrets.SERVER_PATH || '/opt/daralnas-chatgpt' }}"

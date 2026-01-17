@@ -199,16 +199,111 @@ See [API_TESTS.md](./API_TESTS.md) for complete API testing guide.
 ## Deployment
 
 ### Infrastructure
-- **Hosting**: Cloudflare Workers (edge computing)
+- **Hosting**: 
+  - Cloudflare Workers (OliveExpress API - edge computing)
+  - Linux Server (Telegram Bot - via SSH deployment)
 - **Database**: D1 (SQLite, auto-scaling)
 - **CDN**: Cloudflare global network
 - **Monitoring**: Cloudflare Analytics + Observability
-- **CI/CD**: GitHub Actions
+- **CI/CD**: GitHub Actions (automated dual deployment)
 
-### Environment Variables
+### Automated Deployment via GitHub Actions
+
+This repository supports **dual automated deployment**:
+
+#### 1. Cloudflare Workers (OliveExpress API)
+Automatically deploys on every push to `main` branch.
+
+**Required GitHub Secrets:**
 ```bash
 CLOUDFLARE_ACCOUNT_ID=<your-account-id>
 CLOUDFLARE_API_TOKEN=<your-api-token>
+```
+
+#### 2. Linux Server (Telegram Bot - Optional)
+Deploys Python Telegram bot to a Linux server via SSH when enabled.
+
+**Required GitHub Secrets:**
+```bash
+SSH_PRIVATE_KEY=<ssh-private-key-content>
+SERVER_HOST=<server-hostname-or-ip>
+SERVER_USER=<ssh-username>
+SERVER_PATH=<deployment-path>  # Optional, defaults to /opt/daralnas-chatgpt
+```
+
+**Required GitHub Variable:**
+```bash
+ENABLE_SSH_DEPLOYMENT=true  # Set in repository variables to enable
+```
+
+**SSH Deployment Setup:**
+1. Generate SSH key pair on your local machine:
+   ```bash
+   ssh-keygen -t ed25519 -C "github-actions-deploy" -f ~/.ssh/github_deploy
+   ```
+
+2. Copy public key to your Linux server:
+   ```bash
+   ssh-copy-id -i ~/.ssh/github_deploy.pub user@your-server.com
+   ```
+
+3. Add private key to GitHub repository secrets:
+   - Go to repository Settings → Secrets and variables → Actions
+   - Add secret `SSH_PRIVATE_KEY` with the content of `~/.ssh/github_deploy`
+   - Add secrets: `SERVER_HOST`, `SERVER_USER`, `SERVER_PATH`
+   - Add variable: `ENABLE_SSH_DEPLOYMENT=true`
+
+4. Prepare the server:
+   ```bash
+   # On your Linux server
+   sudo mkdir -p /opt/daralnas-chatgpt
+   sudo chown $USER:$USER /opt/daralnas-chatgpt
+   cd /opt/daralnas-chatgpt
+   git clone https://github.com/Oabu77/daralnas-chatgpt.git .
+   ```
+
+5. (Optional) Set up systemd service for automatic restart:
+   ```bash
+   # Create /etc/systemd/system/daralnas-bot.service
+   sudo tee /etc/systemd/system/daralnas-bot.service > /dev/null <<EOF
+   [Unit]
+   Description=Dar Al-Nas Telegram Bot
+   After=network.target
+
+   [Service]
+   Type=simple
+   User=$USER
+   WorkingDirectory=/opt/daralnas-chatgpt
+   Environment="PATH=/opt/daralnas-chatgpt/.venv/bin"
+   EnvironmentFile=/opt/daralnas-chatgpt/.env
+   ExecStart=/opt/daralnas-chatgpt/.venv/bin/python -m daralnas_bot.server
+   Restart=always
+
+   [Install]
+   WantedBy=multi-user.target
+   EOF
+
+   sudo systemctl daemon-reload
+   sudo systemctl enable daralnas-bot
+   sudo systemctl start daralnas-bot
+   ```
+
+### Manual Deployment
+
+#### Cloudflare Workers
+```bash
+# Apply migrations to production DB
+npm run predeploy
+
+# Deploy to Cloudflare Workers
+npm run deploy
+```
+
+#### Linux Server (Telegram Bot)
+```bash
+# On the server
+cd /opt/daralnas-chatgpt
+bash scripts/deploy-to-server.sh
 ```
 
 ### Docker Support
