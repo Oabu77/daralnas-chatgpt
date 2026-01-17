@@ -4,6 +4,7 @@
 
 ### Services Deployed
 - ✅ OliveExpress™ API (Cloudflare Workers)
+- ✅ Fungi Mesh Infrastructure Sentinel (Autonomous Monitoring)
 - ✅ D1 Database (Multi-regional)
 - ✅ Operations Dashboard
 - ✅ QuranChain Integration Layer
@@ -37,6 +38,7 @@
 ✅ 0004_ai_analytics_treasury.sql
 ✅ 0005_integrations.sql
 ✅ 0006_regional_seed_data.sql
+✅ 0007_fungi_mesh_sentinel.sql
 ```
 
 ### API Endpoints (Production)
@@ -81,6 +83,11 @@ Base URL: `https://your-worker.workers.dev` (or custom domain)
 
 #### Carrier Onboarding
 - `POST /oliveexpress/onboarding/carrier` - Complete onboarding flow
+
+#### Fungi Mesh Infrastructure Sentinel
+- `GET /fungi/sentinel/health` - Sentinel health check
+- `GET /fungi/sentinel/status` - Current infrastructure status (multiple formats)
+- `POST /fungi/sentinel/report` - Trigger manual status report
 
 ### Environment Variables Required
 
