@@ -5,6 +5,7 @@ import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { ChatGPTEndpoint } from "./endpoints/chatgpt";
 import { RefreshWidgetEndpoint } from "./endpoints/refreshWidget";
+import { paymentsRouter } from "./endpoints/payments/router";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
@@ -39,18 +40,19 @@ app.onError((err, c) => {
 
 // Setup OpenAPI registry
 const openapi = fromHono(app, {
-	docs_url: "/",
-	schema: {
-		info: {
-			title: "My Awesome API",
-			version: "2.0.0",
-			description: "This is the documentation for my awesome API.",
-		},
-	},
+        docs_url: "/",
+        schema: {
+                info: {
+                        title: "QuranChain Pay API",
+                        version: "1.0.0",
+                        description: "Unified payments, compliance, and royalty engine for the QuranChain ecosystem.",
+                },
+        },
 });
 
 // Register Tasks Sub router
 openapi.route("/tasks", tasksRouter);
+openapi.route("/v1", paymentsRouter);
 
 // Register other endpoints
 openapi.post("/dummy/:slug", DummyEndpoint);
