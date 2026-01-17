@@ -109,7 +109,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: update npm dependencies (automated)'
           committer: GitHub Actions <actions@github.com>
-          author: ChatGPT Agent <chatgpt@daralnas.com>
+          author: ChatGPT Agent <noreply@github.com>
           branch: automated/dependency-updates
           delete-branch: true
           title: '[Auto] Update npm dependencies'
@@ -178,7 +178,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'security: fix npm vulnerabilities (automated)'
           committer: GitHub Actions <actions@github.com>
-          author: ChatGPT Agent <chatgpt@daralnas.com>
+          author: ChatGPT Agent <noreply@github.com>
           branch: automated/security-fixes
           delete-branch: true
           title: '[Auto] Fix security vulnerabilities'

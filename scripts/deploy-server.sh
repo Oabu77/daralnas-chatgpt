@@ -10,6 +10,7 @@ DEPLOY_DIR="${DEPLOY_DIR:-/opt/daralnas/apps/daralnas-chatgpt}"
 BACKUP_DIR="${BACKUP_DIR:-/opt/daralnas/backups}"
 LOG_DIR="${LOG_DIR:-/opt/daralnas/logs}"
 LOG_FILE="$LOG_DIR/deploy-$(date +%Y%m%d-%H%M%S).log"
+REPO_URL="${REPO_URL:-https://github.com/Oabu77/daralnas-chatgpt.git}"
 
 # Colors for output
 RED='\033[0;31m'
@@ -85,7 +86,7 @@ else
     log "Cloning repository..."
     mkdir -p "$(dirname "$DEPLOY_DIR")"
     
-    if ! git clone https://github.com/Oabu77/daralnas-chatgpt.git "$DEPLOY_DIR"; then
+    if ! git clone "$REPO_URL" "$DEPLOY_DIR"; then
         error "Failed to clone repository"
     fi
     

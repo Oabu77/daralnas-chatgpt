@@ -101,11 +101,15 @@ fi
 echo ""
 echo "=== WireGuard Status ==="
 if command -v wg &> /dev/null; then
-    if sudo wg show 2>/dev/null | grep -q "interface"; then
-        echo -e "${GREEN}✅ WireGuard: Active${NC}"
-        sudo wg show 2>/dev/null || true
+    if command -v sudo &> /dev/null && sudo -n true 2>/dev/null; then
+        if sudo wg show 2>/dev/null | grep -q "interface"; then
+            echo -e "${GREEN}✅ WireGuard: Active${NC}"
+            sudo wg show 2>/dev/null || true
+        else
+            echo -e "${YELLOW}⚠️  WireGuard: Not configured${NC}"
+        fi
     else
-        echo -e "${YELLOW}⚠️  WireGuard: Not configured${NC}"
+        echo -e "${YELLOW}⚠️  WireGuard: Cannot check (sudo not available)${NC}"
     fi
 else
     echo "WireGuard not installed"
@@ -114,13 +118,21 @@ fi
 # Cloudflared tunnel status
 echo ""
 echo "=== Cloudflared Tunnel Status ==="
-if systemctl is-active --quiet cloudflared-quickagent 2>/dev/null; then
-    echo -e "${GREEN}✅ Cloudflared Quick Tunnel: Running${NC}"
-    sudo journalctl -u cloudflared-quickagent --no-pager 2>/dev/null | grep "https://" | tail -1 || true
-elif systemctl is-active --quiet cloudflared-tunnel 2>/dev/null; then
-    echo -e "${GREEN}✅ Cloudflared Named Tunnel: Running${NC}"
+if command -v systemctl &> /dev/null; then
+    if command -v sudo &> /dev/null && sudo -n true 2>/dev/null; then
+        if sudo systemctl is-active --quiet cloudflared-quickagent 2>/dev/null; then
+            echo -e "${GREEN}✅ Cloudflared Quick Tunnel: Running${NC}"
+            sudo journalctl -u cloudflared-quickagent --no-pager 2>/dev/null | grep "https://" | tail -1 || true
+        elif sudo systemctl is-active --quiet cloudflared-tunnel 2>/dev/null; then
+            echo -e "${GREEN}✅ Cloudflared Named Tunnel: Running${NC}"
+        else
+            echo -e "${YELLOW}⚠️  Cloudflared: Not running${NC}"
+        fi
+    else
+        echo -e "${YELLOW}⚠️  Cloudflared: Cannot check (sudo not available)${NC}"
+    fi
 else
-    echo -e "${YELLOW}⚠️  Cloudflared: Not running${NC}"
+    echo "systemctl not available"
 fi
 
 # Monitoring stack

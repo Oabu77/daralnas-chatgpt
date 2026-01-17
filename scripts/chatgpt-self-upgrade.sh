@@ -176,7 +176,8 @@ EOF
 
 # CPU check
 CPU_USAGE=$(top -bn1 | grep "Cpu(s)" 2>/dev/null | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}' || echo "0")
-if (( $(echo "$CPU_USAGE > 80" | bc -l 2>/dev/null || echo 0) )); then
+CPU_USAGE_INT=$(printf "%.0f" "$CPU_USAGE" 2>/dev/null || echo "0")
+if [ "$CPU_USAGE_INT" -gt 80 ]; then
     cat >> /tmp/recommendations.txt << EOF
    ⚠️  High CPU usage detected (${CPU_USAGE}%)
    - Monitor sustained high usage
