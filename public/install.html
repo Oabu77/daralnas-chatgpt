@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 Auto-Install AI Apps</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#10b981">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        .app-grid {
+            display: grid;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        .app-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 20px;
+            border-radius: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .app-btn:hover {
+            transform: translateY(-3px);
+        }
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(16, 185, 129, 0.2);
+            border-radius: 10px;
+            display: none;
+        }
+        .status.show {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Install AI Apps</h1>
+        <p style="margin-bottom: 30px;">Tap any app below to auto-install it on your device</p>
+        
+        <div class="app-grid">
+            <button class="app-btn" onclick="installApp('assistant')">
+                🤖 AI Assistant
+            </button>
+            <button class="app-btn" onclick="installApp('network')">
+                🔧 Network Maintenance
+            </button>
+            <button class="app-btn" onclick="installApp('revenue')">
+                💰 Revenue Dashboard
+            </button>
+            <button class="app-btn" onclick="installApp('quranchain')">
+                📱 QuranChain Wallet
+            </button>
+            <button class="app-btn" onclick="installApp('oliveexpress')">
+                📦 OliveExpress Portal
+            </button>
+        </div>
+
+        <div id="status" class="status">
+            <strong>✅ Installation in progress...</strong>
+        </div>
+
+        <p style="margin-top: 30px; color: rgba(255,255,255,0.7);">
+            All apps work offline and auto-update in the background
+        </p>
+    </div>
+
+    <script>
+        const apps = {
+            assistant: '/assistant.html',
+            network: '/network.html',
+            revenue: '/revenue.html',
+            quranchain: '/quranchain',
+            oliveexpress: '/oliveexpress.html'
+        };
+
+        function installApp(appName) {
+            const url = apps[appName];
+            const status = document.getElementById('status');
+            
+            // Show status
+            status.classList.add('show');
+            status.innerHTML = `<strong>✅ Opening ${appName}...</strong><p>When the page loads, you'll see an "Add to Home Screen" prompt. Tap it to install!</p>`;
+            
+            // Open the app (which will trigger auto-install)
+            setTimeout(() => {
+                window.location.href = url;
+            }, 2000);
+        }
+
+        // Auto-install this page as launcher
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        document.getElementById('status').innerHTML = 
+                            '<strong>✅ App Launcher installed!</strong><p>Now tap any app above to install it.</p>';
+                        document.getElementById('status').classList.add('show');
+                    }
+                    deferredPrompt = null;
+                });
+            }, 1000);
+        });
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>

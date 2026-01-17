@@ -254,6 +254,32 @@
     <script>
         const API_BASE = window.location.origin;
         let autoMaintainInterval;
+        let deferredPrompt;
+
+        // Auto-install PWA when page loads
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            // Automatically show install prompt
+            setTimeout(() => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ AI Network Maintenance installed!');
+                    }
+                    deferredPrompt = null;
+                });
+            }, 2000); // Show after 2 seconds
+        });
+
+        // Register service worker automatically
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('✅ Service Worker registered for auto-updates'))
+                    .catch(err => console.log('Service Worker registration failed:', err));
+            });
+        }
 
         async function scanDevices() {
             const response = await fetch(`${API_BASE}/network/devices/monitor`, {

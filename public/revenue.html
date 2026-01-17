@@ -275,6 +275,29 @@
 
     <script>
         const API_BASE = window.location.origin;
+        let deferredPrompt;
+
+        // Auto-install PWA
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('✅ Revenue Dashboard installed!');
+                    }
+                    deferredPrompt = null;
+                });
+            }, 2000);
+        });
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js').then(() => 
+                console.log('✅ Service Worker active - auto-updates enabled')
+            );
+        }
 
         function calculateRoyalty() {
             const amount = parseFloat(document.getElementById('payment-amount').value) || 0;
