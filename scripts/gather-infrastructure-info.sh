@@ -78,7 +78,7 @@ ss -tulpenH | awk '{print $5,$7}' | sed 's/users:(("//; s/".*//' | sort -u >> "$
 section "5. DETAILED PROCESS INFORMATION"
 log "Gathering detailed process info..."
 # Use POSIX-compliant grep for broader compatibility
-ss -tulpen | grep LISTEN | awk '{print $7}' | grep -o 'pid=[0-9]*' | cut -d= -f2 | sort -u | while read pid; do
+ss -tulpen | grep LISTEN | awk '{print $7}' | grep -o 'pid=[0-9]*' | cut -d= -f2 | sort -u | while read -r pid; do
     if [ -n "$pid" ]; then
         echo "PID: $pid" >> "$OUTPUT_FILE"
         ps -p "$pid" -o pid,user,cmd --no-headers >> "$OUTPUT_FILE" 2>&1 || true
@@ -163,7 +163,16 @@ cat /etc/resolv.conf >> "$OUTPUT_FILE" 2>&1 || echo "Cannot read /etc/resolv.con
 section "13. RUNNING PROCESSES (Filtered for DarCloud Services)"
 log "Gathering relevant processes..."
 # Services to filter for: cloudflared, nginx, node, python, oliveexpress, daralnas, meshtalk, darcloud
-ps aux | grep -E "cloudflared|nginx|node|python|oliveexpress|daralnas|meshtalk|darcloud" | grep -v grep >> "$OUTPUT_FILE" 2>&1 || echo "No relevant processes found" >> "$OUTPUT_FILE"
+# Using pgrep for efficiency (fallback to ps+grep if pgrep unavailable)
+if command -v pgrep >/dev/null 2>&1; then
+    for proc in cloudflared nginx node python; do
+        if pgrep -a "$proc" >> "$OUTPUT_FILE" 2>&1; then
+            true  # pgrep succeeded
+        fi
+    done
+else
+    ps aux | grep -E "cloudflared|nginx|node|python|oliveexpress|daralnas|meshtalk|darcloud" | grep -v grep >> "$OUTPUT_FILE" 2>&1 || echo "No relevant processes found" >> "$OUTPUT_FILE"
+fi
 
 # Section 14: Disk Usage
 section "14. DISK USAGE"
