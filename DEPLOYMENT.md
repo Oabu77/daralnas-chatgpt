@@ -183,7 +183,7 @@ npm run predeploy
 **AI Dispatch**: OPERATIONAL  
 **Humanitarian Corridors**: ACTIVE  
 
-**Dashboard**: Available at `/dashboard.html`  
+**Dashboard**: Available at `/dashboard`  
 **API Documentation**: Available at `/` (OpenAPI)
 
 For partner onboarding: Contact operations@daralnas.com

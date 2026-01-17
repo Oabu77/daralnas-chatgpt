@@ -60,7 +60,7 @@ OliveExpress™ is a complete, revenue-generating logistics network featuring:
 
 4. Access API:
    - OpenAPI Docs: http://localhost:8787/
-   - Dashboard: http://localhost:8787/dashboard.html
+   - Dashboard: http://localhost:8787/dashboard
    - Ports API: http://localhost:8787/oliveexpress/ports
 
 ### Production Deployment
