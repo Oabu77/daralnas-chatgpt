@@ -64,6 +64,14 @@ OliveExpress™ is a complete, revenue-generating logistics network featuring:
    - Ports API: http://localhost:8787/oliveexpress/ports
 
 ### Production Deployment
+
+**Option 1: Auto-Deployment (Recommended)**
+1. Create a PR with your changes
+2. Get approvals and pass all checks
+3. Merge the PR → Deployment triggers automatically
+4. Monitor deployment in Actions tab
+
+**Option 2: Manual Deployment**
 ```bash
 # Apply migrations to production DB
 npm run predeploy
@@ -71,6 +79,8 @@ npm run predeploy
 # Deploy to Cloudflare Workers
 npm run deploy
 ```
+
+See [AUTO_DEPLOY.md](./AUTO_DEPLOY.md) for complete auto-deployment guide.
 
 ## API Endpoints (60+)
 
@@ -203,7 +213,7 @@ See [API_TESTS.md](./API_TESTS.md) for complete API testing guide.
 - **Database**: D1 (SQLite, auto-scaling)
 - **CDN**: Cloudflare global network
 - **Monitoring**: Cloudflare Analytics + Observability
-- **CI/CD**: GitHub Actions
+- **CI/CD**: GitHub Actions with auto-deployment
 
 ### Environment Variables
 ```bash
@@ -235,6 +245,7 @@ docker-compose up
 
 ## Documentation
 
+- [AUTO_DEPLOY.md](./AUTO_DEPLOY.md) - Auto-deployment guide with GitHub Actions
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide and infrastructure
 - [LIVE_STATUS.md](./LIVE_STATUS.md) - Live system confirmation and statistics
 - [API_TESTS.md](./API_TESTS.md) - Complete API testing guide
