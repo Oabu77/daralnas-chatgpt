@@ -1,5 +1,6 @@
 // Service Worker for DarCloud AI Assistant
 // Enables offline functionality and always-on capabilities
+// AUTO-ALLOW: No permissions needed, always accessible
 
 const CACHE_NAME = 'darcloud-ai-v1';
 const RUNTIME_CACHE = 'darcloud-runtime-v1';
@@ -13,22 +14,27 @@ const PRECACHE_ASSETS = [
   '/icons/icon-512x512.png'
 ];
 
-// Install event - precache critical assets
+// Install event - precache critical assets, auto-skip waiting
 self.addEventListener('install', (event) => {
-  console.log('[ServiceWorker] Installing...');
+  console.log('[ServiceWorker] Installing... AUTO-ALLOW mode');
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
         console.log('[ServiceWorker] Precaching assets');
-        return cache.addAll(PRECACHE_ASSETS);
+        return cache.addAll(PRECACHE_ASSETS).catch(() => {
+          console.log('[ServiceWorker] Some assets failed to cache, continuing anyway');
+        });
       })
-      .then(() => self.skipWaiting())
+      .then(() => {
+        console.log('[ServiceWorker] Skipping waiting - activating immediately');
+        return self.skipWaiting();
+      })
   );
 });
 
-// Activate event - clean up old caches
+// Activate event - clean up old caches, auto-claim clients
 self.addEventListener('activate', (event) => {
-  console.log('[ServiceWorker] Activating...');
+  console.log('[ServiceWorker] Activating... AUTO-CLAIM all clients');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
@@ -36,7 +42,10 @@ self.addEventListener('activate', (event) => {
           .filter((name) => name !== CACHE_NAME && name !== RUNTIME_CACHE)
           .map((name) => caches.delete(name))
       );
-    }).then(() => self.clients.claim())
+    }).then(() => {
+      console.log('[ServiceWorker] Claiming all clients');
+      return self.clients.claim();
+    })
   );
 });
 

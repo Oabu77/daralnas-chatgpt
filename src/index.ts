@@ -1,8 +1,10 @@
 import { ApiException, fromHono } from "chanfana";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { tasksRouter } from "./endpoints/tasks/router";
 import { oliveexpressRouter } from "./endpoints/oliveexpress/router";
 import { fungiRouter } from "./endpoints/fungi/router";
+import { networkRouter } from "./endpoints/network/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { ChatGPTEndpoint } from "./endpoints/chatgpt";
@@ -10,6 +12,16 @@ import { MobileAssistantEndpoint } from "./endpoints/assistant";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
+
+// Enable CORS for all origins - auto allow everything
+app.use('*', cors({
+	origin: '*',
+	allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+	allowHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+	exposeHeaders: ['Content-Length', 'X-Request-Id'],
+	maxAge: 86400,
+	credentials: false,
+}));
 
 app.onError((err, c) => {
 	if (err instanceof ApiException) {
@@ -52,6 +64,9 @@ openapi.route("/oliveexpress", oliveexpressRouter);
 
 // Register Fungi Mesh Sentinel
 openapi.route("/fungi", fungiRouter);
+
+// Register Network Device Management
+openapi.route("/network", networkRouter);
 
 // Register Mobile AI Assistant
 openapi.post("/assistant/chat", MobileAssistantEndpoint);

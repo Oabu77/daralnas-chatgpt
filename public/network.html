@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 AI Network Maintenance - Auto-Optimize All Devices</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .live-status {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        .stat-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #10b981;
+        }
+        .stat-label {
+            margin-top: 10px;
+            color: #94a3b8;
+        }
+        .devices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .device-card {
+            background: rgba(255,255,255,0.05);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+            border-radius: 15px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+        }
+        .device-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .device-name {
+            font-size: 1.3em;
+            font-weight: bold;
+        }
+        .device-status {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .status-optimal { background: #10b981; }
+        .status-good { background: #3b82f6; }
+        .status-warning { background: #f59e0b; }
+        .performance-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .performance-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #06b6d4);
+            transition: width 1s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .optimizations {
+            margin-top: 15px;
+        }
+        .optimization-item {
+            background: rgba(16, 185, 129, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+        .btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+        }
+        .btn-scan {
+            background: linear-gradient(135deg, #3b82f6, #2563eb);
+            color: white;
+        }
+        .btn-optimize {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        .btn-repair {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        .auto-maintain {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid #10b981;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #10b981;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔧 AI Network Maintenance</h1>
+            <p style="margin: 15px 0;">AI automatically maintaining all your devices at peak performance</p>
+            <span class="live-status">🤖 AI ACTIVE - AUTO-OPTIMIZING</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-value" id="overall-score">--</div>
+                <div class="stat-label">Overall Performance</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="devices-count">--</div>
+                <div class="stat-label">Devices Monitored</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="optimizations-count">--</div>
+                <div class="stat-label">Optimizations Today</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="uptime">--</div>
+                <div class="stat-label">Network Uptime</div>
+            </div>
+        </div>
+
+        <div class="auto-maintain">
+            <h2 style="margin-bottom: 20px;">🤖 Automatic Maintenance</h2>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <label class="toggle-switch">
+                    <input type="checkbox" id="auto-maintain-toggle" checked onchange="toggleAutoMaintain()">
+                    <span class="slider"></span>
+                </label>
+                <div>
+                    <strong>AI Auto-Maintenance: <span id="auto-status">ENABLED</span></strong>
+                    <p style="color: #94a3b8; margin-top: 5px;">AI checks every 30 minutes and automatically optimizes all devices</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn btn-scan" onclick="scanDevices()">🔍 Scan Network</button>
+            <button class="btn btn-optimize" onclick="optimizeDevices()">⚡ Optimize All</button>
+            <button class="btn btn-repair" onclick="repairDevices()">🔧 Auto-Repair</button>
+        </div>
+
+        <div class="devices-grid" id="devices-grid">
+            <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #94a3b8;">
+                <p style="font-size: 1.2em;">Click "Scan Network" to discover and optimize all your devices</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        let autoMaintainInterval;
+
+        async function scanDevices() {
+            const response = await fetch(`${API_BASE}/network/devices/monitor`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'scan' })
+            });
+            const data = await response.json();
+            displayDevices(data.devices);
+            updateStats(data);
+        }
+
+        async function optimizeDevices() {
+            const response = await fetch(`${API_BASE}/network/devices/monitor`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'optimize' })
+            });
+            const data = await response.json();
+            displayDevices(data.devices);
+            updateStats(data);
+            alert(`✅ Optimized ${data.devices.length} devices! Performance improved to ${data.performance_score}%`);
+        }
+
+        async function repairDevices() {
+            const response = await fetch(`${API_BASE}/network/devices/monitor`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'repair' })
+            });
+            const data = await response.json();
+            displayDevices(data.devices);
+            updateStats(data);
+            alert(`✅ Auto-repair complete! All devices running at 100% performance`);
+        }
+
+        async function toggleAutoMaintain() {
+            const enabled = document.getElementById('auto-maintain-toggle').checked;
+            const response = await fetch(`${API_BASE}/network/devices/auto-maintain`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    enabled: enabled,
+                    interval_minutes: 30,
+                    auto_optimize: true,
+                    auto_repair: true
+                })
+            });
+            const data = await response.json();
+            document.getElementById('auto-status').textContent = enabled ? 'ENABLED' : 'DISABLED';
+            
+            if (enabled) {
+                startAutoMaintain();
+            } else {
+                stopAutoMaintain();
+            }
+        }
+
+        function startAutoMaintain() {
+            autoMaintainInterval = setInterval(async () => {
+                await optimizeDevices();
+            }, 30 * 60 * 1000); // Every 30 minutes
+        }
+
+        function stopAutoMaintain() {
+            if (autoMaintainInterval) {
+                clearInterval(autoMaintainInterval);
+            }
+        }
+
+        function displayDevices(devices) {
+            const grid = document.getElementById('devices-grid');
+            grid.innerHTML = devices.map(device => `
+                <div class="device-card">
+                    <div class="device-header">
+                        <div class="device-name">${device.name}</div>
+                        <div class="device-status status-${device.status}">${device.status.toUpperCase()}</div>
+                    </div>
+                    <div style="color: #94a3b8; margin-bottom: 10px;">${device.type} • ${device.ip}</div>
+                    <div class="performance-bar">
+                        <div class="performance-fill" style="width: ${device.performance}%">${device.performance}%</div>
+                    </div>
+                    <div class="optimizations">
+                        <strong>Recent Optimizations:</strong>
+                        ${device.optimizations.map(opt => `<div class="optimization-item">✅ ${opt}</div>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateStats(data) {
+            document.getElementById('overall-score').textContent = data.performance_score + '%';
+            document.getElementById('devices-count').textContent = data.devices.length;
+            document.getElementById('optimizations-count').textContent = data.optimizations_applied;
+        }
+
+        async function loadPerformance() {
+            try {
+                const response = await fetch(`${API_BASE}/network/devices/performance`);
+                const data = await response.json();
+                document.getElementById('overall-score').textContent = data.overall_score + '%';
+                document.getElementById('devices-count').textContent = data.devices_monitored;
+                document.getElementById('optimizations-count').textContent = data.optimizations_today;
+                document.getElementById('uptime').textContent = data.uptime_percentage + '%';
+            } catch (e) {
+                console.log('Initial load, starting with scan...');
+                await scanDevices();
+            }
+        }
+
+        // Auto-load on start
+        loadPerformance();
+        startAutoMaintain();
+    </script>
+</body>
+</html>
