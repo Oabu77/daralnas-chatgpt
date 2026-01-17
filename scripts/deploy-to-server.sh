@@ -20,6 +20,13 @@ echo "📁 Deploy directory: ${DEPLOY_DIR}"
 # Navigate to deployment directory
 cd "${DEPLOY_DIR}"
 
+# Validate requirements.txt exists (fail fast)
+if [ ! -f "requirements.txt" ]; then
+    echo "❌ requirements.txt not found in ${DEPLOY_DIR}"
+    echo "❌ Deployment cannot proceed without dependency specifications"
+    exit 1
+fi
+
 # Backup current deployment (if exists)
 if [ -d "${DEPLOY_DIR}/daralnas_bot" ]; then
     echo "💾 Creating backup of current deployment..."
@@ -59,13 +66,6 @@ fi
 echo "📦 Installing Python dependencies..."
 source "${VENV_DIR}/bin/activate"
 pip install --upgrade pip
-
-# Verify requirements.txt exists before installing
-if [ ! -f "requirements.txt" ]; then
-    echo "❌ requirements.txt not found - cannot install dependencies"
-    exit 1
-fi
-
 pip install -r requirements.txt
 echo "✅ Dependencies installed"
 

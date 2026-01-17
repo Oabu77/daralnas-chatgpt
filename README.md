@@ -265,7 +265,8 @@ ENABLE_SSH_DEPLOYMENT=true  # Set in repository variables to enable
 5. (Optional) Set up systemd service for automatic restart:
    ```bash
    # Create /etc/systemd/system/daralnas-bot.service
-   # Note: Replace YOUR_USERNAME with your actual username
+   # IMPORTANT: Replace YOUR_USERNAME below with your actual Linux username
+   # Common examples: ubuntu, deploy, ec2-user, centos, admin
    sudo tee /etc/systemd/system/daralnas-bot.service > /dev/null <<'EOF'
    [Unit]
    Description=Dar Al-Nas Telegram Bot

@@ -260,7 +260,8 @@ Create a systemd service for automatic startup and management:
 
 ```bash
 # On your Linux server
-# Replace YOUR_USERNAME with your actual username (e.g., ubuntu, deploy, etc.)
+# IMPORTANT: Replace YOUR_USERNAME with your actual Linux username in the service file below
+# Common examples: ubuntu, deploy, ec2-user, centos, admin
 sudo tee /etc/systemd/system/daralnas-bot.service > /dev/null <<EOF
 [Unit]
 Description=Dar Al-Nas Telegram Bot
