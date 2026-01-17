@@ -1,0 +1,18 @@
+[Unit]
+Description=QuranChain Founder Execution Agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=runner
+WorkingDirectory=/home/runner/quranchain_fee/agent
+EnvironmentFile=/etc/quranchain/qc-agent.env
+ExecStart=/usr/bin/python3 -m uvicorn qc_agent:APP --host 127.0.0.1 --port 7444
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
