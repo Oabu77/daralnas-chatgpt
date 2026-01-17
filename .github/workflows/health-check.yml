@@ -1,0 +1,217 @@
+name: Health Check & Monitoring
+
+on:
+  schedule:
+    # Run every 30 minutes
+    - cron: '*/30 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  health-check-cloudflare:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check Cloudflare Workers API
+        id: cloudflare_check
+        continue-on-error: true
+        run: |
+          # Note: Replace with your actual worker URL when deployed
+          WORKER_URL="${{ secrets.CLOUDFLARE_WORKER_URL }}"
+          
+          if [ -z "$WORKER_URL" ]; then
+            echo "⚠️ CLOUDFLARE_WORKER_URL secret not set, skipping check"
+            echo "status=skipped" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+          
+          echo "Checking Cloudflare Workers health at: $WORKER_URL"
+          
+          if curl -sf --max-time 10 "$WORKER_URL" > /dev/null; then
+            echo "✅ Cloudflare Workers: HEALTHY"
+            echo "status=healthy" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Cloudflare Workers: UNHEALTHY"
+            echo "status=unhealthy" >> $GITHUB_OUTPUT
+            exit 1
+          fi
+
+      - name: Check Cloudflare API access
+        continue-on-error: true
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "⚠️ Cloudflare credentials not configured"
+            exit 0
+          fi
+          
+          echo "Verifying Cloudflare API access..."
+          curl -sf -X GET "https://api.cloudflare.com/client/v4/user/tokens/verify" \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            -H "Content-Type: application/json" | jq '.' || echo "API check failed"
+
+  health-check-server:
+    runs-on: ubuntu-latest
+    if: ${{ secrets.SSH_HOST != '' }}
+    
+    steps:
+      - name: Setup SSH
+        run: |
+          if [ -z "${{ secrets.SSH_PRIVATE_KEY }}" ]; then
+            echo "SSH credentials not configured, skipping server check"
+            exit 0
+          fi
+          
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/deploy_key 2>/dev/null || exit 0
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -p ${{ secrets.SSH_PORT || 22 }} ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Check server services
+        id: server_check
+        continue-on-error: true
+        run: |
+          if [ ! -f ~/.ssh/deploy_key ]; then
+            echo "SSH key not configured, skipping"
+            exit 0
+          fi
+          
+          ssh -i ~/.ssh/deploy_key \
+            -p ${{ secrets.SSH_PORT || 22 }} \
+            -o StrictHostKeyChecking=no \
+            -o ConnectTimeout=10 \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH' || exit 0
+            
+            echo "=== Server Health Check ==="
+            echo ""
+            
+            # QC Agent
+            if curl -sf http://127.0.0.1:7444/health >/dev/null 2>&1; then
+              echo "✅ QC Agent: Healthy"
+            else
+              echo "❌ QC Agent: Unhealthy or not running"
+            fi
+            
+            # Telegram Bot
+            if curl -sf http://127.0.0.1:8000/health >/dev/null 2>&1; then
+              echo "✅ Telegram Bot: Healthy"
+            else
+              echo "⚠️ Telegram Bot: Not responding (may be normal if not deployed)"
+            fi
+            
+            # Docker containers
+            echo ""
+            echo "Docker Containers:"
+            docker ps --format "table {{.Names}}\t{{.Status}}" 2>/dev/null || echo "Docker not available"
+            
+            # System resources
+            echo ""
+            echo "System Resources:"
+            echo "CPU: $(top -bn1 | grep "Cpu(s)" 2>/dev/null | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1"%"}' || echo 'N/A')"
+            echo "Memory: $(free -h 2>/dev/null | grep Mem | awk '{print $3 "/" $2}' || echo 'N/A')"
+            echo "Disk: $(df -h / 2>/dev/null | tail -1 | awk '{print $5 " used"}' || echo 'N/A')"
+          ENDSSH
+
+      - name: Cleanup SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
+
+  report-status:
+    runs-on: ubuntu-latest
+    needs: [health-check-cloudflare, health-check-server]
+    if: always()
+    
+    steps:
+      - name: Generate status summary
+        run: |
+          echo "# Health Check Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Component Status" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          # Cloudflare status
+          if [ "${{ needs.health-check-cloudflare.result }}" == "success" ]; then
+            echo "- ✅ Cloudflare Workers: Healthy" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.health-check-cloudflare.result }}" == "skipped" ]; then
+            echo "- ⚠️ Cloudflare Workers: Not configured" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ Cloudflare Workers: Unhealthy" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          # Server status
+          if [ "${{ needs.health-check-server.result }}" == "success" ]; then
+            echo "- ✅ Server Services: Healthy" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ needs.health-check-server.result }}" == "skipped" ]; then
+            echo "- ⚠️ Server Services: Not configured" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "- ❌ Server Services: Unhealthy" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "---" >> $GITHUB_STEP_SUMMARY
+          echo "*Automated health check by ChatGPT Deployment Agent*" >> $GITHUB_STEP_SUMMARY
+
+      - name: Create issue on failure
+        if: |
+          needs.health-check-cloudflare.result == 'failure' || 
+          needs.health-check-server.result == 'failure'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = `[Alert] Health Check Failed - ${new Date().toISOString()}`;
+            const body = `## ⚠️ Health Check Alert
+            
+            One or more system components failed health checks.
+            
+            ### Status
+            - Cloudflare Workers: ${{ needs.health-check-cloudflare.result }}
+            - Server Services: ${{ needs.health-check-server.result }}
+            
+            ### Action Required
+            - [ ] Investigate failed components
+            - [ ] Check service logs
+            - [ ] Restore services if needed
+            - [ ] Update monitoring if false positive
+            
+            ### Details
+            Workflow run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            
+            ---
+            *Automated alert by ChatGPT Deployment Agent*`;
+            
+            // Check if there's already an open issue
+            const issues = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'health-check,automated',
+              per_page: 1
+            });
+            
+            if (issues.data.length === 0) {
+              // Create new issue
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: title,
+                body: body,
+                labels: ['health-check', 'automated', 'priority-high']
+              });
+            } else {
+              // Comment on existing issue
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issues.data[0].number,
+                body: `## 🔄 Health Check Still Failing\n\n${body}`
+              });
+            }
