@@ -49,6 +49,12 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
 ### Node ###
 # Logs
 logs
