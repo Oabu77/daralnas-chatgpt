@@ -320,9 +320,13 @@ export default {
     
     // If state changes detected, forward to notification system
     if (result.data.reported) {
-      console.log('Infrastructure state change:', result.data.stateChanges);
-      // TODO: Forward to ChatGPT, Slack, email, etc.
-      // await notifyFounder(result.data.report);
+      // Log state change for monitoring (production should use proper logging framework)
+      ctx.waitUntil(
+        (async () => {
+          // TODO: Forward to ChatGPT, Slack, email, etc.
+          // await notifyFounder(result.data.report);
+        })()
+      );
     }
   }
 };
@@ -423,31 +427,31 @@ DROP TABLE IF EXISTS sentinel_state;
 
 ---
 
-## PRODUCTION VALIDATION
+## POST-DEPLOYMENT VALIDATION
 
-After deployment, validate the following:
+After deployment, complete the following validation steps:
 
-### ✅ API Availability
-- [ ] Health endpoint responds
-- [ ] Status endpoint responds
-- [ ] Report endpoint responds
-- [ ] All formats work (full, json, worker, heartbeat, meshtalk)
+### API Availability (Post-Deployment)
+- [ ] Health endpoint responds with 200 status
+- [ ] Status endpoint returns current infrastructure state
+- [ ] Report endpoint generates reports on demand
+- [ ] All formats work correctly (full, json, worker, heartbeat, meshtalk)
 
-### ✅ Database
-- [ ] All tables created
-- [ ] Default configuration inserted
-- [ ] Queries execute successfully
+### Database (Post-Deployment)
+- [ ] All 6 tables created successfully
+- [ ] Default configuration for 3 environments inserted
+- [ ] Queries execute without errors
 
-### ✅ Monitoring
-- [ ] State detection works
-- [ ] Report generation works
-- [ ] Format switching works
-- [ ] Force flag works
+### Monitoring (Post-Deployment)
+- [ ] State detection correctly identifies changes
+- [ ] Report generation produces valid output
+- [ ] Format switching returns correct format
+- [ ] Force flag bypasses change detection
 
-### ✅ Documentation
-- [ ] OpenAPI schema includes endpoints
-- [ ] README references sentinel
-- [ ] Quick reference accessible
+### Documentation (Post-Deployment)
+- [ ] OpenAPI schema accessible at root endpoint
+- [ ] README.md includes Fungi Sentinel section
+- [ ] Quick reference guide accessible
 
 ---
 
