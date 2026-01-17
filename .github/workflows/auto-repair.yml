@@ -30,10 +30,10 @@ jobs:
           echo "Checking DarCloud & Fungi Mesh Network health..."
           
           # Check main health endpoint
-          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/health" || echo "000")
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/sentinel/health" || echo "000")
           
           # Check sentinel status
-          SENTINEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/status" || echo "000")
+          SENTINEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/sentinel/status" || echo "000")
           
           # Check OliveExpress health
           OLIVE_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/oliveexpress/shipments" || echo "000")
@@ -97,8 +97,8 @@ jobs:
         run: |
           echo "🔍 Verifying repair..."
           
-          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/health" || echo "000")
-          SENTINEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/status" || echo "000")
+          HEALTH_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/sentinel/health" || echo "000")
+          SENTINEL_STATUS=$(curl -s -o /dev/null -w "%{http_code}" "${WORKER_URL}/fungi/sentinel/status" || echo "000")
           
           if [ "$HEALTH_STATUS" = "200" ] && [ "$SENTINEL_STATUS" = "200" ]; then
             echo "✅ REPAIR SUCCESSFUL - All systems operational"

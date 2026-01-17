@@ -91,17 +91,17 @@ jobs:
           sleep 15
           
           # Check sentinel health
-          HEALTH=$(curl -s "${WORKER_URL}/fungi/health" | jq -r '.status // "unknown"')
+          HEALTH=$(curl -s "${WORKER_URL}/fungi/sentinel/health" | jq -r '.status // "unknown"')
           echo "Sentinel Health: $HEALTH"
           
           # Check infrastructure status
-          STATUS=$(curl -s "${WORKER_URL}/fungi/status")
+          STATUS=$(curl -s "${WORKER_URL}/fungi/sentinel/status")
           echo "Infrastructure Status:"
           echo "$STATUS" | jq '.'
           
           # Verify critical endpoints
-          curl -f "${WORKER_URL}/fungi/health" || exit 1
-          curl -f "${WORKER_URL}/fungi/status" || exit 1
+          curl -f "${WORKER_URL}/fungi/sentinel/health" || exit 1
+          curl -f "${WORKER_URL}/fungi/sentinel/status" || exit 1
           curl -f "${WORKER_URL}/oliveexpress/shipments" || exit 1
           
           echo "✅ All Fungi Mesh endpoints verified"
@@ -130,9 +130,9 @@ jobs:
           
           # Test all critical endpoints
           endpoints=(
-            "/fungi/health"
-            "/fungi/status"
-            "/fungi/report"
+            "/fungi/sentinel/health"
+            "/fungi/sentinel/status"
+            "/fungi/sentinel/report"
             "/oliveexpress/shipments"
             "/tasks"
             "/"

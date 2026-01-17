@@ -92,8 +92,8 @@ main() {
     while true; do
         # Check critical endpoints
         endpoints=(
-            "/fungi/health:Fungi Sentinel"
-            "/fungi/status:Infrastructure Status"
+            "/fungi/sentinel/health:Fungi Sentinel"
+            "/fungi/sentinel/status:Infrastructure Status"
             "/oliveexpress/shipments:OliveExpress"
             "/:API Root"
         )

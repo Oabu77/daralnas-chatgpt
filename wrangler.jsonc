@@ -19,11 +19,5 @@
 		"AUTO_REPAIR_ENABLED": "true",
 		"FUNGI_MESH_ENABLED": "true",
 		"DARCLOUD_ENABLED": "true"
-	},
-	"routes": [
-		{
-			"pattern": "daralnas.com/*",
-			"custom_domain": true
-		}
-	]
+	}
 }
