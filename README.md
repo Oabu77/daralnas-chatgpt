@@ -238,6 +238,79 @@ docker-compose up
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment guide and infrastructure
 - [LIVE_STATUS.md](./LIVE_STATUS.md) - Live system confirmation and statistics
 - [API_TESTS.md](./API_TESTS.md) - Complete API testing guide
+- [FUNGI_MESH_SENTINEL.md](./FUNGI_MESH_SENTINEL.md) - Fungi Mesh Infrastructure Sentinel system documentation
+
+## Fungi Mesh Infrastructure Sentinel
+
+The Fungi Mesh Infrastructure Sentinel is an autonomous monitoring system for DarCloud™ and QuranChain™ infrastructure. It continuously monitors tunnel status, control planes, ports, and network connectivity, reporting state changes immediately.
+
+### Key Features
+
+- **Real-time Infrastructure Monitoring**: Continuous monitoring of tunnels, control planes, and network services
+- **State Change Detection**: Automatic detection and reporting of infrastructure state changes
+- **Multiple Report Formats**: Full text, JSON, worker-optimized, heartbeat, and MeshTalk-native formats
+- **Database Persistence**: Complete state history tracked in D1 database
+- **RESTful API**: Easy integration with existing monitoring and alerting systems
+
+### API Endpoints
+
+#### Health Check
+```bash
+GET /fungi/sentinel/health
+```
+
+#### Current Infrastructure Status
+```bash
+GET /fungi/sentinel/status?environment=DarCloud&format=full
+```
+
+Query parameters:
+- `environment` (optional): Environment name (default: "DarCloud")
+- `format` (optional): Report format - "full", "json", "worker", "heartbeat", "meshtalk" (default: "full")
+
+#### Trigger Manual Report
+```bash
+POST /fungi/sentinel/report
+Content-Type: application/json
+
+{
+  "environment": "DarCloud",
+  "format": "full",
+  "force": false
+}
+```
+
+### Report Variants
+
+1. **Full Report**: Structured text format following the mandatory reporting directive
+2. **JSON Report**: Machine-readable format for programmatic consumption
+3. **Worker Report**: Minimal one-line status for resource-constrained workers
+4. **Heartbeat Report**: Compact JSON for cron/scheduled monitoring
+5. **MeshTalk Broadcast**: Native MeshTalk protocol message for mesh network distribution
+
+### Monitored Components
+
+- **Control Plane**: qc-agent service (127.0.0.1:7444) and /health endpoint
+- **Tunnels**: Cloudflare tunnel processes and public URL availability
+- **Ports**: Active TCP/UDP listeners and process-to-port mapping
+- **MeshTalk Data Plane**: Overlay network (WireGuard/Tailscale) and UDP/TCP readiness
+- **Redundancy**: Primary and secondary tunnel states
+
+### Example Usage
+
+Get current status in JSON format:
+```bash
+curl "https://your-worker.workers.dev/fungi/sentinel/status?format=json"
+```
+
+Trigger a forced report:
+```bash
+curl -X POST https://your-worker.workers.dev/fungi/sentinel/report \
+  -H "Content-Type: application/json" \
+  -d '{"environment": "DarCloud", "format": "full", "force": true}'
+```
+
+For complete documentation, see [FUNGI_MESH_SENTINEL.md](./FUNGI_MESH_SENTINEL.md).
 
 ## Telegram Bot (Legacy)
 

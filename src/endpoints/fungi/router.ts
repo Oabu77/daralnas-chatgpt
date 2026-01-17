@@ -11,9 +11,7 @@ import { SentinelReportEndpoint } from "./report";
 // Create Fungi Mesh sub-router
 const fungiApp = new Hono<{ Bindings: Env }>();
 
-export const fungiRouter = fromHono(fungiApp, {
-	base: "/fungi",
-});
+export const fungiRouter = fromHono(fungiApp);
 
 // Register sentinel endpoints
 fungiRouter.get("/sentinel/health", SentinelHealthEndpoint);
