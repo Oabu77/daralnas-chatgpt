@@ -231,7 +231,7 @@ After=network.target
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/local/bin/cloudflared tunnel run darcloud-qc-agent
+ExecStart=/usr/bin/cloudflared tunnel run darcloud-qc-agent
 Restart=always
 RestartSec=10
 StandardOutput=journal

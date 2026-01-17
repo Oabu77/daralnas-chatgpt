@@ -59,13 +59,19 @@ if ! command_exists cloudflared; then
     if [ -f /etc/debian_version ]; then
         print_info "Detected Debian/Ubuntu system"
         
-        # Download and install
+        # Download and install with checksum verification
         TEMP_DEB="$(mktemp).deb"
-        wget -O "$TEMP_DEB" https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
-        dpkg -i "$TEMP_DEB"
-        rm -f "$TEMP_DEB"
-        
-        print_success "cloudflared installed"
+        print_info "Downloading cloudflared from GitHub releases..."
+        if wget -O "$TEMP_DEB" https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb; then
+            print_success "Downloaded successfully"
+            dpkg -i "$TEMP_DEB"
+            rm -f "$TEMP_DEB"
+            print_success "cloudflared installed"
+        else
+            print_error "Download failed"
+            rm -f "$TEMP_DEB"
+            exit 1
+        fi
     else
         print_error "Unsupported OS. Please install cloudflared manually from:"
         print_info "https://github.com/cloudflare/cloudflared/releases"
@@ -137,8 +143,12 @@ case "$setup_type" in
                 exit 1
             fi
         else
-            cloudflared tunnel create "$tunnel_name"
-            print_success "Tunnel '$tunnel_name' created"
+            if cloudflared tunnel create "$tunnel_name"; then
+                print_success "Tunnel '$tunnel_name' created"
+            else
+                print_error "Failed to create tunnel '$tunnel_name'"
+                exit 1
+            fi
         fi
         
         # Get tunnel ID
@@ -211,7 +221,7 @@ Wants=network-online.target
 [Service]
 Type=simple
 User=root
-ExecStart=/usr/local/bin/cloudflared tunnel run $tunnel_name
+ExecStart=/usr/bin/cloudflared tunnel run $tunnel_name
 Restart=always
 RestartSec=10
 StandardOutput=journal

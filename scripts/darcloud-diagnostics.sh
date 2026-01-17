@@ -87,12 +87,14 @@ check_health() {
         print_success "Health check succeeded"
         
         # Extract status if available
-        if status=$(echo "$response" | jq -r '.status // empty' 2>/dev/null); then
-            if [ "$status" = "ok" ]; then
+        if status=$(echo "$response" | jq -r '.status // empty'); then
+            if [ -n "$status" ] && [ "$status" = "ok" ]; then
                 print_success "Service status: OK"
-            else
+            elif [ -n "$status" ]; then
                 print_warning "Service status: $status"
             fi
+        else
+            print_warning "Could not parse status from response (invalid JSON or missing .status field)"
         fi
         
         return 0

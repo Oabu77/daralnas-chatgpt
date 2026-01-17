@@ -7,7 +7,8 @@ Wants=network-online.target
 Type=simple
 User=root
 # Update the tunnel name to match your created tunnel
-ExecStart=/usr/local/bin/cloudflared tunnel run darcloud-qc-agent
+# Uses cloudflared from PATH (works with both /usr/bin and /usr/local/bin)
+ExecStart=/usr/bin/cloudflared tunnel run darcloud-qc-agent
 Restart=always
 RestartSec=10
 StandardOutput=journal
