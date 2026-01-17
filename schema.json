@@ -1,0 +1,4968 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OliveExpress™ Logistics Platform API",
+    "version": "1.0.0",
+    "description": "Production logistics platform for Dar Al-Nas ecosystem with QuranChain integration, AI-powered dispatch, and multi-regional operations (USA, Mexico, Jordan)."
+  },
+  "components": {
+    "schemas": {},
+    "parameters": {}
+  },
+  "paths": {
+    "/tasks": {
+      "get": {
+        "operationId": "get_TaskList",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "per_page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "description": "Search by name, slug, description"
+            },
+            "required": false,
+            "name": "search",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "slug": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "completed": {
+                            "type": "boolean"
+                          },
+                          "due_date": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "name",
+                          "slug",
+                          "description",
+                          "completed",
+                          "due_date"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "post_TaskCreate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "completed": {
+                    "type": "boolean"
+                  },
+                  "due_date": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "name",
+                  "slug",
+                  "description",
+                  "completed",
+                  "due_date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "completed": {
+                          "type": "boolean"
+                        },
+                        "due_date": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug",
+                        "description",
+                        "completed",
+                        "due_date"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/tasks/{id}": {
+      "get": {
+        "operationId": "get_TaskRead",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a single object if found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "completed": {
+                          "type": "boolean"
+                        },
+                        "due_date": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug",
+                        "description",
+                        "completed",
+                        "due_date"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "put_TaskUpdate",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "slug": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "completed": {
+                    "type": "boolean"
+                  },
+                  "due_date": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "name",
+                  "slug",
+                  "description",
+                  "completed",
+                  "due_date"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "completed": {
+                          "type": "boolean"
+                        },
+                        "due_date": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug",
+                        "description",
+                        "completed",
+                        "due_date"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "delete_TaskDelete",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the Object if it was successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "description": {
+                          "type": "string"
+                        },
+                        "completed": {
+                          "type": "boolean"
+                        },
+                        "due_date": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "name",
+                        "slug",
+                        "description",
+                        "completed",
+                        "due_date"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/shipments": {
+      "get": {
+        "operationId": "get_ShipmentList",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "per_page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "shipment_number": {
+                            "type": "string"
+                          },
+                          "shipper_name": {
+                            "type": "string"
+                          },
+                          "shipper_darcloud_id": {
+                            "type": "string"
+                          },
+                          "consignee_name": {
+                            "type": "string"
+                          },
+                          "consignee_darcloud_id": {
+                            "type": "string"
+                          },
+                          "carrier_id": {
+                            "type": "integer"
+                          },
+                          "origin_port_id": {
+                            "type": "integer"
+                          },
+                          "destination_port_id": {
+                            "type": "integer"
+                          },
+                          "corridor_id": {
+                            "type": [
+                              "integer",
+                              "null"
+                            ]
+                          },
+                          "transport_mode": {
+                            "type": "string",
+                            "enum": [
+                              "TRUCK",
+                              "RAIL",
+                              "SEA",
+                              "AIR",
+                              "MULTIMODAL"
+                            ]
+                          },
+                          "cargo_type": {
+                            "type": "string"
+                          },
+                          "cargo_weight_kg": {
+                            "type": "number"
+                          },
+                          "cargo_volume_m3": {
+                            "type": "number"
+                          },
+                          "cargo_value_usd": {
+                            "type": "number"
+                          },
+                          "shipment_type": {
+                            "type": "string",
+                            "enum": [
+                              "COMMERCIAL",
+                              "HUMANITARIAN",
+                              "NGO"
+                            ]
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "CREATED",
+                              "DISPATCHED",
+                              "IN_TRANSIT",
+                              "AT_CUSTOMS",
+                              "DELIVERED",
+                              "DELAYED",
+                              "DISPUTED",
+                              "CANCELLED"
+                            ]
+                          },
+                          "quranchain_contract_id": {
+                            "type": [
+                              "string",
+                              "null"
+                            ]
+                          },
+                          "escrow_status": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "enum": [
+                              "NONE",
+                              "FUNDED",
+                              "RELEASED",
+                              "DISPUTED"
+                            ]
+                          },
+                          "pickup_date": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "estimated_delivery": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "actual_delivery": {
+                            "type": [
+                              "string",
+                              "null"
+                            ],
+                            "format": "date-time"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "shipment_number",
+                          "shipper_name",
+                          "shipper_darcloud_id",
+                          "consignee_name",
+                          "consignee_darcloud_id",
+                          "carrier_id",
+                          "origin_port_id",
+                          "destination_port_id",
+                          "transport_mode",
+                          "cargo_type",
+                          "cargo_weight_kg",
+                          "cargo_volume_m3",
+                          "cargo_value_usd",
+                          "shipment_type",
+                          "status",
+                          "estimated_delivery",
+                          "created_at",
+                          "updated_at"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "post_ShipmentCreate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shipment_number": {
+                    "type": "string"
+                  },
+                  "shipper_name": {
+                    "type": "string"
+                  },
+                  "shipper_darcloud_id": {
+                    "type": "string"
+                  },
+                  "consignee_name": {
+                    "type": "string"
+                  },
+                  "consignee_darcloud_id": {
+                    "type": "string"
+                  },
+                  "carrier_id": {
+                    "type": "integer"
+                  },
+                  "origin_port_id": {
+                    "type": "integer"
+                  },
+                  "destination_port_id": {
+                    "type": "integer"
+                  },
+                  "corridor_id": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "transport_mode": {
+                    "type": "string",
+                    "enum": [
+                      "TRUCK",
+                      "RAIL",
+                      "SEA",
+                      "AIR",
+                      "MULTIMODAL"
+                    ]
+                  },
+                  "cargo_type": {
+                    "type": "string"
+                  },
+                  "cargo_weight_kg": {
+                    "type": "number"
+                  },
+                  "cargo_volume_m3": {
+                    "type": "number"
+                  },
+                  "cargo_value_usd": {
+                    "type": "number"
+                  },
+                  "shipment_type": {
+                    "type": "string",
+                    "enum": [
+                      "COMMERCIAL",
+                      "HUMANITARIAN",
+                      "NGO"
+                    ]
+                  },
+                  "estimated_delivery": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                },
+                "required": [
+                  "shipment_number",
+                  "shipper_name",
+                  "shipper_darcloud_id",
+                  "consignee_name",
+                  "consignee_darcloud_id",
+                  "carrier_id",
+                  "origin_port_id",
+                  "destination_port_id",
+                  "transport_mode",
+                  "cargo_type",
+                  "cargo_weight_kg",
+                  "cargo_volume_m3",
+                  "cargo_value_usd",
+                  "shipment_type",
+                  "estimated_delivery"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "shipment_number": {
+                          "type": "string"
+                        },
+                        "shipper_name": {
+                          "type": "string"
+                        },
+                        "shipper_darcloud_id": {
+                          "type": "string"
+                        },
+                        "consignee_name": {
+                          "type": "string"
+                        },
+                        "consignee_darcloud_id": {
+                          "type": "string"
+                        },
+                        "carrier_id": {
+                          "type": "integer"
+                        },
+                        "origin_port_id": {
+                          "type": "integer"
+                        },
+                        "destination_port_id": {
+                          "type": "integer"
+                        },
+                        "corridor_id": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "transport_mode": {
+                          "type": "string",
+                          "enum": [
+                            "TRUCK",
+                            "RAIL",
+                            "SEA",
+                            "AIR",
+                            "MULTIMODAL"
+                          ]
+                        },
+                        "cargo_type": {
+                          "type": "string"
+                        },
+                        "cargo_weight_kg": {
+                          "type": "number"
+                        },
+                        "cargo_volume_m3": {
+                          "type": "number"
+                        },
+                        "cargo_value_usd": {
+                          "type": "number"
+                        },
+                        "shipment_type": {
+                          "type": "string",
+                          "enum": [
+                            "COMMERCIAL",
+                            "HUMANITARIAN",
+                            "NGO"
+                          ]
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "CREATED",
+                            "DISPATCHED",
+                            "IN_TRANSIT",
+                            "AT_CUSTOMS",
+                            "DELIVERED",
+                            "DELAYED",
+                            "DISPUTED",
+                            "CANCELLED"
+                          ]
+                        },
+                        "quranchain_contract_id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "escrow_status": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "NONE",
+                            "FUNDED",
+                            "RELEASED",
+                            "DISPUTED"
+                          ]
+                        },
+                        "pickup_date": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "estimated_delivery": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "actual_delivery": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "shipment_number",
+                        "shipper_name",
+                        "shipper_darcloud_id",
+                        "consignee_name",
+                        "consignee_darcloud_id",
+                        "carrier_id",
+                        "origin_port_id",
+                        "destination_port_id",
+                        "transport_mode",
+                        "cargo_type",
+                        "cargo_weight_kg",
+                        "cargo_volume_m3",
+                        "cargo_value_usd",
+                        "shipment_type",
+                        "status",
+                        "estimated_delivery",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/shipments/{id}": {
+      "get": {
+        "operationId": "get_ShipmentRead",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a single object if found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "shipment_number": {
+                          "type": "string"
+                        },
+                        "shipper_name": {
+                          "type": "string"
+                        },
+                        "shipper_darcloud_id": {
+                          "type": "string"
+                        },
+                        "consignee_name": {
+                          "type": "string"
+                        },
+                        "consignee_darcloud_id": {
+                          "type": "string"
+                        },
+                        "carrier_id": {
+                          "type": "integer"
+                        },
+                        "origin_port_id": {
+                          "type": "integer"
+                        },
+                        "destination_port_id": {
+                          "type": "integer"
+                        },
+                        "corridor_id": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "transport_mode": {
+                          "type": "string",
+                          "enum": [
+                            "TRUCK",
+                            "RAIL",
+                            "SEA",
+                            "AIR",
+                            "MULTIMODAL"
+                          ]
+                        },
+                        "cargo_type": {
+                          "type": "string"
+                        },
+                        "cargo_weight_kg": {
+                          "type": "number"
+                        },
+                        "cargo_volume_m3": {
+                          "type": "number"
+                        },
+                        "cargo_value_usd": {
+                          "type": "number"
+                        },
+                        "shipment_type": {
+                          "type": "string",
+                          "enum": [
+                            "COMMERCIAL",
+                            "HUMANITARIAN",
+                            "NGO"
+                          ]
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "CREATED",
+                            "DISPATCHED",
+                            "IN_TRANSIT",
+                            "AT_CUSTOMS",
+                            "DELIVERED",
+                            "DELAYED",
+                            "DISPUTED",
+                            "CANCELLED"
+                          ]
+                        },
+                        "quranchain_contract_id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "escrow_status": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "NONE",
+                            "FUNDED",
+                            "RELEASED",
+                            "DISPUTED"
+                          ]
+                        },
+                        "pickup_date": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "estimated_delivery": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "actual_delivery": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "shipment_number",
+                        "shipper_name",
+                        "shipper_darcloud_id",
+                        "consignee_name",
+                        "consignee_darcloud_id",
+                        "carrier_id",
+                        "origin_port_id",
+                        "destination_port_id",
+                        "transport_mode",
+                        "cargo_type",
+                        "cargo_weight_kg",
+                        "cargo_volume_m3",
+                        "cargo_value_usd",
+                        "shipment_type",
+                        "status",
+                        "estimated_delivery",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "put_ShipmentUpdate",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "CREATED",
+                      "DISPATCHED",
+                      "IN_TRANSIT",
+                      "AT_CUSTOMS",
+                      "DELIVERED",
+                      "DELAYED",
+                      "DISPUTED",
+                      "CANCELLED"
+                    ]
+                  },
+                  "carrier_id": {
+                    "type": "integer"
+                  },
+                  "corridor_id": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "pickup_date": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "estimated_delivery": {
+                    "type": "string",
+                    "format": "date-time"
+                  },
+                  "actual_delivery": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date-time"
+                  },
+                  "quranchain_contract_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "escrow_status": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "enum": [
+                      "NONE",
+                      "FUNDED",
+                      "RELEASED",
+                      "DISPUTED"
+                    ]
+                  }
+                },
+                "required": [
+                  "status",
+                  "carrier_id",
+                  "estimated_delivery"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "shipment_number": {
+                          "type": "string"
+                        },
+                        "shipper_name": {
+                          "type": "string"
+                        },
+                        "shipper_darcloud_id": {
+                          "type": "string"
+                        },
+                        "consignee_name": {
+                          "type": "string"
+                        },
+                        "consignee_darcloud_id": {
+                          "type": "string"
+                        },
+                        "carrier_id": {
+                          "type": "integer"
+                        },
+                        "origin_port_id": {
+                          "type": "integer"
+                        },
+                        "destination_port_id": {
+                          "type": "integer"
+                        },
+                        "corridor_id": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "transport_mode": {
+                          "type": "string",
+                          "enum": [
+                            "TRUCK",
+                            "RAIL",
+                            "SEA",
+                            "AIR",
+                            "MULTIMODAL"
+                          ]
+                        },
+                        "cargo_type": {
+                          "type": "string"
+                        },
+                        "cargo_weight_kg": {
+                          "type": "number"
+                        },
+                        "cargo_volume_m3": {
+                          "type": "number"
+                        },
+                        "cargo_value_usd": {
+                          "type": "number"
+                        },
+                        "shipment_type": {
+                          "type": "string",
+                          "enum": [
+                            "COMMERCIAL",
+                            "HUMANITARIAN",
+                            "NGO"
+                          ]
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "CREATED",
+                            "DISPATCHED",
+                            "IN_TRANSIT",
+                            "AT_CUSTOMS",
+                            "DELIVERED",
+                            "DELAYED",
+                            "DISPUTED",
+                            "CANCELLED"
+                          ]
+                        },
+                        "quranchain_contract_id": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "escrow_status": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "enum": [
+                            "NONE",
+                            "FUNDED",
+                            "RELEASED",
+                            "DISPUTED"
+                          ]
+                        },
+                        "pickup_date": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "estimated_delivery": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "actual_delivery": {
+                          "type": [
+                            "string",
+                            "null"
+                          ],
+                          "format": "date-time"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "shipment_number",
+                        "shipper_name",
+                        "shipper_darcloud_id",
+                        "consignee_name",
+                        "consignee_darcloud_id",
+                        "carrier_id",
+                        "origin_port_id",
+                        "destination_port_id",
+                        "transport_mode",
+                        "cargo_type",
+                        "cargo_weight_kg",
+                        "cargo_volume_m3",
+                        "cargo_value_usd",
+                        "shipment_type",
+                        "status",
+                        "estimated_delivery",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/carriers": {
+      "get": {
+        "operationId": "get_CarrierList",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "per_page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "carrier_code": {
+                            "type": "string"
+                          },
+                          "legal_name": {
+                            "type": "string"
+                          },
+                          "operating_name": {
+                            "type": "string"
+                          },
+                          "carrier_type": {
+                            "type": "string",
+                            "enum": [
+                              "TRUCK",
+                              "RAIL",
+                              "SEA",
+                              "AIR",
+                              "MULTIMODAL"
+                            ]
+                          },
+                          "registration_country": {
+                            "type": "string"
+                          },
+                          "darcloud_identity_id": {
+                            "type": "string"
+                          },
+                          "wallet_address": {
+                            "type": "string"
+                          },
+                          "trust_score": {
+                            "type": "number"
+                          },
+                          "status": {
+                            "type": "string",
+                            "enum": [
+                              "PENDING",
+                              "ACTIVE",
+                              "SUSPENDED",
+                              "TERMINATED"
+                            ]
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "carrier_code",
+                          "legal_name",
+                          "operating_name",
+                          "carrier_type",
+                          "registration_country",
+                          "darcloud_identity_id",
+                          "wallet_address",
+                          "trust_score",
+                          "status",
+                          "created_at",
+                          "updated_at"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "post_CarrierCreate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "carrier_code": {
+                    "type": "string"
+                  },
+                  "legal_name": {
+                    "type": "string"
+                  },
+                  "operating_name": {
+                    "type": "string"
+                  },
+                  "carrier_type": {
+                    "type": "string",
+                    "enum": [
+                      "TRUCK",
+                      "RAIL",
+                      "SEA",
+                      "AIR",
+                      "MULTIMODAL"
+                    ]
+                  },
+                  "registration_country": {
+                    "type": "string"
+                  },
+                  "darcloud_identity_id": {
+                    "type": "string"
+                  },
+                  "wallet_address": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "carrier_code",
+                  "legal_name",
+                  "operating_name",
+                  "carrier_type",
+                  "registration_country",
+                  "darcloud_identity_id",
+                  "wallet_address"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "carrier_code": {
+                          "type": "string"
+                        },
+                        "legal_name": {
+                          "type": "string"
+                        },
+                        "operating_name": {
+                          "type": "string"
+                        },
+                        "carrier_type": {
+                          "type": "string",
+                          "enum": [
+                            "TRUCK",
+                            "RAIL",
+                            "SEA",
+                            "AIR",
+                            "MULTIMODAL"
+                          ]
+                        },
+                        "registration_country": {
+                          "type": "string"
+                        },
+                        "darcloud_identity_id": {
+                          "type": "string"
+                        },
+                        "wallet_address": {
+                          "type": "string"
+                        },
+                        "trust_score": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "PENDING",
+                            "ACTIVE",
+                            "SUSPENDED",
+                            "TERMINATED"
+                          ]
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "carrier_code",
+                        "legal_name",
+                        "operating_name",
+                        "carrier_type",
+                        "registration_country",
+                        "darcloud_identity_id",
+                        "wallet_address",
+                        "trust_score",
+                        "status",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/carriers/{id}": {
+      "get": {
+        "operationId": "get_CarrierRead",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a single object if found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "carrier_code": {
+                          "type": "string"
+                        },
+                        "legal_name": {
+                          "type": "string"
+                        },
+                        "operating_name": {
+                          "type": "string"
+                        },
+                        "carrier_type": {
+                          "type": "string",
+                          "enum": [
+                            "TRUCK",
+                            "RAIL",
+                            "SEA",
+                            "AIR",
+                            "MULTIMODAL"
+                          ]
+                        },
+                        "registration_country": {
+                          "type": "string"
+                        },
+                        "darcloud_identity_id": {
+                          "type": "string"
+                        },
+                        "wallet_address": {
+                          "type": "string"
+                        },
+                        "trust_score": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "PENDING",
+                            "ACTIVE",
+                            "SUSPENDED",
+                            "TERMINATED"
+                          ]
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "carrier_code",
+                        "legal_name",
+                        "operating_name",
+                        "carrier_type",
+                        "registration_country",
+                        "darcloud_identity_id",
+                        "wallet_address",
+                        "trust_score",
+                        "status",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "put_CarrierUpdate",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "operating_name": {
+                    "type": "string"
+                  },
+                  "trust_score": {
+                    "type": "number"
+                  },
+                  "status": {
+                    "type": "string",
+                    "enum": [
+                      "PENDING",
+                      "ACTIVE",
+                      "SUSPENDED",
+                      "TERMINATED"
+                    ]
+                  }
+                },
+                "required": [
+                  "operating_name",
+                  "trust_score",
+                  "status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "carrier_code": {
+                          "type": "string"
+                        },
+                        "legal_name": {
+                          "type": "string"
+                        },
+                        "operating_name": {
+                          "type": "string"
+                        },
+                        "carrier_type": {
+                          "type": "string",
+                          "enum": [
+                            "TRUCK",
+                            "RAIL",
+                            "SEA",
+                            "AIR",
+                            "MULTIMODAL"
+                          ]
+                        },
+                        "registration_country": {
+                          "type": "string"
+                        },
+                        "darcloud_identity_id": {
+                          "type": "string"
+                        },
+                        "wallet_address": {
+                          "type": "string"
+                        },
+                        "trust_score": {
+                          "type": "number"
+                        },
+                        "status": {
+                          "type": "string",
+                          "enum": [
+                            "PENDING",
+                            "ACTIVE",
+                            "SUSPENDED",
+                            "TERMINATED"
+                          ]
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "carrier_code",
+                        "legal_name",
+                        "operating_name",
+                        "carrier_type",
+                        "registration_country",
+                        "darcloud_identity_id",
+                        "wallet_address",
+                        "trust_score",
+                        "status",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/ports": {
+      "get": {
+        "operationId": "get_PortList",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "per_page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "port_code": {
+                            "type": "string"
+                          },
+                          "port_name": {
+                            "type": "string"
+                          },
+                          "country": {
+                            "type": "string"
+                          },
+                          "region": {
+                            "type": "string",
+                            "enum": [
+                              "USA",
+                              "MEXICO",
+                              "JORDAN"
+                            ]
+                          },
+                          "port_type": {
+                            "type": "string",
+                            "enum": [
+                              "SEA",
+                              "AIR",
+                              "LAND",
+                              "RAIL"
+                            ]
+                          },
+                          "latitude": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "longitude": {
+                            "type": [
+                              "number",
+                              "null"
+                            ]
+                          },
+                          "capacity_status": {
+                            "type": "string",
+                            "enum": [
+                              "NORMAL",
+                              "CONGESTED",
+                              "CRITICAL",
+                              "CLOSED"
+                            ]
+                          },
+                          "congestion_level": {
+                            "type": "integer"
+                          },
+                          "operational_status": {
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "updated_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "port_code",
+                          "port_name",
+                          "country",
+                          "region",
+                          "port_type",
+                          "capacity_status",
+                          "congestion_level",
+                          "operational_status",
+                          "created_at",
+                          "updated_at"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "post_PortCreate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "port_code": {
+                    "type": "string"
+                  },
+                  "port_name": {
+                    "type": "string"
+                  },
+                  "country": {
+                    "type": "string"
+                  },
+                  "region": {
+                    "type": "string",
+                    "enum": [
+                      "USA",
+                      "MEXICO",
+                      "JORDAN"
+                    ]
+                  },
+                  "port_type": {
+                    "type": "string",
+                    "enum": [
+                      "SEA",
+                      "AIR",
+                      "LAND",
+                      "RAIL"
+                    ]
+                  },
+                  "latitude": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "longitude": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "port_code",
+                  "port_name",
+                  "country",
+                  "region",
+                  "port_type"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "port_code": {
+                          "type": "string"
+                        },
+                        "port_name": {
+                          "type": "string"
+                        },
+                        "country": {
+                          "type": "string"
+                        },
+                        "region": {
+                          "type": "string",
+                          "enum": [
+                            "USA",
+                            "MEXICO",
+                            "JORDAN"
+                          ]
+                        },
+                        "port_type": {
+                          "type": "string",
+                          "enum": [
+                            "SEA",
+                            "AIR",
+                            "LAND",
+                            "RAIL"
+                          ]
+                        },
+                        "latitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "longitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "capacity_status": {
+                          "type": "string",
+                          "enum": [
+                            "NORMAL",
+                            "CONGESTED",
+                            "CRITICAL",
+                            "CLOSED"
+                          ]
+                        },
+                        "congestion_level": {
+                          "type": "integer"
+                        },
+                        "operational_status": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "port_code",
+                        "port_name",
+                        "country",
+                        "region",
+                        "port_type",
+                        "capacity_status",
+                        "congestion_level",
+                        "operational_status",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/ports/{id}": {
+      "get": {
+        "operationId": "get_PortRead",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a single object if found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "port_code": {
+                          "type": "string"
+                        },
+                        "port_name": {
+                          "type": "string"
+                        },
+                        "country": {
+                          "type": "string"
+                        },
+                        "region": {
+                          "type": "string",
+                          "enum": [
+                            "USA",
+                            "MEXICO",
+                            "JORDAN"
+                          ]
+                        },
+                        "port_type": {
+                          "type": "string",
+                          "enum": [
+                            "SEA",
+                            "AIR",
+                            "LAND",
+                            "RAIL"
+                          ]
+                        },
+                        "latitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "longitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "capacity_status": {
+                          "type": "string",
+                          "enum": [
+                            "NORMAL",
+                            "CONGESTED",
+                            "CRITICAL",
+                            "CLOSED"
+                          ]
+                        },
+                        "congestion_level": {
+                          "type": "integer"
+                        },
+                        "operational_status": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "port_code",
+                        "port_name",
+                        "country",
+                        "region",
+                        "port_type",
+                        "capacity_status",
+                        "congestion_level",
+                        "operational_status",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "put_PortUpdate",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "capacity_status": {
+                    "type": "string",
+                    "enum": [
+                      "NORMAL",
+                      "CONGESTED",
+                      "CRITICAL",
+                      "CLOSED"
+                    ]
+                  },
+                  "congestion_level": {
+                    "type": "integer"
+                  },
+                  "operational_status": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "capacity_status",
+                  "congestion_level",
+                  "operational_status"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "port_code": {
+                          "type": "string"
+                        },
+                        "port_name": {
+                          "type": "string"
+                        },
+                        "country": {
+                          "type": "string"
+                        },
+                        "region": {
+                          "type": "string",
+                          "enum": [
+                            "USA",
+                            "MEXICO",
+                            "JORDAN"
+                          ]
+                        },
+                        "port_type": {
+                          "type": "string",
+                          "enum": [
+                            "SEA",
+                            "AIR",
+                            "LAND",
+                            "RAIL"
+                          ]
+                        },
+                        "latitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "longitude": {
+                          "type": [
+                            "number",
+                            "null"
+                          ]
+                        },
+                        "capacity_status": {
+                          "type": "string",
+                          "enum": [
+                            "NORMAL",
+                            "CONGESTED",
+                            "CRITICAL",
+                            "CLOSED"
+                          ]
+                        },
+                        "congestion_level": {
+                          "type": "integer"
+                        },
+                        "operational_status": {
+                          "type": "string"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "updated_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "port_code",
+                        "port_name",
+                        "country",
+                        "region",
+                        "port_type",
+                        "capacity_status",
+                        "congestion_level",
+                        "operational_status",
+                        "created_at",
+                        "updated_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/corridors": {
+      "get": {
+        "operationId": "get_CorridorList",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "required": false,
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "required": false,
+            "name": "per_page",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List objects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "corridor_code": {
+                            "type": "string"
+                          },
+                          "corridor_name": {
+                            "type": "string"
+                          },
+                          "origin_port_id": {
+                            "type": "integer"
+                          },
+                          "destination_port_id": {
+                            "type": "integer"
+                          },
+                          "corridor_type": {
+                            "type": "string",
+                            "enum": [
+                              "COMMERCIAL",
+                              "HUMANITARIAN",
+                              "NGO",
+                              "ZAKAT_EXEMPT"
+                            ]
+                          },
+                          "distance_km": {
+                            "type": "number"
+                          },
+                          "estimated_duration_hours": {
+                            "type": "number"
+                          },
+                          "active": {
+                            "type": "boolean"
+                          },
+                          "created_at": {
+                            "type": "string",
+                            "format": "date-time"
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "corridor_code",
+                          "corridor_name",
+                          "origin_port_id",
+                          "destination_port_id",
+                          "corridor_type",
+                          "distance_km",
+                          "estimated_duration_hours",
+                          "active",
+                          "created_at"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "post_CorridorCreate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "corridor_code": {
+                    "type": "string"
+                  },
+                  "corridor_name": {
+                    "type": "string"
+                  },
+                  "origin_port_id": {
+                    "type": "integer"
+                  },
+                  "destination_port_id": {
+                    "type": "integer"
+                  },
+                  "corridor_type": {
+                    "type": "string",
+                    "enum": [
+                      "COMMERCIAL",
+                      "HUMANITARIAN",
+                      "NGO",
+                      "ZAKAT_EXEMPT"
+                    ]
+                  },
+                  "distance_km": {
+                    "type": "number"
+                  },
+                  "estimated_duration_hours": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "corridor_code",
+                  "corridor_name",
+                  "origin_port_id",
+                  "destination_port_id",
+                  "corridor_type",
+                  "distance_km",
+                  "estimated_duration_hours"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Returns the created Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "corridor_code": {
+                          "type": "string"
+                        },
+                        "corridor_name": {
+                          "type": "string"
+                        },
+                        "origin_port_id": {
+                          "type": "integer"
+                        },
+                        "destination_port_id": {
+                          "type": "integer"
+                        },
+                        "corridor_type": {
+                          "type": "string",
+                          "enum": [
+                            "COMMERCIAL",
+                            "HUMANITARIAN",
+                            "NGO",
+                            "ZAKAT_EXEMPT"
+                          ]
+                        },
+                        "distance_km": {
+                          "type": "number"
+                        },
+                        "estimated_duration_hours": {
+                          "type": "number"
+                        },
+                        "active": {
+                          "type": "boolean"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "corridor_code",
+                        "corridor_name",
+                        "origin_port_id",
+                        "destination_port_id",
+                        "corridor_type",
+                        "distance_km",
+                        "estimated_duration_hours",
+                        "active",
+                        "created_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/corridors/{id}": {
+      "get": {
+        "operationId": "get_CorridorRead",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns a single object if found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "corridor_code": {
+                          "type": "string"
+                        },
+                        "corridor_name": {
+                          "type": "string"
+                        },
+                        "origin_port_id": {
+                          "type": "integer"
+                        },
+                        "destination_port_id": {
+                          "type": "integer"
+                        },
+                        "corridor_type": {
+                          "type": "string",
+                          "enum": [
+                            "COMMERCIAL",
+                            "HUMANITARIAN",
+                            "NGO",
+                            "ZAKAT_EXEMPT"
+                          ]
+                        },
+                        "distance_km": {
+                          "type": "number"
+                        },
+                        "estimated_duration_hours": {
+                          "type": "number"
+                        },
+                        "active": {
+                          "type": "boolean"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "corridor_code",
+                        "corridor_name",
+                        "origin_port_id",
+                        "destination_port_id",
+                        "corridor_type",
+                        "distance_km",
+                        "estimated_duration_hours",
+                        "active",
+                        "created_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "put_CorridorUpdate",
+        "parameters": [
+          {
+            "schema": {
+              "type": "integer"
+            },
+            "required": true,
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "corridor_name": {
+                    "type": "string"
+                  },
+                  "active": {
+                    "type": "boolean"
+                  },
+                  "estimated_duration_hours": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "corridor_name",
+                  "active",
+                  "estimated_duration_hours"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated Object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "corridor_code": {
+                          "type": "string"
+                        },
+                        "corridor_name": {
+                          "type": "string"
+                        },
+                        "origin_port_id": {
+                          "type": "integer"
+                        },
+                        "destination_port_id": {
+                          "type": "integer"
+                        },
+                        "corridor_type": {
+                          "type": "string",
+                          "enum": [
+                            "COMMERCIAL",
+                            "HUMANITARIAN",
+                            "NGO",
+                            "ZAKAT_EXEMPT"
+                          ]
+                        },
+                        "distance_km": {
+                          "type": "number"
+                        },
+                        "estimated_duration_hours": {
+                          "type": "number"
+                        },
+                        "active": {
+                          "type": "boolean"
+                        },
+                        "created_at": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "corridor_code",
+                        "corridor_name",
+                        "origin_port_id",
+                        "destination_port_id",
+                        "corridor_type",
+                        "distance_km",
+                        "estimated_duration_hours",
+                        "active",
+                        "created_at"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7001
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Input Validation Error"
+                          },
+                          "path": {
+                            "type": "array",
+                            "items": {
+                              "type": "string",
+                              "example": "body"
+                            }
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message",
+                          "path"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "enum": [
+                        false
+                      ]
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number",
+                            "example": 7002
+                          },
+                          "message": {
+                            "type": "string",
+                            "example": "Not Found"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/quranchain/deploy": {
+      "post": {
+        "tags": [
+          "QuranChain"
+        ],
+        "summary": "Deploy shipment smart contract to QuranChain",
+        "operationId": "post_ContractDeploy",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shipment_id": {
+                    "type": "integer"
+                  },
+                  "shipper_wallet": {
+                    "type": "string"
+                  },
+                  "carrier_wallet": {
+                    "type": "string"
+                  },
+                  "contract_value_usd": {
+                    "type": "number"
+                  },
+                  "royalty_rate": {
+                    "type": "number",
+                    "default": 0.025
+                  }
+                },
+                "required": [
+                  "shipment_id",
+                  "shipper_wallet",
+                  "carrier_wallet",
+                  "contract_value_usd"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Contract deployed successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "contract_id": {
+                      "type": "string"
+                    },
+                    "transaction_hash": {
+                      "type": "string"
+                    },
+                    "founder_royalty_usd": {
+                      "type": "number"
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "contract_id",
+                    "transaction_hash",
+                    "founder_royalty_usd"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/oliveexpress/quranchain/escrow/fund": {
+      "post": {
+        "tags": [
+          "QuranChain"
+        ],
+        "summary": "Fund escrow account for shipment",
+        "operationId": "post_EscrowFund",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "contract_id": {
+                    "type": "string"
+                  },
+                  "shipment_id": {
+                    "type": "integer"
+                  },
+                  "funded_amount_usd": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "contract_id",
+                  "shipment_id",
+                  "funded_amount_usd"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Escrow funded successfully"
+          }
+        }
+      }
+    },
+    "/oliveexpress/quranchain/escrow/release": {
+      "post": {
+        "tags": [
+          "QuranChain"
+        ],
+        "summary": "Release escrow funds on successful delivery",
+        "operationId": "post_EscrowRelease",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "escrow_id": {
+                    "type": "string"
+                  },
+                  "shipment_id": {
+                    "type": "integer"
+                  },
+                  "delivery_confirmed": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "escrow_id",
+                  "shipment_id",
+                  "delivery_confirmed"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Escrow released successfully"
+          }
+        }
+      }
+    },
+    "/oliveexpress/quranchain/dispute": {
+      "post": {
+        "tags": [
+          "QuranChain"
+        ],
+        "summary": "Create dispute for shipment",
+        "operationId": "post_DisputeCreate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "contract_id": {
+                    "type": "string"
+                  },
+                  "shipment_id": {
+                    "type": "integer"
+                  },
+                  "raised_by_wallet": {
+                    "type": "string"
+                  },
+                  "dispute_type": {
+                    "type": "string",
+                    "enum": [
+                      "DELAY",
+                      "DAMAGE",
+                      "LOSS",
+                      "QUALITY",
+                      "PAYMENT",
+                      "OTHER"
+                    ]
+                  },
+                  "dispute_reason": {
+                    "type": "string"
+                  },
+                  "evidence_urls": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "contract_id",
+                  "shipment_id",
+                  "raised_by_wallet",
+                  "dispute_type",
+                  "dispute_reason"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Dispute created successfully"
+          }
+        }
+      }
+    },
+    "/oliveexpress/ai/dispatch/optimize": {
+      "post": {
+        "tags": [
+          "AI & Automation"
+        ],
+        "summary": "Omar AI dispatch optimization",
+        "operationId": "post_DispatchOptimize",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shipment_id": {
+                    "type": "integer"
+                  },
+                  "origin_port_id": {
+                    "type": "integer"
+                  },
+                  "destination_port_id": {
+                    "type": "integer"
+                  },
+                  "cargo_weight_kg": {
+                    "type": "number"
+                  },
+                  "priority": {
+                    "type": "string",
+                    "enum": [
+                      "LOW",
+                      "NORMAL",
+                      "HIGH",
+                      "CRITICAL"
+                    ],
+                    "default": "NORMAL"
+                  }
+                },
+                "required": [
+                  "shipment_id",
+                  "origin_port_id",
+                  "destination_port_id",
+                  "cargo_weight_kg"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Optimal carrier and route suggested"
+          }
+        }
+      }
+    },
+    "/oliveexpress/ai/carrier/score": {
+      "post": {
+        "tags": [
+          "AI & Automation"
+        ],
+        "summary": "AMĀN AI carrier trust scoring",
+        "operationId": "post_CarrierScoring",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "carrier_id": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "carrier_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Trust score calculated"
+          }
+        }
+      }
+    },
+    "/oliveexpress/ai/delay/predict": {
+      "post": {
+        "tags": [
+          "AI & Automation"
+        ],
+        "summary": "Predict shipment delays using AI",
+        "operationId": "post_DelayPredict",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shipment_id": {
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "shipment_id"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Delay prediction generated"
+          }
+        }
+      }
+    },
+    "/oliveexpress/ai/carrier/reassign": {
+      "post": {
+        "tags": [
+          "AI & Automation"
+        ],
+        "summary": "Auto-reassign carrier for delayed shipment",
+        "operationId": "post_CarrierReassign",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shipment_id": {
+                    "type": "integer"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "enum": [
+                      "DELAY",
+                      "BREAKDOWN",
+                      "CAPACITY",
+                      "OPTIMIZATION",
+                      "EMERGENCY"
+                    ]
+                  }
+                },
+                "required": [
+                  "shipment_id",
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Carrier reassigned"
+          }
+        }
+      }
+    },
+    "/oliveexpress/tracking/update": {
+      "post": {
+        "tags": [
+          "Tracking"
+        ],
+        "summary": "Update shipment location and status",
+        "operationId": "post_TrackingUpdate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "shipment_id": {
+                    "type": "integer"
+                  },
+                  "event_type": {
+                    "type": "string",
+                    "enum": [
+                      "CREATED",
+                      "DISPATCHED",
+                      "CHECKPOINT",
+                      "CUSTOMS",
+                      "DELIVERED",
+                      "DELAYED",
+                      "DAMAGED"
+                    ]
+                  },
+                  "latitude": {
+                    "type": "number"
+                  },
+                  "longitude": {
+                    "type": "number"
+                  },
+                  "location_name": {
+                    "type": "string"
+                  },
+                  "event_data": {
+                    "type": "object",
+                    "additionalProperties": {}
+                  }
+                },
+                "required": [
+                  "shipment_id",
+                  "event_type"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tracking updated successfully"
+          }
+        }
+      }
+    },
+    "/oliveexpress/operations/live-map": {
+      "get": {
+        "tags": [
+          "Operations"
+        ],
+        "summary": "Get live shipment map data",
+        "operationId": "get_LiveMap",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "USA",
+                "MEXICO",
+                "JORDAN",
+                "ALL"
+              ],
+              "default": "ALL"
+            },
+            "required": false,
+            "name": "region",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "status",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Live map data"
+          }
+        }
+      }
+    },
+    "/oliveexpress/operations/port-congestion": {
+      "get": {
+        "tags": [
+          "Operations"
+        ],
+        "summary": "Get port congestion status",
+        "operationId": "get_PortCongestion",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "USA",
+                "MEXICO",
+                "JORDAN",
+                "ALL"
+              ],
+              "default": "ALL"
+            },
+            "required": false,
+            "name": "region",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Port congestion data"
+          }
+        }
+      }
+    },
+    "/oliveexpress/treasury/invoice/generate": {
+      "post": {
+        "tags": [
+          "Treasury"
+        ],
+        "summary": "Generate invoice for shipment(s)",
+        "operationId": "post_InvoiceGenerate",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "customer_name": {
+                    "type": "string"
+                  },
+                  "customer_darcloud_id": {
+                    "type": "string"
+                  },
+                  "customer_wallet": {
+                    "type": "string"
+                  },
+                  "invoice_type": {
+                    "type": "string",
+                    "enum": [
+                      "MERCHANT",
+                      "ENTERPRISE",
+                      "GOVERNMENT",
+                      "NGO"
+                    ]
+                  },
+                  "shipment_ids": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
+                    }
+                  },
+                  "due_days": {
+                    "type": "integer",
+                    "default": 30
+                  }
+                },
+                "required": [
+                  "customer_name",
+                  "customer_darcloud_id",
+                  "customer_wallet",
+                  "invoice_type",
+                  "shipment_ids"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Invoice generated successfully"
+          }
+        }
+      }
+    },
+    "/oliveexpress/treasury/revenue/analytics": {
+      "get": {
+        "tags": [
+          "Treasury"
+        ],
+        "summary": "Get revenue analytics by corridor/region",
+        "operationId": "get_RevenueAnalytics",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "USA",
+                "MEXICO",
+                "JORDAN",
+                "ALL"
+              ],
+              "default": "ALL"
+            },
+            "required": false,
+            "name": "region",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "start_date",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": false,
+            "name": "end_date",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Revenue analytics data"
+          }
+        }
+      }
+    },
+    "/oliveexpress/onboarding/carrier": {
+      "post": {
+        "tags": [
+          "Onboarding"
+        ],
+        "summary": "Complete carrier onboarding process",
+        "operationId": "post_CarrierOnboard",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "legal_name": {
+                    "type": "string"
+                  },
+                  "operating_name": {
+                    "type": "string"
+                  },
+                  "carrier_type": {
+                    "type": "string",
+                    "enum": [
+                      "TRUCK",
+                      "RAIL",
+                      "SEA",
+                      "AIR",
+                      "MULTIMODAL"
+                    ]
+                  },
+                  "registration_country": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "compliance_documents": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "document_type": {
+                          "type": "string",
+                          "enum": [
+                            "LICENSE",
+                            "INSURANCE",
+                            "CUSTOMS",
+                            "SAFETY_CERT"
+                          ]
+                        },
+                        "document_url": {
+                          "type": "string"
+                        },
+                        "issue_date": {
+                          "type": "string",
+                          "format": "date-time"
+                        },
+                        "expiry_date": {
+                          "type": "string",
+                          "format": "date-time"
+                        }
+                      },
+                      "required": [
+                        "document_type",
+                        "document_url",
+                        "issue_date",
+                        "expiry_date"
+                      ]
+                    }
+                  }
+                },
+                "required": [
+                  "legal_name",
+                  "operating_name",
+                  "carrier_type",
+                  "registration_country",
+                  "email",
+                  "phone",
+                  "compliance_documents"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Carrier onboarded successfully"
+          }
+        }
+      }
+    },
+    "/fungi/sentinel/health": {
+      "get": {
+        "tags": [
+          "Fungi Mesh Sentinel"
+        ],
+        "summary": "Sentinel health check",
+        "description": "Check if the Fungi Mesh Infrastructure Sentinel is operational",
+        "operationId": "get_SentinelHealthEndpoint",
+        "responses": {
+          "200": {
+            "description": "Sentinel is healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string"
+                    },
+                    "timestamp": {
+                      "type": "string"
+                    },
+                    "sentinel": {
+                      "type": "object",
+                      "properties": {
+                        "operational": {
+                          "type": "boolean"
+                        },
+                        "version": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "operational",
+                        "version"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "status",
+                    "timestamp",
+                    "sentinel"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fungi/sentinel/status": {
+      "get": {
+        "tags": [
+          "Fungi Mesh Sentinel"
+        ],
+        "summary": "Get current infrastructure status",
+        "description": "Retrieve the current status of DarCloud and QuranChain infrastructure",
+        "operationId": "get_SentinelStatusEndpoint",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string",
+              "default": "DarCloud"
+            },
+            "required": false,
+            "name": "environment",
+            "in": "query"
+          },
+          {
+            "schema": {
+              "type": "string",
+              "enum": [
+                "full",
+                "json",
+                "worker",
+                "heartbeat",
+                "meshtalk"
+              ],
+              "default": "full"
+            },
+            "required": false,
+            "name": "format",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current infrastructure status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "type": "string"
+                        },
+                        "timestamp": {
+                          "type": "string"
+                        },
+                        "host": {
+                          "type": "string"
+                        },
+                        "environment": {
+                          "type": "string"
+                        },
+                        "report": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "status",
+                        "timestamp",
+                        "host",
+                        "environment",
+                        "report"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/fungi/sentinel/report": {
+      "post": {
+        "tags": [
+          "Fungi Mesh Sentinel"
+        ],
+        "summary": "Trigger infrastructure status report",
+        "description": "Manually trigger an infrastructure status report. Reports are generated only when state changes are detected unless force=true.",
+        "operationId": "post_SentinelReportEndpoint",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "environment": {
+                    "type": "string",
+                    "default": "DarCloud"
+                  },
+                  "format": {
+                    "type": "string",
+                    "enum": [
+                      "full",
+                      "json",
+                      "worker",
+                      "heartbeat",
+                      "meshtalk"
+                    ],
+                    "default": "full"
+                  },
+                  "force": {
+                    "type": "boolean",
+                    "default": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Report generated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "reported": {
+                          "type": "boolean"
+                        },
+                        "stateChanges": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "report": {
+                          "anyOf": [
+                            {
+                              "type": "string"
+                            },
+                            {
+                              "type": "object",
+                              "additionalProperties": {}
+                            }
+                          ]
+                        }
+                      },
+                      "required": [
+                        "reported",
+                        "stateChanges",
+                        "report"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dummy/{slug}": {
+      "post": {
+        "tags": [
+          "Dummy"
+        ],
+        "summary": "this endpoint is an example",
+        "operationId": "example-endpoint",
+        "parameters": [
+          {
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "name": "slug",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "name"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the log details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "msg": {
+                          "type": "string"
+                        },
+                        "slug": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "msg",
+                        "slug",
+                        "name"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/chatgpt": {
+      "post": {
+        "tags": [
+          "ChatGPT"
+        ],
+        "summary": "Send a message to ChatGPT and get a response",
+        "operationId": "chatgpt-completion",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "minLength": 1,
+                    "description": "The message to send to ChatGPT"
+                  },
+                  "model": {
+                    "type": "string",
+                    "default": "gpt-3.5-turbo",
+                    "description": "The OpenAI model to use"
+                  },
+                  "temperature": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 2,
+                    "default": 0.7,
+                    "description": "Sampling temperature"
+                  }
+                },
+                "required": [
+                  "message"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the ChatGPT response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "result": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string"
+                        },
+                        "model": {
+                          "type": "string"
+                        },
+                        "usage": {
+                          "type": "object",
+                          "properties": {
+                            "prompt_tokens": {
+                              "type": "number"
+                            },
+                            "completion_tokens": {
+                              "type": "number"
+                            },
+                            "total_tokens": {
+                              "type": "number"
+                            }
+                          },
+                          "required": [
+                            "prompt_tokens",
+                            "completion_tokens",
+                            "total_tokens"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "message",
+                        "model",
+                        "usage"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "result"
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request - missing or invalid parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean"
+                    },
+                    "errors": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "code": {
+                            "type": "number"
+                          },
+                          "message": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "code",
+                          "message"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "errors"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "webhooks": {}
+}
