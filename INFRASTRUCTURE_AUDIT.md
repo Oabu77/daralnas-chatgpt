@@ -6,6 +6,22 @@
 
 ---
 
+## 📋 Quick Start
+
+**To complete this audit, you need to run commands on the DarCloud Linux host:**
+
+### Option 1: Manual Commands (Quick)
+See [PORT_MANIFEST_COMMANDS.md](./PORT_MANIFEST_COMMANDS.md) for exact commands to run.
+
+### Option 2: Automated Script (Comprehensive)
+```bash
+sudo ./scripts/gather-infrastructure-info.sh
+```
+
+Then paste the output into the appropriate sections below.
+
+---
+
 ## Overview
 
 This document captures the complete network infrastructure of the DarCloud Linux host, including:
