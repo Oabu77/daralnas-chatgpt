@@ -1,0 +1,156 @@
+name: PR Auto-Deploy
+
+on:
+  # Manual trigger for deploying a specific PR branch
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+      branch:
+        description: 'Branch to deploy (leave empty for current branch)'
+        required: false
+        type: string
+  
+  # Auto-deploy when PR is merged to main
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+concurrency:
+  group: pr-auto-deploy-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  auto-deploy:
+    name: Auto Deploy PR
+    runs-on: ubuntu-latest
+    # Only run if PR was merged or manually triggered
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true) ||
+      github.event_name == 'workflow_dispatch'
+    environment: ${{ github.event.inputs.environment || 'production' }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.inputs.branch || github.event.pull_request.head.ref || github.ref }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Capture previous deployment id
+        id: prev
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          npx wrangler deployments list --limit 1 --format json > previous_deployment.json
+          echo "previous_id=$(jq -r '.[0].id // ""' previous_deployment.json)" >> $GITHUB_OUTPUT
+      
+      - name: Apply D1 migrations
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npm run predeploy
+      
+      - name: Deploy to Cloudflare Workers
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: npm run deploy
+      
+      - name: Get deployment URL
+        id: deploy_info
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          npx wrangler deployments list --limit 1 --format json > latest_deployment.json
+          DEPLOY_URL=$(jq -r '.[0].url // ""' latest_deployment.json)
+          echo "url=$DEPLOY_URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $DEPLOY_URL"
+      
+      - name: Verify Fungi Sentinel endpoints
+        if: steps.deploy_info.outputs.url != ''
+        run: |
+          DEPLOY_URL="${{ steps.deploy_info.outputs.url }}"
+          echo "Verifying Fungi Sentinel deployment..."
+          
+          # Health check
+          echo "Testing /fungi/sentinel/health..."
+          curl -f -s "${DEPLOY_URL}/fungi/sentinel/health" || echo "Health endpoint not responding"
+          
+          # Status check
+          echo "Testing /fungi/sentinel/status..."
+          curl -f -s "${DEPLOY_URL}/fungi/sentinel/status?format=json" || echo "Status endpoint not responding"
+          
+          echo "Deployment verification complete"
+      
+      - name: Log deployment summary
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          echo "=== Recent Deployments ==="
+          npx wrangler deployments list --limit 5
+          
+          if [ -n "${{ steps.deploy_info.outputs.url }}" ]; then
+            echo ""
+            echo "=== Fungi Sentinel Endpoints ==="
+            echo "Health:  ${{ steps.deploy_info.outputs.url }}/fungi/sentinel/health"
+            echo "Status:  ${{ steps.deploy_info.outputs.url }}/fungi/sentinel/status?format=json"
+            echo "Report:  ${{ steps.deploy_info.outputs.url }}/fungi/sentinel/report"
+          fi
+      
+      - name: Upload rollback info
+        if: steps.prev.outputs.previous_id != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-deployment-rollback-${{ github.run_number }}
+          path: previous_deployment.json
+          retention-days: 30
+      
+      - name: Comment on PR
+        if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const deployUrl = '${{ steps.deploy_info.outputs.url }}';
+            const body = deployUrl 
+              ? `🚀 **Auto-deployment successful!**
+            
+            **Deployment URL**: ${deployUrl}
+            
+            **Fungi Sentinel Endpoints**:
+            - Health: \`${deployUrl}/fungi/sentinel/health\`
+            - Status: \`${deployUrl}/fungi/sentinel/status?format=json\`
+            - Report: \`${deployUrl}/fungi/sentinel/report\`
+            
+            Deployment triggered automatically after PR merge.`
+              : `🚀 **Auto-deployment completed!**
+            
+            Deployment triggered automatically after PR merge. Check Actions logs for details.`;
+            
+            github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body: body
+            });
