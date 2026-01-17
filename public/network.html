@@ -244,6 +244,13 @@
             <button class="btn btn-repair" onclick="repairDevices()">🔧 Auto-Repair</button>
         </div>
 
+        <div class="action-buttons" style="margin-top: 20px;">
+            <button class="btn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white;" onclick="discoverDevices()">🔍 Discover All Devices</button>
+            <button class="btn" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;" onclick="optimizeMemory()">💾 Optimize Memory</button>
+            <button class="btn" style="background: linear-gradient(135deg, #f43f5e, #e11d48); color: white;" onclick="scaleNodes()">🚀 Launch Nodes</button>
+            <button class="btn" style="background: linear-gradient(135deg, #14b8a6, #0d9488); color: white;" onclick="enableAutoGrow()">📈 Auto-Grow Network</button>
+        </div>
+
         <div class="devices-grid" id="devices-grid">
             <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: #94a3b8;">
                 <p style="font-size: 1.2em;">Click "Scan Network" to discover and optimize all your devices</p>
@@ -393,6 +400,70 @@
         // Auto-load on start
         loadPerformance();
         startAutoMaintain();
+
+        // Network Tools Functions
+        async function discoverDevices() {
+            const response = await fetch(`${API_BASE}/network/tools/discover`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    scan_range: '192.168.0.0/16',
+                    deep_scan: true,
+                    auto_connect: true
+                })
+            });
+            const data = await response.json();
+            alert(`✅ Discovered ${data.devices_found} devices!\n${data.connections_established} connections established.\n\nDevices:\n` + 
+                data.devices.map(d => `• ${d.name} (${d.ip}) - ${d.type}`).join('\n'));
+            await scanDevices(); // Refresh display
+        }
+
+        async function optimizeMemory() {
+            const response = await fetch(`${API_BASE}/network/tools/optimize-memory`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    optimization_level: 'aggressive',
+                    auto_restart_services: true
+                })
+            });
+            const data = await response.json();
+            alert(`✅ Memory Optimized!\n\nDevices optimized: ${data.devices_optimized}\nMemory freed: ${data.memory_freed_mb} MB\nPerformance improvement: +${data.performance_improvement}%`);
+            await scanDevices(); // Refresh display
+        }
+
+        async function scaleNodes() {
+            const nodes = prompt('How many nodes to launch?', '5');
+            if (!nodes) return;
+            
+            const response = await fetch(`${API_BASE}/network/tools/scale-nodes`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    action: 'launch',
+                    node_count: parseInt(nodes),
+                    node_type: 'worker',
+                    auto_optimize: true
+                })
+            });
+            const data = await response.json();
+            alert(`✅ Nodes Launched!\n\nActive nodes: ${data.nodes_active}\nNew nodes: ${data.nodes_launched}\nNetwork capacity: ${data.network_capacity}`);
+        }
+
+        async function enableAutoGrow() {
+            const response = await fetch(`${API_BASE}/network/tools/auto-grow`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    growth_strategy: 'aggressive',
+                    max_nodes: 100,
+                    enable_auto_healing: true,
+                    enable_load_balancing: true
+                })
+            });
+            const data = await response.json();
+            alert(`✅ Auto-Growth Enabled!\n\nCurrent nodes: ${data.current_nodes}\nMax nodes: ${data.max_nodes}\nGrowth rate: ${data.growth_rate}\n\n${data.message}`);
+        }
     </script>
 </body>
 </html>
