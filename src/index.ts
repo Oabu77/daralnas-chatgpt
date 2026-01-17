@@ -6,6 +6,7 @@ import { fungiRouter } from "./endpoints/fungi/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { ChatGPTEndpoint } from "./endpoints/chatgpt";
+import { MobileAssistantEndpoint } from "./endpoints/assistant";
 
 // Start a Hono app
 const app = new Hono<{ Bindings: Env }>();
@@ -51,6 +52,31 @@ openapi.route("/oliveexpress", oliveexpressRouter);
 
 // Register Fungi Mesh Sentinel
 openapi.route("/fungi", fungiRouter);
+
+// Register Mobile AI Assistant
+openapi.post("/assistant/chat", MobileAssistantEndpoint);
+
+// Serve PWA files
+app.get("/assistant", async (c) => {
+	const html = await c.env.ASSETS?.fetch(new Request("https://fake-host/assistant.html"));
+	return html || c.text("Assistant not available", 404);
+});
+
+app.get("/manifest.json", async (c) => {
+	const manifest = await c.env.ASSETS?.fetch(new Request("https://fake-host/manifest.json"));
+	return manifest || c.json({}, 404);
+});
+
+app.get("/sw.js", async (c) => {
+	const sw = await c.env.ASSETS?.fetch(new Request("https://fake-host/sw.js"));
+	if (sw) {
+		const response = new Response(sw.body, sw);
+		response.headers.set("Content-Type", "application/javascript");
+		response.headers.set("Service-Worker-Allowed", "/");
+		return response;
+	}
+	return c.text("Service worker not available", 404);
+});
 
 // Register other endpoints
 openapi.post("/dummy/:slug", DummyEndpoint);

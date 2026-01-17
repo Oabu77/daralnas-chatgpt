@@ -19,5 +19,9 @@
 		"AUTO_REPAIR_ENABLED": "true",
 		"FUNGI_MESH_ENABLED": "true",
 		"DARCLOUD_ENABLED": "true"
+	},
+	"assets": {
+		"directory": "./public",
+		"binding": "ASSETS"
 	}
 }
