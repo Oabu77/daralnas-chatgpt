@@ -84,7 +84,7 @@ jobs:
           
           ssh -i ~/.ssh/deploy_key \
             -p ${{ secrets.SSH_PORT || 22 }} \
-            -o StrictHostKeyChecking=no \
+            -o StrictHostKeyChecking=accept-new \
             -o ConnectTimeout=10 \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH' || exit 0
             

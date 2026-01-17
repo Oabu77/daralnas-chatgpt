@@ -98,7 +98,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/deploy_key \
             -p ${{ secrets.SSH_PORT || 22 }} \
-            -o StrictHostKeyChecking=no \
+            -o StrictHostKeyChecking=accept-new \
             -o ConnectTimeout=10 \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} \
             "echo 'SSH connection successful'"
@@ -107,7 +107,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/deploy_key \
             -p ${{ secrets.SSH_PORT || 22 }} \
-            -o StrictHostKeyChecking=no \
+            -o StrictHostKeyChecking=accept-new \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
             set -e
             
@@ -160,7 +160,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/deploy_key \
             -p ${{ secrets.SSH_PORT || 22 }} \
-            -o StrictHostKeyChecking=no \
+            -o StrictHostKeyChecking=accept-new \
             ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'ENDSSH'
             
             echo "=== Verifying deployment ==="

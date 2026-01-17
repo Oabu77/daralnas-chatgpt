@@ -84,6 +84,11 @@ services:
       - "127.0.0.1:8080:8080"
     networks:
       - monitoring
+    # Note: cAdvisor requires privileged mode for full container metrics
+    # If this is a concern, you can run with specific capabilities instead:
+    # cap_add:
+    #   - SYS_ADMIN
+    # Or remove cAdvisor entirely if not needed
     privileged: true
     devices:
       - /dev/kmsg
