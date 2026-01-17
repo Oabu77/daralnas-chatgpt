@@ -154,7 +154,7 @@ echo ""
 # TypeScript compilation
 if command -v npx &> /dev/null && [ -f "tsconfig.json" ]; then
     info "Running TypeScript compilation check..."
-    if npx tsc --noEmit 2>&1; then
+    if npx tsc --noEmit > /dev/null 2>&1; then
         success "TypeScript compilation successful"
     else
         error "TypeScript compilation failed"
