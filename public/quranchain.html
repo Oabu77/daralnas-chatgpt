@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#14532d">
+    <title>QuranChain - Muslim Wallets & Smart Contracts</title>
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" href="/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #14532d 0%, #166534 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            opacity: 0.9;
+            font-size: 0.95rem;
+        }
+
+        .wallet-section {
+            background: rgba(255, 255, 255, 0.95);
+            color: #14532d;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .wallet-address {
+            background: #f0fdf4;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #14532d;
+            font-family: monospace;
+            font-size: 0.85rem;
+            word-break: break-all;
+            margin: 15px 0;
+        }
+
+        .balance {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+            color: #14532d;
+        }
+
+        .balance-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: #14532d;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #166534;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(20, 83, 45, 0.3);
+        }
+
+        .btn-secondary {
+            background: #f0fdf4;
+            color: #14532d;
+            border: 2px solid #14532d;
+        }
+
+        .btn-secondary:hover {
+            background: #dcfce7;
+        }
+
+        .contract-card {
+            background: rgba(255, 255, 255, 0.95);
+            color: #14532d;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #14532d;
+        }
+
+        .contract-card h3 {
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .contract-detail {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(20, 83, 45, 0.1);
+        }
+
+        .contract-detail:last-child {
+            border-bottom: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .status-active {
+            background: #dcfce7;
+            color: #14532d;
+        }
+
+        .status-funded {
+            background: #dbeafe;
+            color: #1e3a8a;
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+
+        .features h3 {
+            margin-bottom: 15px;
+        }
+
+        .feature-item {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+
+        .feature-item strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .install-prompt {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: white;
+            color: #14532d;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            display: none;
+            z-index: 1000;
+        }
+
+        .install-prompt.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            opacity: 0.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📿 QuranChain</h1>
+            <p class="subtitle">Halal Blockchain for Muslim Commerce</p>
+        </div>
+
+        <div class="wallet-section">
+            <h2>🕌 Muslim Wallet</h2>
+            <div class="balance-label">Your Balance</div>
+            <div class="balance" id="balance">0.00 QRC</div>
+            <div class="wallet-address" id="walletAddress">
+                Generating your wallet...
+            </div>
+            <button class="btn btn-primary" onclick="copyAddress()">📋 Copy Address</button>
+            <button class="btn btn-secondary" onclick="requestFunds()">💰 Request Test Funds</button>
+        </div>
+
+        <div class="wallet-section">
+            <h2>⚡ Quick Actions</h2>
+            <button class="btn btn-primary" onclick="createContract()">📄 Create Contract</button>
+            <button class="btn btn-secondary" onclick="fundEscrow()">🔒 Fund Escrow</button>
+            <button class="btn btn-secondary" onclick="releasePayment()">✅ Release Payment</button>
+        </div>
+
+        <div id="contracts">
+            <h3 style="color: white; margin-bottom: 15px;">📋 Active Contracts</h3>
+            <div class="loading">Loading your contracts...</div>
+        </div>
+
+        <div class="features">
+            <h3>🌟 QuranChain Features</h3>
+            <div class="feature-item">
+                <strong>✅ Halal & Transparent</strong>
+                No interest, no speculation - work-based compensation only
+            </div>
+            <div class="feature-item">
+                <strong>🔒 Smart Escrow</strong>
+                Automatic fund release on delivery confirmation
+            </div>
+            <div class="feature-item">
+                <strong>📊 Audit Anchoring</strong>
+                Immutable transaction records for governance
+            </div>
+            <div class="feature-item">
+                <strong>⚡ Predictable Fees</strong>
+                Fixed 2.5% founder royalty, no gas surprises
+            </div>
+            <div class="feature-item">
+                <strong>🌍 Global Reach</strong>
+                Serve the Muslim world - 1.8 billion users
+            </div>
+        </div>
+    </div>
+
+    <div class="install-prompt" id="installPrompt">
+        <h3 style="margin-bottom: 10px;">📱 Install QuranChain App</h3>
+        <p style="margin-bottom: 10px;">Add to your home screen for the best experience!</p>
+        <button class="btn btn-primary" onclick="installApp()">Install Now</button>
+        <button class="btn btn-secondary" onclick="closeInstallPrompt()">Maybe Later</button>
+    </div>
+
+    <script>
+        let deferredPrompt;
+        let userWallet = null;
+
+        // Generate or retrieve wallet
+        function initWallet() {
+            userWallet = localStorage.getItem('quranchain_wallet');
+            if (!userWallet) {
+                // Generate new wallet address
+                userWallet = 'QRC-' + Math.random().toString(36).substring(2, 15) + 
+                            Math.random().toString(36).substring(2, 15);
+                localStorage.setItem('quranchain_wallet', userWallet);
+            }
+            document.getElementById('walletAddress').textContent = userWallet;
+            
+            // Load balance
+            const balance = localStorage.getItem('quranchain_balance') || '0.00';
+            document.getElementById('balance').textContent = balance + ' QRC';
+            
+            loadContracts();
+        }
+
+        function copyAddress() {
+            navigator.clipboard.writeText(userWallet);
+            alert('✅ Wallet address copied!');
+        }
+
+        async function requestFunds() {
+            // Simulate faucet
+            const currentBalance = parseFloat(localStorage.getItem('quranchain_balance') || '0');
+            const newBalance = currentBalance + 100;
+            localStorage.setItem('quranchain_balance', newBalance.toFixed(2));
+            document.getElementById('balance').textContent = newBalance.toFixed(2) + ' QRC';
+            alert('✅ Received 100 QRC test tokens!');
+        }
+
+        async function createContract() {
+            const value = prompt('Enter contract value (USD):', '1000');
+            if (!value) return;
+
+            const response = await fetch('/oliveexpress/quranchain/deploy', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    shipment_id: Math.floor(Math.random() * 10000),
+                    shipper_wallet: userWallet,
+                    carrier_wallet: 'QRC-carrier-' + Math.random().toString(36).substring(7),
+                    contract_value_usd: parseFloat(value),
+                    royalty_rate: 0.025
+                })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert(`✅ Contract deployed!\nID: ${result.contract_id}\nFounder royalty: $${result.founder_royalty_usd.toFixed(2)}`);
+                loadContracts();
+            } else {
+                alert('❌ Error creating contract');
+            }
+        }
+
+        async function fundEscrow() {
+            alert('🔒 Escrow funding feature - connect your wallet to continue');
+        }
+
+        async function releasePayment() {
+            alert('✅ Payment release feature - requires delivery confirmation');
+        }
+
+        async function loadContracts() {
+            const contractsDiv = document.getElementById('contracts');
+            // Simulate loading contracts
+            setTimeout(() => {
+                contractsDiv.innerHTML = `
+                    <h3 style="color: white; margin-bottom: 15px;">📋 Active Contracts</h3>
+                    <div class="contract-card">
+                        <h3>Shipment Contract #1234</h3>
+                        <div class="contract-detail">
+                            <span>Status:</span>
+                            <span class="status-badge status-active">ACTIVE</span>
+                        </div>
+                        <div class="contract-detail">
+                            <span>Value:</span>
+                            <span>$1,000.00</span>
+                        </div>
+                        <div class="contract-detail">
+                            <span>Founder Royalty:</span>
+                            <span>$25.00 (2.5%)</span>
+                        </div>
+                        <div class="contract-detail">
+                            <span>Carrier Payment:</span>
+                            <span>$975.00</span>
+                        </div>
+                    </div>
+                `;
+            }, 500);
+        }
+
+        // PWA Install
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            setTimeout(() => {
+                document.getElementById('installPrompt').classList.add('show');
+            }, 3000);
+        });
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('App installed');
+                    }
+                    deferredPrompt = null;
+                    closeInstallPrompt();
+                });
+            }
+        }
+
+        function closeInstallPrompt() {
+            document.getElementById('installPrompt').classList.remove('show');
+        }
+
+        // Initialize
+        initWallet();
+
+        // Register service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>
