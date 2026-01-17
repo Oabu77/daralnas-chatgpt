@@ -2,12 +2,18 @@
 
 ## Production Infrastructure Status: LIVE ✅
 
+> **Note**: This repository now includes a **ChatGPT Deployment Agent** for automated CI/CD.
+> See [CHATGPT_DEPLOYMENT_AGENT.md](./CHATGPT_DEPLOYMENT_AGENT.md) for the complete automation setup guide.
+> For quick setup, see [QUICKSTART.md](./QUICKSTART.md).
+
 ### Services Deployed
 - ✅ OliveExpress™ API (Cloudflare Workers)
 - ✅ D1 Database (Multi-regional)
 - ✅ Operations Dashboard
 - ✅ QuranChain Integration Layer
 - ✅ AI Dispatch Engine (Omar AI / AMĀN)
+- ✅ **Automated CI/CD Pipeline** (GitHub Actions)
+- ✅ **Monitoring Stack** (Prometheus + Grafana)
 
 ### Regional Operations: ACTIVE
 
