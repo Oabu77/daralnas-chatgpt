@@ -1,0 +1,64 @@
+# Cloudflare Tunnel Configuration for DarCloud QC Agent
+#
+# Installation location: /etc/cloudflared/config.yml
+#
+# Before using this file:
+# 1. Run: cloudflared tunnel login
+# 2. Create tunnel: cloudflared tunnel create darcloud-qc-agent
+# 3. Update the 'tunnel' field with your tunnel name
+# 4. Update the 'credentials-file' path with your tunnel UUID
+# 5. Update the 'hostname' with your desired subdomain
+# 6. Route DNS: cloudflared tunnel route dns darcloud-qc-agent qc-agent.daralnas.com
+
+# Tunnel name (replace with your tunnel name)
+tunnel: darcloud-qc-agent
+
+# Credentials file (replace UUID with your tunnel's UUID)
+credentials-file: /root/.cloudflared/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx.json
+
+# Ingress rules - routes traffic to local services
+ingress:
+  # Route qc-agent traffic
+  - hostname: qc-agent.daralnas.com
+    service: http://127.0.0.1:7444
+    # Optional: Add origin request configuration
+    originRequest:
+      # Connection timeout
+      connectTimeout: 30s
+      # TLS verification (set to false for self-signed certs)
+      noTLSVerify: false
+      # HTTP/2 origin
+      http2Origin: false
+
+  # Optional: Route multiple services
+  # Uncomment and configure as needed
+  
+  # - hostname: telegram-bot.daralnas.com
+  #   service: http://127.0.0.1:8000
+  
+  # - hostname: oliveexpress-dev.daralnas.com
+  #   service: http://127.0.0.1:8787
+
+  # Catch-all rule (must be last) - returns 404 for unmatched requests
+  - service: http_status:404
+
+# Optional: Metrics and logging
+metrics: localhost:60123
+
+# Optional: Enable auto-update
+autoupdate-freq: 24h
+
+# Optional: Logging level (debug, info, warn, error, fatal)
+loglevel: info
+
+# Optional: Log directory
+# logfile: /var/log/cloudflared.log
+
+# Optional: Protocol optimization
+# protocol: quic
+
+# Optional: Retries for failed requests
+# retries: 5
+
+# Optional: Grace period for graceful shutdown
+# grace-period: 30s
