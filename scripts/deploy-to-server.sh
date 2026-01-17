@@ -25,8 +25,12 @@ if [ -d "${DEPLOY_DIR}/daralnas_bot" ]; then
     echo "💾 Creating backup of current deployment..."
     BACKUP_DIR="${DEPLOY_DIR}/backup-$(date +%Y%m%d-%H%M%S)"
     mkdir -p "${BACKUP_DIR}"
-    cp -r daralnas_bot requirements.txt "${BACKUP_DIR}/" 2>/dev/null || true
+    # Backup Python bot files if they exist
+    [ -d "daralnas_bot" ] && cp -r daralnas_bot "${BACKUP_DIR}/"
+    [ -f "requirements.txt" ] && cp requirements.txt "${BACKUP_DIR}/"
     echo "✅ Backup created at ${BACKUP_DIR}"
+else
+    echo "ℹ️  No existing deployment found - skipping backup"
 fi
 
 # Pull latest code (assuming repository is cloned at DEPLOY_DIR)
@@ -55,6 +59,13 @@ fi
 echo "📦 Installing Python dependencies..."
 source "${VENV_DIR}/bin/activate"
 pip install --upgrade pip
+
+# Verify requirements.txt exists before installing
+if [ ! -f "requirements.txt" ]; then
+    echo "❌ requirements.txt not found - cannot install dependencies"
+    exit 1
+fi
+
 pip install -r requirements.txt
 echo "✅ Dependencies installed"
 
