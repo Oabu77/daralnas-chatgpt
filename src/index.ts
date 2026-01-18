@@ -5,6 +5,7 @@ import { tasksRouter } from "./endpoints/tasks/router";
 import { oliveexpressRouter } from "./endpoints/oliveexpress/router";
 import { fungiRouter } from "./endpoints/fungi/router";
 import { networkRouter } from "./endpoints/network/router";
+import { agentsRouter } from "./endpoints/agents/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { ChatGPTEndpoint } from "./endpoints/chatgpt";
@@ -67,6 +68,9 @@ openapi.route("/fungi", fungiRouter);
 
 // Register Network Device Management
 openapi.route("/network", networkRouter);
+
+// Register AI Agents
+openapi.route("/agents", agentsRouter);
 
 // Register Mobile AI Assistant
 openapi.post("/assistant/chat", MobileAssistantEndpoint);

@@ -1,17 +1,151 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database for AI/Analytics
+  postgres:
+    image: postgres:16-alpine
+    container_name: daralnas-postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=daralnas
+      - POSTGRES_PASSWORD=daralnas2026
+      - POSTGRES_DB=fungi_mesh
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./migrations:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U daralnas"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for caching and message queue
+  redis:
+    image: redis:7-alpine
+    container_name: daralnas-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # MongoDB for AI training data and logs
+  mongodb:
+    image: mongo:7
+    container_name: daralnas-mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=daralnas
+      - MONGO_INITDB_ROOT_PASSWORD=daralnas2026
+      - MONGO_INITDB_DATABASE=ai_training
+    volumes:
+      - mongodb_data:/data/db
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Ollama for local AI models
+  ollama:
+    image: ollama/ollama:latest
+    container_name: daralnas-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    restart: unless-stopped
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # Qdrant Vector Database for AI embeddings
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: daralnas-qdrant
+    ports:
+      - "6333:6333"
+      - "6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:6333/"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # RabbitMQ for message queue and agent coordination
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: daralnas-rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=daralnas
+      - RABBITMQ_DEFAULT_PASS=daralnas2026
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Nginx reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: daralnas-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - oliveexpress-api
+    restart: unless-stopped
+
+  # Main API Service
   oliveexpress-api:
     build: .
+    container_name: daralnas-api
     ports:
       - "8787:8787"
     environment:
       - NODE_ENV=production
       - CLOUDFLARE_ACCOUNT_ID=${CLOUDFLARE_ACCOUNT_ID}
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+      - DATABASE_URL=postgresql://daralnas:daralnas2026@postgres:5432/fungi_mesh
+      - REDIS_URL=redis://redis:6379
+      - MONGODB_URL=mongodb://daralnas:daralnas2026@mongodb:27017/ai_training
+      - OLLAMA_URL=http://ollama:11434
+      - QDRANT_URL=http://qdrant:6333
+      - RABBITMQ_URL=amqp://daralnas:daralnas2026@rabbitmq:5672
     volumes:
       - ./migrations:/app/migrations
       - ./.wrangler:/app/.wrangler
+    depends_on:
+      - postgres
+      - redis
+      - mongodb
+      - ollama
+      - qdrant
+      - rabbitmq
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8787/"]
@@ -20,9 +154,29 @@ services:
       retries: 3
       start_period: 40s
 
-  # Future services:
-  # - QuranChain node connector
-  # - DarCloud identity service
-  # - MeshTalk message broker
-  # - OliveAir integration service
-  # - Omar AI / AMĀN Control engine
+  # AI Agent Runner
+  ai-agents:
+    build: .
+    container_name: daralnas-agents
+    command: python run_agents.py
+    environment:
+      - DATABASE_URL=postgresql://daralnas:daralnas2026@postgres:5432/fungi_mesh
+      - REDIS_URL=redis://redis:6379
+      - MONGODB_URL=mongodb://daralnas:daralnas2026@mongodb:27017/ai_training
+      - OLLAMA_URL=http://ollama:11434
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+      - redis
+      - mongodb
+      - ollama
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  redis_data:
+  mongodb_data:
+  ollama_data:
+  qdrant_data:
+  rabbitmq_data:
