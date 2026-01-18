@@ -41,11 +41,13 @@ jobs:
           echo "✅ 4 outreach campaigns activated"
 
       - name: 📱 Check Mobile App Accessibility
+        env:
+          WORKER_URL: ${{ secrets.WORKER_URL || 'https://daralnas-chatgpt.oabu77.workers.dev' }}
         run: |
           echo "📱 Verifying mobile endpoints..."
-          curl -sf https://daralnas-chatgpt.oabu77.workers.dev/quranchain > /dev/null 2>&1 || echo "QuranChain check"
-          curl -sf https://daralnas-chatgpt.oabu77.workers.dev/assistant > /dev/null 2>&1 || echo "Assistant check"
-          curl -sf https://daralnas-chatgpt.oabu77.workers.dev/meshtalk > /dev/null 2>&1 || echo "MeshTalk check"
+          curl -sf "${WORKER_URL}/quranchain" > /dev/null 2>&1 || echo "QuranChain check"
+          curl -sf "${WORKER_URL}/assistant" > /dev/null 2>&1 || echo "Assistant check"
+          curl -sf "${WORKER_URL}/meshtalk" > /dev/null 2>&1 || echo "MeshTalk check"
           echo "✅ Mobile endpoints verified"
 
       - name: 🚀 Auto-Scale Based on Demand

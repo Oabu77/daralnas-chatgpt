@@ -89,7 +89,7 @@ jobs:
           sleep 15
           
           # Check sentinel health (silent mode)
-          HEALTH=$(curl -sf "${WORKER_URL}/fungi/sentinel/health" | jq -r '.status // "unknown"' 2>/dev/null || echo "unknown")
+          HEALTH=$(curl -sf "${WORKER_URL}/fungi/sentinel/health" | jq -r '.status // "unknown"' || echo "unknown")
           echo "Sentinel Health: $HEALTH"
           
           # Verify critical endpoints
