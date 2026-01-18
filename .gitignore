@@ -197,3 +197,13 @@ dist
 !.env.example
 .dev.vars*
 !.dev.vars.example
+
+### Project-specific logs ###
+nohup.out
+*.log.txt
+*-takeover.log
+*-scaling.log
+*-spawner.log
+samsung-takeover.log
+auto-scaling.log
+agent-spawner.log

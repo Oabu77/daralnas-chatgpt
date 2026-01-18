@@ -86,25 +86,18 @@ jobs:
           WORKER_URL: ${{ secrets.WORKER_URL || 'https://daralnas-chatgpt.oabu77.workers.dev' }}
         run: |
           echo "🔍 Verifying Fungi Mesh Sentinel..."
-          
-          # Wait for deployment to propagate
           sleep 15
           
-          # Check sentinel health
-          HEALTH=$(curl -s "${WORKER_URL}/fungi/sentinel/health" | jq -r '.status // "unknown"')
+          # Check sentinel health (silent mode)
+          HEALTH=$(curl -sf "${WORKER_URL}/fungi/sentinel/health" | jq -r '.status // "unknown"' 2>/dev/null || echo "unknown")
           echo "Sentinel Health: $HEALTH"
           
-          # Check infrastructure status
-          STATUS=$(curl -s "${WORKER_URL}/fungi/sentinel/status")
-          echo "Infrastructure Status:"
-          echo "$STATUS" | jq '.'
-          
           # Verify critical endpoints
-          curl -f "${WORKER_URL}/fungi/sentinel/health" || exit 1
-          curl -f "${WORKER_URL}/fungi/sentinel/status" || exit 1
-          curl -f "${WORKER_URL}/oliveexpress/shipments" || exit 1
+          curl -sf "${WORKER_URL}/fungi/sentinel/health" > /dev/null || exit 1
+          curl -sf "${WORKER_URL}/fungi/sentinel/status" > /dev/null || exit 1
+          curl -sf "${WORKER_URL}/oliveexpress/shipments" > /dev/null || exit 1
           
-          echo "✅ All Fungi Mesh endpoints verified"
+          echo "✅ All endpoints verified"
 
       - name: Trigger Auto-Monitoring
         if: success()
@@ -126,7 +119,7 @@ jobs:
         env:
           WORKER_URL: ${{ secrets.WORKER_URL || 'https://daralnas-chatgpt.oabu77.workers.dev' }}
         run: |
-          echo "🧪 Running full system validation..."
+          echo "🧪 Running system validation..."
           
           # Test all critical endpoints
           endpoints=(
@@ -140,27 +133,21 @@ jobs:
           
           failed=0
           for endpoint in "${endpoints[@]}"; do
-            echo "Testing: $endpoint"
-            if curl -sf "${WORKER_URL}${endpoint}" > /dev/null; then
-              echo "  ✅ $endpoint"
+            if curl -sf "${WORKER_URL}${endpoint}" > /dev/null 2>&1; then
+              echo "✅ $endpoint"
             else
-              echo "  ❌ $endpoint FAILED"
+              echo "❌ $endpoint"
               failed=$((failed + 1))
             fi
           done
           
           if [ $failed -eq 0 ]; then
-            echo ""
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
             echo "🎉 LAUNCH SUCCESSFUL!"
-            echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-            echo "🌐 DarCloud: FULLY OPERATIONAL"
-            echo "🍄 Fungi Mesh Network: LIVE"
-            echo "🤖 Auto-Repair: ENABLED"
-            echo "🔄 Auto-Deploy: ACTIVE"
-            echo "📊 Monitoring: CONTINUOUS"
+            echo "🌐 DarCloud: OPERATIONAL | 🍄 Fungi Mesh: LIVE"
+            echo "🤖 Auto-Repair: ENABLED | 📊 Monitoring: ACTIVE"
             echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
           else
-            echo "❌ $failed endpoint(s) failed validation"
+            echo "❌ $failed endpoint(s) failed"
             exit 1
           fi
