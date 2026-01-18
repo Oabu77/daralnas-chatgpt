@@ -207,3 +207,17 @@ nohup.out
 samsung-takeover.log
 auto-scaling.log
 agent-spawner.log
+
+### Workflow-generated temporary files ###
+*-spec.md
+*-plan.md
+*-checklist.md
+*-queue.md
+*-report.md
+*-content.md
+*-metrics.json
+*-structure.md
+outreach-report.md
+adoption-metrics.json
+social-media-content.md
+implementation-queue.md
