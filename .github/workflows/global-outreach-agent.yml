@@ -45,10 +45,10 @@ jobs:
           WORKER_URL: ${{ secrets.WORKER_URL || 'https://daralnas-chatgpt.oabu77.workers.dev' }}
         run: |
           echo "📱 Verifying mobile endpoints..."
-          curl -sf "${WORKER_URL}/quranchain" > /dev/null 2>&1 || echo "QuranChain check"
-          curl -sf "${WORKER_URL}/assistant" > /dev/null 2>&1 || echo "Assistant check"
-          curl -sf "${WORKER_URL}/meshtalk" > /dev/null 2>&1 || echo "MeshTalk check"
-          echo "✅ Mobile endpoints verified"
+          curl -sf "${WORKER_URL}/quranchain" > /dev/null 2>&1 && echo "✓ QuranChain" || echo "✗ QuranChain"
+          curl -sf "${WORKER_URL}/assistant" > /dev/null 2>&1 && echo "✓ Assistant" || echo "✗ Assistant"
+          curl -sf "${WORKER_URL}/meshtalk" > /dev/null 2>&1 && echo "✓ MeshTalk" || echo "✗ MeshTalk"
+          echo "✅ Mobile endpoints checked"
 
       - name: 🚀 Auto-Scale Based on Demand
         run: |
