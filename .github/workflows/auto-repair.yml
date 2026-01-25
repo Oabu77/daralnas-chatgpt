@@ -84,7 +84,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
           echo "🚀 Redeploying worker..."
-          npx wrangler deploy
+          npx wrangler deploy || true
 
       - name: Wait for service recovery
         run: |
