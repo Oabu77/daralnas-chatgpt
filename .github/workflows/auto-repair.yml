@@ -70,7 +70,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check Cloudflare Credentials
+        id: check_credentials
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "has_credentials=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Cloudflare credentials not configured - skipping automated repair"
+          else
+            echo "has_credentials=true" >> $GITHUB_OUTPUT
+            echo "✅ Cloudflare credentials available"
+          fi
+
       - name: Repair - Reapply Migrations
+        if: steps.check_credentials.outputs.has_credentials == 'true'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -79,6 +91,7 @@ jobs:
           npx wrangler d1 migrations apply DB --remote || true
 
       - name: Repair - Redeploy Worker
+        if: steps.check_credentials.outputs.has_credentials == 'true'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -87,11 +100,13 @@ jobs:
           npx wrangler deploy
 
       - name: Wait for service recovery
+        if: steps.check_credentials.outputs.has_credentials == 'true'
         run: |
           echo "⏳ Waiting 30 seconds for service to stabilize..."
           sleep 30
 
       - name: Verify repair
+        if: steps.check_credentials.outputs.has_credentials == 'true'
         env:
           WORKER_URL: ${{ secrets.WORKER_URL || 'https://daralnas-chatgpt.oabu77.workers.dev' }}
         run: |
@@ -107,6 +122,15 @@ jobs:
             echo "❌ REPAIR FAILED - Health: $HEALTH_STATUS, Sentinel: $SENTINEL_STATUS"
             exit 1
           fi
+
+      - name: Report Missing Credentials
+        if: steps.check_credentials.outputs.has_credentials == 'false'
+        run: |
+          echo "⚠️ Auto-repair skipped: Cloudflare credentials not configured"
+          echo "To enable auto-repair, configure the following secrets:"
+          echo "  - CLOUDFLARE_ACCOUNT_ID"
+          echo "  - CLOUDFLARE_API_TOKEN"
+          echo "Manual intervention required for service recovery."
 
   notify:
     needs: [health-check, auto-repair]
