@@ -73,7 +73,7 @@ jobs:
       - name: Check Cloudflare Credentials
         id: check_credentials
         run: |
-          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ] || [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
             echo "has_credentials=false" >> $GITHUB_OUTPUT
             echo "⚠️ Cloudflare credentials not configured - skipping automated repair"
           else
