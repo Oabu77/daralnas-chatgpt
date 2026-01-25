@@ -2,6 +2,7 @@
 	"compatibility_date": "2025-10-08",
 	"main": "src/index.ts",
 	"name": "daralnas-chatgpt",
+	"account_id": "3bfc21f5baba642160ec706818e3a19f",
 	"upload_source_maps": true,
 	"observability": {
 		"enabled": true,
