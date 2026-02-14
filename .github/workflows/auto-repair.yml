@@ -126,7 +126,7 @@ jobs:
             exit 1
           fi
 
-      - name: Skip repair (credentials not available)
+      - name: Repair - Skip (credentials not available)
         if: steps.check_credentials.outputs.credentials_available == 'false'
         run: |
           echo "⚠️ Skipping repair steps - Cloudflare credentials not configured"
