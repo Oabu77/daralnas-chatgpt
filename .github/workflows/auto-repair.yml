@@ -72,8 +72,11 @@ jobs:
 
       - name: Check Cloudflare credentials
         id: check_credentials
+        env:
+          CF_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CF_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
         run: |
-          if [ -n "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ] && [ -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+          if [ -n "$CF_ACCOUNT_ID" ] && [ -n "$CF_API_TOKEN" ]; then
             echo "credentials_available=true" >> $GITHUB_OUTPUT
             echo "✅ Cloudflare credentials are configured"
           else
@@ -130,7 +133,6 @@ jobs:
           echo "📝 To enable auto-repair, please configure the following secrets:"
           echo "   - CLOUDFLARE_ACCOUNT_ID"
           echo "   - CLOUDFLARE_API_TOKEN"
-          exit 0
 
   notify:
     needs: [health-check, auto-repair]
