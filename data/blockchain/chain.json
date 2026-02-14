@@ -1,0 +1,511 @@
+{
+  "chainId": "quranchain-mainnet-v1",
+  "version": "1.0.0",
+  "difficulty": 4,
+  "blocks": [
+    {
+      "index": 0,
+      "timestamp": 1739491200000,
+      "transactions": [
+        {
+          "id": "443eaad3-7b08-4733-8706-d4be444241a9",
+          "type": "GENESIS",
+          "from": "SYSTEM",
+          "to": "Omar_Mohammad_Abunadi",
+          "amount": 50,
+          "data": {
+            "message": "بسم الله الرحمن الرحيم — In the name of Allah, the Most Gracious, the Most Merciful",
+            "founder": "Omar Mohammad Abunadi™",
+            "chain": "QuranChain Mainnet",
+            "purpose": "Immutable preservation and authentication of the Holy Quran through decentralized blockchain technology",
+            "launched": "2025-02-14T00:00:00.000Z",
+            "verse": {
+              "surah": 1,
+              "ayah": 1,
+              "arabic": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+              "translation": "In the name of Allah, the Most Gracious, the Most Merciful"
+            }
+          },
+          "timestamp": 1771037434904,
+          "signature": null,
+          "hash": "7d274914ebb48a19f2956383765e3483124edebdd5e5b602924edbe4f5f76d7e"
+        },
+        {
+          "id": "8f18dcde-85cb-4595-8ab5-3a872dcb0a55",
+          "type": "VERSE_AUTH",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": null,
+          "amount": 0,
+          "data": {
+            "surah": 1,
+            "ayah": 1,
+            "verseHash": "a83ca7b2c2b3d1ef0c5dd0a0d10ae2704707602ed48cfca8268df5453a69cb34",
+            "textPreview": "In the name of Allah, the Most Gracious, the Most Merciful",
+            "arabicPreview": "بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ",
+            "translation": null,
+            "authenticatedAt": 1771037434905
+          },
+          "timestamp": 1771037434905,
+          "signature": null,
+          "hash": "fec0a5e5f27c8b77de3c5576e9d3352acfc8b61abe4c57b1473ca67fb6ddc7d7"
+        },
+        {
+          "id": "af680117-5d23-40b3-88e3-25a0be8b1f16",
+          "type": "VERSE_AUTH",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": null,
+          "amount": 0,
+          "data": {
+            "surah": 1,
+            "ayah": 2,
+            "verseHash": "a93115238c654ace014ae9f582c729faf6a7cc92272012266293a38c3975808b",
+            "textPreview": "All praise is due to Allah, Lord of all the worlds",
+            "arabicPreview": "الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ",
+            "translation": null,
+            "authenticatedAt": 1771037434905
+          },
+          "timestamp": 1771037434905,
+          "signature": null,
+          "hash": "7983dcc390a73709acdc580f710ec4acd28abc5b9510c8b7bf241fddae56714f"
+        },
+        {
+          "id": "e84b80d7-77ee-4d61-8762-c9411e2dd11c",
+          "type": "VERSE_AUTH",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": null,
+          "amount": 0,
+          "data": {
+            "surah": 1,
+            "ayah": 3,
+            "verseHash": "4a3cf22fe293a7ad435f57eed98f4ca70508f0b29041c12288fcb79d093d5c24",
+            "textPreview": "The Most Gracious, the Most Merciful",
+            "arabicPreview": "الرَّحْمَٰنِ الرَّحِيمِ",
+            "translation": null,
+            "authenticatedAt": 1771037434905
+          },
+          "timestamp": 1771037434905,
+          "signature": null,
+          "hash": "037abee5eb9d4c34b6d056836623bf988fc95299c56a60e07cfd0a09539cbcac"
+        },
+        {
+          "id": "951407e3-5c79-4cd9-a9c8-cb29ce8f3f5a",
+          "type": "VERSE_AUTH",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": null,
+          "amount": 0,
+          "data": {
+            "surah": 1,
+            "ayah": 4,
+            "verseHash": "6af28b805da8886e0fdf9eb093fdc5285d0243b9ce3d738670ec171b0d85cde4",
+            "textPreview": "Master of the Day of Judgment",
+            "arabicPreview": "مَالِكِ يَوْمِ الدِّينِ",
+            "translation": null,
+            "authenticatedAt": 1771037434905
+          },
+          "timestamp": 1771037434905,
+          "signature": null,
+          "hash": "a5d62c7c553c88178b82f9a194f0cc33ad6b3262de183ef4993780253709f55e"
+        },
+        {
+          "id": "df24af7a-1113-425d-aba8-15b5a866e81f",
+          "type": "VERSE_AUTH",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": null,
+          "amount": 0,
+          "data": {
+            "surah": 1,
+            "ayah": 5,
+            "verseHash": "e37dd000c43f4bc1628095578f14cada18a628ed2d604f0392f6a8fa25f4fad8",
+            "textPreview": "You alone we worship, and You alone we ask for help",
+            "arabicPreview": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ",
+            "translation": null,
+            "authenticatedAt": 1771037434905
+          },
+          "timestamp": 1771037434905,
+          "signature": null,
+          "hash": "2d3dcfe036180c84f2521ac3a078f29f400cb173aed365e47f3a47e0bd5ea83b"
+        },
+        {
+          "id": "5af3bc41-e18f-46c5-a7ba-e568d5210d7e",
+          "type": "VERSE_AUTH",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": null,
+          "amount": 0,
+          "data": {
+            "surah": 1,
+            "ayah": 6,
+            "verseHash": "137677bd0f9a7afd5bcd135324e54bd6676130830b60d1fbe2ea404d34cbc96e",
+            "textPreview": "Guide us along the Straight Path",
+            "arabicPreview": "اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ",
+            "translation": null,
+            "authenticatedAt": 1771037434905
+          },
+          "timestamp": 1771037434905,
+          "signature": null,
+          "hash": "bd5a24f3112f8bbfbd054153925ae481a02e30943c4b16d455d23dd1e238946a"
+        },
+        {
+          "id": "d5b72e63-97f5-4329-8a9d-09a157a0b54c",
+          "type": "VERSE_AUTH",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": null,
+          "amount": 0,
+          "data": {
+            "surah": 1,
+            "ayah": 7,
+            "verseHash": "1467350c71ee6827d5d9c05fcb67ad28c66f7ef31b4c41a9036e5c1bed11c059",
+            "textPreview": "The path of those You have blessed—not those You are displeased with, or those who are astray",
+            "arabicPreview": "صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ",
+            "translation": null,
+            "authenticatedAt": 1771037434905
+          },
+          "timestamp": 1771037434905,
+          "signature": null,
+          "hash": "fe933a0ff5b7b0910aa3b0f3b3ec30ba22757966cd569b7756f5a737642ad577"
+        }
+      ],
+      "previousHash": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash": "00365a01be7ecd4cf309b99783453e6a360f3402acf8c28885cbf316b4620170",
+      "nonce": 18,
+      "difficulty": 4,
+      "merkleRoot": "7331756532ac33f9c6e643de2ca3fa153ba5b9c32cdcd2a69d3c2691f3cd0238",
+      "miner": "Omar_Mohammad_Abunadi",
+      "txCount": 8
+    },
+    {
+      "index": 1,
+      "timestamp": 1771037435064,
+      "transactions": [
+        {
+          "id": "50a73de3-890a-4dd9-9181-94715319033d",
+          "type": "REWARD",
+          "from": "SYSTEM",
+          "to": "Omar_Mohammad_Abunadi",
+          "amount": 50,
+          "data": {
+            "type": "block_reward"
+          },
+          "timestamp": 1771037435064,
+          "signature": null,
+          "hash": "7caa92218d9198d808b184c931db1c200e12051d84594cd41cff9047efb8157c"
+        }
+      ],
+      "previousHash": "00365a01be7ecd4cf309b99783453e6a360f3402acf8c28885cbf316b4620170",
+      "hash": "00004e893a126b0847bb4416734a49d724051f939e76d73eeca7bd2e3ea9b6b6",
+      "nonce": 12256,
+      "difficulty": 4,
+      "merkleRoot": "03b12ae3439d4b0ce802fdf1d602f10a6dcdffc8bc11c187f71e139d69509647",
+      "miner": "Omar_Mohammad_Abunadi",
+      "txCount": 1
+    },
+    {
+      "index": 2,
+      "timestamp": 1771038191265,
+      "transactions": [
+        {
+          "id": "2fe2b024-0a56-4535-b722-5bcceefedff4",
+          "type": "REWARD",
+          "from": "SYSTEM",
+          "to": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+          "amount": 50,
+          "data": {
+            "type": "block_reward"
+          },
+          "timestamp": 1771038191265,
+          "signature": null,
+          "hash": "74229d2c7a5dd1b4a6ca3446839698c587a556d842484858c0fb027866e88574"
+        }
+      ],
+      "previousHash": "00004e893a126b0847bb4416734a49d724051f939e76d73eeca7bd2e3ea9b6b6",
+      "hash": "000078ef3c42c009aa043d9338d64572ede38d431a47b4865c2ef59ebbb5c77e",
+      "nonce": 50616,
+      "difficulty": 4,
+      "merkleRoot": "241fde795953809e0674c3f318a664add60a436fc735d45db4b1b467a000a8c9",
+      "miner": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+      "txCount": 1
+    },
+    {
+      "index": 3,
+      "timestamp": 1771038203856,
+      "transactions": [
+        {
+          "id": "8ee1c511-c0a5-461b-9827-c60e4131a1aa",
+          "type": "REWARD",
+          "from": "SYSTEM",
+          "to": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+          "amount": 50,
+          "data": {
+            "type": "block_reward"
+          },
+          "timestamp": 1771038203856,
+          "signature": null,
+          "hash": "305e0ba8c1979c3956d39c619c38fbc736e0f66f44d434090e89dd160f6aafb5"
+        }
+      ],
+      "previousHash": "000078ef3c42c009aa043d9338d64572ede38d431a47b4865c2ef59ebbb5c77e",
+      "hash": "0000075c555ccd0597f531452ed63640d654fa367a7f3613e0f6454192293f56",
+      "nonce": 28801,
+      "difficulty": 4,
+      "merkleRoot": "1c8d19bb7535b5ac55b4473b398df5c47e599590a9cddbcc3ce7bfa30e49d170",
+      "miner": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+      "txCount": 1
+    },
+    {
+      "index": 4,
+      "timestamp": 1771038209318,
+      "transactions": [
+        {
+          "id": "82798a1b-e698-4fde-88b1-2041144de597",
+          "type": "REWARD",
+          "from": "SYSTEM",
+          "to": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+          "amount": 50,
+          "data": {
+            "type": "block_reward"
+          },
+          "timestamp": 1771038209318,
+          "signature": null,
+          "hash": "1374804f34579176ce3d3ee7b54eb1015eb2e1d7057e6cc11e42ecfb2606f9da"
+        }
+      ],
+      "previousHash": "0000075c555ccd0597f531452ed63640d654fa367a7f3613e0f6454192293f56",
+      "hash": "0000dd59dc0363fb6ce642052d31f3834d8a3055c899bb0b11589eca73de27d0",
+      "nonce": 24995,
+      "difficulty": 4,
+      "merkleRoot": "f4d1e062308e1e9e364b6a2fd9d2dfdcbfcf9b8880c7ebd08a00b8b146be394e",
+      "miner": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+      "txCount": 1
+    },
+    {
+      "index": 5,
+      "timestamp": 1771040035432,
+      "transactions": [
+        {
+          "id": "4987fc26-093f-4a08-bc1f-2a991e5a32ef",
+          "type": "ZAKAT",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": "ZAKAT_FUND",
+          "amount": 5,
+          "data": {
+            "category": "zakat",
+            "memo": "2.5% annual zakat",
+            "islamicCompliant": true
+          },
+          "timestamp": 1771039775947,
+          "signature": null,
+          "hash": "f353aa059400c446433d7f7e1b024c3ac40d01d1660090c8093d86d9b662d693"
+        },
+        {
+          "id": "d66f9c84-18c8-4826-9356-49277e370335",
+          "type": "SADAQAH",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": "SADAQAH_FUND",
+          "amount": 3,
+          "data": {
+            "category": "sadaqah",
+            "memo": "Voluntary charity",
+            "islamicCompliant": true
+          },
+          "timestamp": 1771039775957,
+          "signature": null,
+          "hash": "14dd67681a90077ab68d9b05daa72cc68be8cdd83fc410772bee52f0af697784"
+        },
+        {
+          "id": "8e2edd1b-7870-4151-a75b-dfb33f561e93",
+          "type": "HALAL_PAYMENT",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": "HALAL_VENDOR",
+          "amount": 7,
+          "data": {
+            "category": "halal_payment",
+            "description": "Halal food supply",
+            "invoiceId": "INV-001",
+            "islamicCompliant": true,
+            "interestFree": true
+          },
+          "timestamp": 1771040021970,
+          "signature": null,
+          "hash": "3b040ff0fa83fcb8b829a84ed352b18ee4b2bd9fa1ffb27fbdcd7adc594c604b"
+        },
+        {
+          "id": "940ffb15-b396-40ec-a85b-4608b249978f",
+          "type": "TRANSFER",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": "Omar_Mohammad_Abunadi",
+          "amount": 3,
+          "data": {
+            "memo": "Founder royalty (30%) on halal payment"
+          },
+          "timestamp": 1771040021970,
+          "signature": null,
+          "hash": "306f553d7c51cc55c8d7fe220741de7ce30a868f09aa6c864ce939cd229c9ae4"
+        },
+        {
+          "id": "e2fd74c2-9700-4f72-a86b-3f090b4faf05",
+          "type": "WAQF",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": "EDUCATION_FUND",
+          "amount": 20,
+          "data": {
+            "category": "waqf",
+            "purpose": "Build Islamic school",
+            "islamicCompliant": true,
+            "irrevocable": true
+          },
+          "timestamp": 1771040021999,
+          "signature": null,
+          "hash": "aeb9fa8e58551a94a5217e19c5bf77221fea7101ccb5c66ceb1d0e0decbca66e"
+        },
+        {
+          "id": "97f9216c-8e34-4c52-9e97-ca49f50d9f7a",
+          "type": "ISLAMIC_LOAN",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": "BORROWER_1",
+          "amount": 15,
+          "data": {
+            "category": "qard_al_hasan",
+            "memo": "Interest-free loan",
+            "returnDate": "2026-12-31",
+            "islamicCompliant": true,
+            "interestFree": true,
+            "interestRate": 0
+          },
+          "timestamp": 1771040022028,
+          "signature": null,
+          "hash": "4ab42647f456432964b7d52eaaefcfcf739904386c7648b95141cea96b8ed16f"
+        },
+        {
+          "id": "40299d79-02b4-4f3b-a64f-9eecbc7b4fa4",
+          "type": "REWARD",
+          "from": "SYSTEM",
+          "to": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+          "amount": 50,
+          "data": {
+            "type": "block_reward"
+          },
+          "timestamp": 1771040035432,
+          "signature": null,
+          "hash": "88ffaece1c727a4ca9573ac4cf8460243ea20d2288806500b017d262aabd3435"
+        }
+      ],
+      "previousHash": "0000dd59dc0363fb6ce642052d31f3834d8a3055c899bb0b11589eca73de27d0",
+      "hash": "00008cf1f2d12d1a18fa4ce1cc2aae7468006aff0a1a2ee2a0d0a1cb70690a4d",
+      "nonce": 41379,
+      "difficulty": 4,
+      "merkleRoot": "6879fe1671024d76bd3edf0f6cebdc2ea75c4e737264b75b92e3ae065bf9eec7",
+      "miner": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+      "txCount": 7
+    },
+    {
+      "index": 6,
+      "timestamp": 1771040375954,
+      "transactions": [
+        {
+          "id": "a5073205-a449-48cb-b528-9204d9617871",
+          "type": "REWARD",
+          "from": "SYSTEM",
+          "to": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+          "amount": 50,
+          "data": {
+            "type": "block_reward"
+          },
+          "timestamp": 1771040375954,
+          "signature": null,
+          "hash": "8d29786778e9117c254da0a7572d5a9ad5dd1ad96e866ae1b879a7d6c6469f45"
+        }
+      ],
+      "previousHash": "00008cf1f2d12d1a18fa4ce1cc2aae7468006aff0a1a2ee2a0d0a1cb70690a4d",
+      "hash": "0000c7e53ce3aa292dd1888086b4b7df136b183390ff584ba89e37dcc1defc1f",
+      "nonce": 38489,
+      "difficulty": 4,
+      "merkleRoot": "ce6160e1a0cf3905c1c50de3d699d16cec83624c0b9d7412f8c77ba774d25a88",
+      "miner": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+      "txCount": 1
+    },
+    {
+      "index": 7,
+      "timestamp": 1771041488212,
+      "transactions": [
+        {
+          "id": "f3f55cff-8858-4518-827e-b762332eb1c3",
+          "type": "STAKE",
+          "from": "Omar_Mohammad_Abunadi",
+          "to": "STAKE_POOL",
+          "amount": 50,
+          "data": {
+            "lockPeriod": 30,
+            "stakedAt": 1771041478427,
+            "expectedRewardRate": 0.05
+          },
+          "timestamp": 1771041478427,
+          "signature": null,
+          "hash": "4c9e67a1425d81798e3cbeac6d90f3df66daf22821af372aed92c73794d9e8ba"
+        },
+        {
+          "id": "3e20f8cc-1c74-4517-88ec-2b4ad296cc48",
+          "type": "REWARD",
+          "from": "SYSTEM",
+          "to": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+          "amount": 50,
+          "data": {
+            "type": "block_reward"
+          },
+          "timestamp": 1771041488209,
+          "signature": null,
+          "hash": "c1a1af362a97c2882a29e64c17d3d060689f16e70e33636e1e75239cdcd3d40b"
+        }
+      ],
+      "previousHash": "0000c7e53ce3aa292dd1888086b4b7df136b183390ff584ba89e37dcc1defc1f",
+      "hash": "00006609d9966acd5958340848e9b53915fa00ccc9dd67222ffac26e85a6ccac",
+      "nonce": 48562,
+      "difficulty": 4,
+      "merkleRoot": "a0356b327926bb25386bee8ab55e14deea212fb460f0c46ad7d73c786162d60a",
+      "miner": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+      "txCount": 2
+    },
+    {
+      "index": 8,
+      "timestamp": 1771041500531,
+      "transactions": [
+        {
+          "id": "a2bfff11-37b6-4b20-8f58-28169b0d068d",
+          "type": "STAKING_REWARD",
+          "from": "SYSTEM",
+          "to": "Omar_Mohammad_Abunadi",
+          "amount": 0.00000238,
+          "data": {
+            "type": "staking_reward",
+            "stakedAmount": 50,
+            "period": "1 block",
+            "rewardRate": 0.05
+          },
+          "timestamp": 1771041500531,
+          "signature": null,
+          "hash": "a60e0c869d179df10de73160697ced1bd5a93c7d1bf6a13388feb0e69e503371"
+        },
+        {
+          "id": "ba317b70-a1ed-4fc3-a5cc-76cbaa62376a",
+          "type": "REWARD",
+          "from": "SYSTEM",
+          "to": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+          "amount": 50,
+          "data": {
+            "type": "block_reward"
+          },
+          "timestamp": 1771041500531,
+          "signature": null,
+          "hash": "f4bd0052eaf0c616929f8eeddc6229e6930ab7c830f5f3a6183e9f1f94133918"
+        }
+      ],
+      "previousHash": "00006609d9966acd5958340848e9b53915fa00ccc9dd67222ffac26e85a6ccac",
+      "hash": "0000cf4fa000168781ba740f2cb799d029956611f97054c09b2088ef8964138c",
+      "nonce": 186177,
+      "difficulty": 4,
+      "merkleRoot": "9b188a1b42529b639a3aa9745fb3c89e8b2dc1a4eca6703fef6ca6f94b2f8e05",
+      "miner": "qrc_5edeb1eb3b18bd6d3ab97298de0dafb58ac8b6a4",
+      "txCount": 2
+    }
+  ],
+  "savedAt": 1771041502937,
+  "nodeId": "e780f049-ac61-416f-9dfc-3ae69278de25"
+}

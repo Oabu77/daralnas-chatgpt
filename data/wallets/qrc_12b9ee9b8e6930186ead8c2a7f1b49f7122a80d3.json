@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "address": "qrc_12b9ee9b8e6930186ead8c2a7f1b49f7122a80d3",
+  "ethAddress": "0xa8cca006ad030e624af9dfdef05a2789a20c5b39",
+  "publicKey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgmZDVXlzRPPLKFIuVq/F\nUP0y6323FDrdLSbsStNUDGDo35hjOd72PFlmDzxXyEREbfy4rPBtFEQzBHch2Sau\ngrOdIUnnEYRiWRT8TcBaSDhpIYiJmsmCdk4ofYDHIuhYkERaTjnOVoRHujqGKVJc\niTxao0AimWjxOIZQzuFxdG5v4VQ0GSMaZvJ67QITEVxk7npTvMzo8fQqlM6Znr9x\np5tOb4tm7cznKpfFWXzXu3NfCpLgdFFNVFcU3iAa4epJqNT12Mpl9eKQ/+xWngYC\nZkgnAbvncMf/wMiJtOev2PvJ4BGZhlLI0MOabL+WiFX6wuLnjGlByg0/+PoQp960\nUwIDAQAB\n-----END PUBLIC KEY-----\n",
+  "privateKey": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCCZkNVeXNE88so\nUi5Wr8VQ/TLrfbcUOt0tJuxK01QMYOjfmGM53vY8WWYPPFfIRERt/Lis8G0URDME\ndyHZJq6Cs50hSecRhGJZFPxNwFpIOGkhiImayYJ2Tih9gMci6FiQRFpOOc5WhEe6\nOoYpUlyJPFqjQCKZaPE4hlDO4XF0bm/hVDQZIxpm8nrtAhMRXGTuelO8zOjx9CqU\nzpmev3Gnm05vi2btzOcql8VZfNe7c18KkuB0UU1UVxTeIBrh6kmo1PXYymX14pD/\n7FaeBgJmSCcBu+dwx//AyIm056/Y+8ngEZmGUsjQw5psv5aIVfrC4ueMaUHKDT/4\n+hCn3rRTAgMBAAECggEAGO5YXVU1Fq/N3c2okmZUwWFHhQKqKDIA64sPjlbNMPiu\nTWGjRwM77Nniy3LsDZwPwT+aR2ZIVKGdZ3Mng48DunWAy0aH6S94ZjO+8VafbENs\nxj6GoJN6YAgdcbFXYXMuy5Zl9aLTsnLkC9T4pZnbm1lwstmmQ9JunDIB7SvpNytI\nVwPGvG/7d9rPJ6Ni9FqIWfDLuiMkzyg/F9n6TRRi7V0OvyB0SNEAzKep7yQdxzE3\nMQaYVPDSgZNz2HwNnsrFGAmJq2Uv9GIU401jpLTXV2peZyNESWOLKk4Woq9sInTS\nSSPODMpY6DC3SyMOe8rH2RXTyvnRkGHDCuQP4BFsAQKBgQC3xPPeDau6gcxc2XFt\ntEPN8nnn8x15ZhpkNajNlDzp9gOtPxrKHA984RRqvIkcNsOQPF/44gukUrsQXmnc\n6lIZGXbWqZh7KHVmMwvz4KOzGCu7H0wbDEHFovYg3BxJiKa+I/Sz3WG+yIRajVXJ\nFlUxc3KXxknUIyOzpYf01bxTUwKBgQC1py6SRVpdUvrn4mWlp633cyGwf6AsxZEo\neqqtSpE9floMaDuV+CooGQqYTFSY7CD8z6Ik1Tii81l3Hi0wYjx0/L39adB5ir0w\nkw0cNctS78RJM+wSQNCAsCnqpj9EcRV9iTzolv677x/rQCrNGeEAzbVum7dNFLja\nPH/ng9D7AQKBgB/Z7Ca9mdkurBwfuBA6oVHtyAFS2vXyo3pg7owLOG+Yq1R4zozf\nRjPv0xkY6m7Qcx7px/ycOUZW7INOyex3VJlzF2znYj1eatK24Eh51AWzl8jMCOXb\nPv8hWqWhYOnB3JyyILSYF1v45y/GtWqwCz4R83eo75zsJkD53NGrxgNvAoGAARmz\nKYWsB3ayOGdhsEA0yJP090m+oabMu08K66PQ/2tdhke3XLA1KSsFqmiD9q0vgfiM\nBecYwbvxpcwUAAAIV7kUOY3DiojxnnK1mJ8mzSjQqpTa8D1eRflLN7WsGnEI7UrA\niLQpdN/89ILd/4IRn9yfJb1hveDLQd8t8ywUPwECgYBtzlY9aqPyzt0eeCcJ06Wi\nbdk2b/kWxk4RNIZ7cSP9W9LrfzZAgYsJmKpcT0baL7Iakm8NEixRAXPYcM9ONovO\nCGhrT9QhV5SDlGDt1KaWksqgP7zxAzxdOZTJtRX61cqSGv9pNILZtIMWgS5vt9R9\nmUZWpqO98x1/ECGqgl+ZHg==\n-----END PRIVATE KEY-----\n",
+  "mnemonic": "buzz outdoor beef analyst milk picture crater year upper wedding enrich heart",
+  "label": "recovered-wallet",
+  "type": "standard",
+  "derivationPath": "m/44'/786'/0'/0/0",
+  "chainId": "quranchain-mainnet-v1",
+  "createdAt": 1771038918349
+}

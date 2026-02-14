@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quranchain-config
+data:
+  NODE_ENV: "production"
+  PORT: "3000"
+  CORS_ORIGIN: "http://localhost:3000"
+  ETHEREUM_NETWORK: "mainnet"
+  LOG_LEVEL: "info"
+  JWT_EXPIRES_IN: "7d"
+  BCRYPT_ROUNDS: "12"
+  RATE_LIMIT_WINDOW_MS: "900000"
+  RATE_LIMIT_MAX_REQUESTS: "100"
+  # Add your actual values here
+  MONGODB_URI: "mongodb://localhost:27017/quranchain"
+  INFURA_PROJECT_ID: "your-infura-project-id"

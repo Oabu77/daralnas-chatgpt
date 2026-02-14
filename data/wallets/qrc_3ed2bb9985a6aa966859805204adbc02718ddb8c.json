@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "address": "qrc_3ed2bb9985a6aa966859805204adbc02718ddb8c",
+  "ethAddress": "0xd750f6c3b56bbce97c68290bb8e2fd0f94f96fa6",
+  "publicKey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzJYc9Pj/wa0kYziJ+whs\n90y+M/vTp7A9zGNHKZGjxvGf5gVrRvT40/2HI8/DjghRG1KDtr1S8GMnUMQjbWKP\nGJglKdIrW222+zFk3oLVg7X5Pu5uym/HQIzGLW0yJFN8YHwZAkke9J8RLLzHvfYH\nxKou2dRyB52f9dXl9X3ZUm05KS74y6823WvmwJ/HkiwACLF59eXvaBpTQ9ILOlRY\n4Bx8SRNu7cLUU45kZAjla1bN1sSUYkMg5Y1hNtA4GTZ3i3ipprQHDjfToPCDQALI\npdGhajCZd+YoBvHII436Ed4v4+j/MN03LV8OycXNAyAvnXIIpmeE0BYyLUEzPmAZ\nmwIDAQAB\n-----END PUBLIC KEY-----\n",
+  "privateKey": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDMlhz0+P/BrSRj\nOIn7CGz3TL4z+9OnsD3MY0cpkaPG8Z/mBWtG9PjT/Ycjz8OOCFEbUoO2vVLwYydQ\nxCNtYo8YmCUp0itbbbb7MWTegtWDtfk+7m7Kb8dAjMYtbTIkU3xgfBkCSR70nxEs\nvMe99gfEqi7Z1HIHnZ/11eX1fdlSbTkpLvjLrzbda+bAn8eSLAAIsXn15e9oGlND\n0gs6VFjgHHxJE27twtRTjmRkCOVrVs3WxJRiQyDljWE20DgZNneLeKmmtAcON9Og\n8INAAsil0aFqMJl35igG8cgjjfoR3i/j6P8w3TctXw7Jxc0DIC+dcgimZ4TQFjIt\nQTM+YBmbAgMBAAECggEAZdn58o+gLFi5e9gjAWHxdbC0JIcjmSEpsv5d6DkEcz/J\nnidmf/3nfwqB4/dEYQqM7nBG+IwKpXiHkzMCfCuMF+9u2QIz6aGWbjnqAMjb6WWH\n/6eOaqP5a45p/yWUx/b0PciqXrPugFRMpZwaSN0agvNCvdmBJ392qlnh0TTlI54t\nwZY99FRRGbECKoy+Or/FZbBawTCi3Ku8qwY8bs9z8ab6E5Z9+fuI39QtyaXPse6v\nn6/FFnlGeevFX1x4/N+iWBFYGrRK1q5IrTBjCIaEJQZ2AUwWKN2EVR9GV1mUUBQr\nuAtUwIrs2F6tYq60s/SjXdbgvhlKViDHTc45QcavwQKBgQD9WVUMkpTO3eh3ybOT\noxapHUtWuiDMcxl91I3lvUrkUBpae83Yo70v/gPKcsHlm7/8cwwXUIOBl670zNQz\nrrbRQ51+Z4N3m/BoOB2VZtg7JD1L7ifHCguEuWHS+GW56s/alvgAIe/VPCZajgAB\nLRQbuDlv/Uu0MbCwjQ/CNwQBIQKBgQDOuigHLadAScD/EIqa3XvzqSOlGbzdviU0\n0tIA1pJPz1AGJa3V/0BBL5iyPGKJdbsSNmHB+ywG0YDu12TZMjJivAvIdEQ8CHKY\nQUc9hx0RT7AqFLTQ+loNQwEc46mnX3F66/QO1o/wO19XSKnQPZNwXB8VZI47yZzh\nwuylHr33OwKBgQDeylAgXka+JCbqMFXa3vBuh3RZMBTntdAU93ZRMcVKQabrKzQ5\n7sPQEHEE9yXL5MtQFVvspMEAlYMlg3qYeGwMWomFP0I9TMR84dwiJe7BE31T6HrS\nbeLzNJLyE75hYDyo3Vn5w95EhkC0IWufnSSxu6/G69hG/euDVoklIXxEAQKBgQCI\n48I/xp5atrwC6mwt0n4SwiylVh63YwL2MKf5AB0QlkHyYB71drmQsLjXRZ8mUPxY\nOgSP1Ae6WB6dianxHQk6UjUnPr40Vo+zfH51IrQ/01ne86ksPKtG3tiszaB5AX1+\nnSIWdUQJGveuL6KrDytDmuzGWLjKpF2rLU1QpcO7IwKBgA7z+vhwEAJR92JSyINJ\nm10ehSmkF26/BXJ+u6Wo4gRPon0KiGAxk9wIhHo6JohUUXq/OHcmuShBCzX3w++F\nB6UTaXjqHITYKB6bMrqh7Di9EHOFZIULADo/CHm0k+ltNNKmD7DaYJLAeLMGkZwM\nKQFQBWGuKP/ELdvz8YcXoyE3\n-----END PRIVATE KEY-----\n",
+  "mnemonic": "reward cloth quality tool gravity couple crisp lounge just ahead annual dad buyer uniform wall know elbow mimic phrase fall pony retire valley enough",
+  "label": "zakat-wallet",
+  "type": "zakat",
+  "derivationPath": "m/44'/786'/0'/0/0",
+  "chainId": "quranchain-mainnet-v1",
+  "createdAt": 1771038984917
+}

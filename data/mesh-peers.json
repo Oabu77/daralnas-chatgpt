@@ -1,0 +1,14 @@
+{
+  "updatedAt": "2026-02-14T05:23:11.692Z",
+  "nodeId": "cf2d4c143d4b1d2b3e928d41ee44ea6e",
+  "peers": [
+    {
+      "address": "::ffff:192.168.1.98",
+      "lastSeen": 1771046591692
+    },
+    {
+      "address": "ws://10.248.195.1:7001",
+      "lastSeen": 1771046591692
+    }
+  ]
+}

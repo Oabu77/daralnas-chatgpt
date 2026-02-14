@@ -1,0 +1,1736 @@
+{
+  "generated_at": "2026-02-14T01:21:23.947Z",
+  "founder": "Omar Mohammad Abunadi™",
+  "platform": "QuranChain-OS",
+  "total_links": 216,
+  "payment_links": [
+    {
+      "product": "QuranChain Blockchain Consulting",
+      "price_id": "price_1T0X9gAqs2ifkfkqKHu3U5O6",
+      "amount": "$999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/14AfZgfrkgM31Xf4YwcEw00",
+      "payment_link_id": "plink_1T0XVKAqs2ifkfkqbZccNmlZ"
+    },
+    {
+      "product": "QuranChain Private Chain Deployment",
+      "price_id": "price_1T0X9gAqs2ifkfkqDAx5dCI3",
+      "amount": "$4999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/28EeVc2Ey7btatL62AcEw01",
+      "payment_link_id": "plink_1T0XVKAqs2ifkfkqt3BLjize"
+    },
+    {
+      "product": "QuranChain Enterprise Blockchain License",
+      "price_id": "price_1T0X9eAqs2ifkfkqSV1XDAlP",
+      "amount": "$8333.33",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/6oU6oGgvoeDVatL1MkcEw02",
+      "payment_link_id": "plink_1T0XVLAqs2ifkfkqypudttI1"
+    },
+    {
+      "product": "QuranChain Chain Upgrade Service",
+      "price_id": "price_1T0X9cAqs2ifkfkq1EjL10w8",
+      "amount": "$499.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/6oU8wO4MGdzReK162AcEw03",
+      "payment_link_id": "plink_1T0XVMAqs2ifkfkqD8vjlVaD"
+    },
+    {
+      "product": "QuranChain CosmWasm Development",
+      "price_id": "price_1T0X9bAqs2ifkfkqHxbQgoBV",
+      "amount": "$79.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJecN44MGdzR7hz0IgcEw04",
+      "payment_link_id": "plink_1T0XVMAqs2ifkfkq0e2RChkS"
+    },
+    {
+      "product": "QuranChain IBC Relay Service",
+      "price_id": "price_1T0X9aAqs2ifkfkqA3i7aJnf",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14A8wObb4fHZ6dv4YwcEw05",
+      "payment_link_id": "plink_1T0XVNAqs2ifkfkq59pithkk"
+    },
+    {
+      "product": "QuranChain Multi-Sig Wallet",
+      "price_id": "price_1T0X9ZAqs2ifkfkqrNO9ZMPY",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJe28q1Au53l6dvbmUcEw06",
+      "payment_link_id": "plink_1T0XVNAqs2ifkfkqKAI6vuZA"
+    },
+    {
+      "product": "QuranChain Fraud Detection AI",
+      "price_id": "price_1T0X9YAqs2ifkfkqJ9vGhiUk",
+      "amount": "$249.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/6oU00iengcvNfO576EcEw07",
+      "payment_link_id": "plink_1T0XVOAqs2ifkfkqYwyqMOHL"
+    },
+    {
+      "product": "QuranChain AML/KYC Compliance Suite",
+      "price_id": "price_1T0X9YAqs2ifkfkqnrwm6pqv",
+      "amount": "$149.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14AcN42Ey3ZhdFXaiQcEw08",
+      "payment_link_id": "plink_1T0XVOAqs2ifkfkqjp7EPqea"
+    },
+    {
+      "product": "Validator Managed Hosting",
+      "price_id": "price_1T0X9XAqs2ifkfkq7nFGy4tK",
+      "amount": "$199.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28E9ASa700N5cBTfDacEw09",
+      "payment_link_id": "plink_1T0XVPAqs2ifkfkq1D6ElTBX"
+    },
+    {
+      "product": "Global Validator Deployment - Full Network",
+      "price_id": "price_1T0X9WAqs2ifkfkqVxAOjAaa",
+      "amount": "$29999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/eVq5kC6UO9jB0Tb4YwcEw0a",
+      "payment_link_id": "plink_1T0XVQAqs2ifkfkqq5WjDk98"
+    },
+    {
+      "product": "Global Validator Deployment - Regional",
+      "price_id": "price_1T0X9WAqs2ifkfkqEWUiozRb",
+      "amount": "$3999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/9B69AS0wqanFdFX76EcEw0b",
+      "payment_link_id": "plink_1T0XVQAqs2ifkfkqyD57DIH2"
+    },
+    {
+      "product": "Global Validator Deployment - Single",
+      "price_id": "price_1T0X9VAqs2ifkfkqA2cdL0l8",
+      "amount": "$499.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/3cIcN41Au67patLgHecEw0c",
+      "payment_link_id": "plink_1T0XVRAqs2ifkfkqbesZtNJg"
+    },
+    {
+      "product": "QuranChain Token Swap",
+      "price_id": "price_1T0X9VAqs2ifkfkqTA7jcBff",
+      "amount": "$1.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/8x2bJ0gvogM36dvcqYcEw0d",
+      "payment_link_id": "plink_1T0XVSAqs2ifkfkqRqbEnfVc"
+    },
+    {
+      "product": "QuranChain DeFi - Yield Optimizer",
+      "price_id": "price_1T0X9UAqs2ifkfkqqqLYrIVz",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/fZuaEW92W53l59r76EcEw0e",
+      "payment_link_id": "plink_1T0XVSAqs2ifkfkqpx9PxcRw"
+    },
+    {
+      "product": "QuranChain DeFi - Liquidity Provider",
+      "price_id": "price_1T0X9UAqs2ifkfkqgqcbjEF4",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/6oU9AS4MG0N56dvdv2cEw0f",
+      "payment_link_id": "plink_1T0XVTAqs2ifkfkqZiPRd71X"
+    },
+    {
+      "product": "QuranChain Revenue Tracking API",
+      "price_id": "price_1T0X9TAqs2ifkfkqpF4TLiAi",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cI9AScf867pfO52QocEw0g",
+      "payment_link_id": "plink_1T0XVTAqs2ifkfkqg7Xu2trj"
+    },
+    {
+      "product": "QuranChain Analytics Dashboard",
+      "price_id": "price_1T0X9TAqs2ifkfkqvItsx8hu",
+      "amount": "$149.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cI8wOeng3ZheK176EcEw0h",
+      "payment_link_id": "plink_1T0XVUAqs2ifkfkqz233VeJn"
+    },
+    {
+      "product": "QuranChain Block Explorer Pro",
+      "price_id": "price_1T0X9SAqs2ifkfkqUYIllPhq",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRmbJ07YS2VdeK1cqYcEw0i",
+      "payment_link_id": "plink_1T0XVVAqs2ifkfkqfMdQsyJ8"
+    },
+    {
+      "product": "AI Agent Training Module",
+      "price_id": "price_1T0X9RAqs2ifkfkqpWINCNrl",
+      "amount": "$19.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/7sY28q1Au9jBatL1MkcEw0j",
+      "payment_link_id": "plink_1T0XVVAqs2ifkfkqcQvRo1rf"
+    },
+    {
+      "product": "AI Agent Hiring Fee",
+      "price_id": "price_1T0X9QAqs2ifkfkqRRIMlv0L",
+      "amount": "$249.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/14A6oGcf8gM3cBT2QocEw0k",
+      "payment_link_id": "plink_1T0XVXAqs2ifkfkqNDVWe610"
+    },
+    {
+      "product": "AI Agent License NFT Mint",
+      "price_id": "price_1T0X9PAqs2ifkfkqtgQUebmf",
+      "amount": "$99.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/dRmfZg1AubrJ31jcqYcEw0l",
+      "payment_link_id": "plink_1T0XVYAqs2ifkfkqNYDL3VOu"
+    },
+    {
+      "product": "AI Agent School - Enterprise Fleet",
+      "price_id": "price_1T0X9PAqs2ifkfkqFrYpBvDr",
+      "amount": "$999.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cI3cucf853latL1MkcEw0m",
+      "payment_link_id": "plink_1T0XVYAqs2ifkfkqd3GpJ7bC"
+    },
+    {
+      "product": "AI Agent School - Student Enrollment",
+      "price_id": "price_1T0X9PAqs2ifkfkqwNvxbnlR",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14AeVc3IC1R97hzbmUcEw0n",
+      "payment_link_id": "plink_1T0XVZAqs2ifkfkqpvSwvtLF"
+    },
+    {
+      "product": "Ecosystem Token Pack - Enterprise",
+      "price_id": "price_1T0X9OAqs2ifkfkqZ4XmQ74J",
+      "amount": "$4999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/9B64gybb4dzR0Tb1MkcEw0o",
+      "payment_link_id": "plink_1T0XVaAqs2ifkfkqrgFxK9X3"
+    },
+    {
+      "product": "Ecosystem Token Pack - Starter",
+      "price_id": "price_1T0X9NAqs2ifkfkqOchY5GIs",
+      "amount": "$99.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/aFa28q4MG0N50Tb4YwcEw0p",
+      "payment_link_id": "plink_1T0XVbAqs2ifkfkqv3L4twyy"
+    },
+    {
+      "product": "QLEARN Token Bundle",
+      "price_id": "price_1T0X9NAqs2ifkfkqbfyw4NVe",
+      "amount": "$25.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/dRm4gy92W7btfO5cqYcEw0q",
+      "payment_link_id": "plink_1T0XVbAqs2ifkfkqIQPAXJSa"
+    },
+    {
+      "product": "QCOIN Token Purchase",
+      "price_id": "price_1T0X9MAqs2ifkfkqNuCwhaUA",
+      "amount": "$10.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/4gM9AScf8dzR1Xf8aIcEw0r",
+      "payment_link_id": "plink_1T0XVcAqs2ifkfkqgsj3YtVy"
+    },
+    {
+      "product": "QURAN Token Purchase",
+      "price_id": "price_1T0X9LAqs2ifkfkqXfCEc0kF",
+      "amount": "$50.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/5kQfZggvogM36dv76EcEw0s",
+      "payment_link_id": "plink_1T0XVdAqs2ifkfkqG779MIZ9"
+    },
+    {
+      "product": "DarPay Crypto-to-Fiat Bridge",
+      "price_id": "price_1T0X9LAqs2ifkfkqdkzAxgUh",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gMbJ01AucvN45nez6cEw0t",
+      "payment_link_id": "plink_1T0XVdAqs2ifkfkqYJUtSN0A"
+    },
+    {
+      "product": "DarPay Invoice Processing Fee",
+      "price_id": "price_1T0X9KAqs2ifkfkqXlnZxBJ5",
+      "amount": "$1.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/6oU6oG5QK1R959rcqYcEw0u",
+      "payment_link_id": "plink_1T0XVeAqs2ifkfkqykDOQHha"
+    },
+    {
+      "product": "DarPay Crypto - Merchant Enterprise",
+      "price_id": "price_1T0X9KAqs2ifkfkqdKrvqafp",
+      "amount": "$199.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sY8wO6UO3Zh7hz2QocEw0v",
+      "payment_link_id": "plink_1T0XVeAqs2ifkfkq8QRLMSBx"
+    },
+    {
+      "product": "DarPay Crypto - Merchant Basic",
+      "price_id": "price_1T0X9JAqs2ifkfkqEcBueKaY",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/9B6dR83IC1R9fO50IgcEw0w",
+      "payment_link_id": "plink_1T0XVfAqs2ifkfkqK5nIGond"
+    },
+    {
+      "product": "QEX NFT Trading Fee",
+      "price_id": "price_1T0X9IAqs2ifkfkqzoL10Rxs",
+      "amount": "$2.50",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/8x228qcf83Zh45nez6cEw0x",
+      "payment_link_id": "plink_1T0XVgAqs2ifkfkq73ZF5aIa"
+    },
+    {
+      "product": "QEX NFT Minting Fee",
+      "price_id": "price_1T0X9HAqs2ifkfkq2r27UucA",
+      "amount": "$25.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/14A5kC7YS0N57hzdv2cEw0y",
+      "payment_link_id": "plink_1T0XVhAqs2ifkfkqwhV1kR6I"
+    },
+    {
+      "product": "QEX NFT Marketplace - Collector",
+      "price_id": "price_1T0X9HAqs2ifkfkqUdtI99HE",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/9B6bJ0a707bt9pHgHecEw0z",
+      "payment_link_id": "plink_1T0XViAqs2ifkfkq0gA3y1xf"
+    },
+    {
+      "product": "QEX NFT Marketplace - Creator",
+      "price_id": "price_1T0X9GAqs2ifkfkqBuvoBcYs",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gMcN41AuanF6dv1MkcEw0A",
+      "payment_link_id": "plink_1T0XVjAqs2ifkfkqgS7ePGi0"
+    },
+    {
+      "product": "QEX Token Listing Fee",
+      "price_id": "price_1T0X9FAqs2ifkfkqKZS7iEZX",
+      "amount": "$9999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/bJe7sK7YS3Zh0TbaiQcEw0B",
+      "payment_link_id": "plink_1T0XVjAqs2ifkfkqZPCyRzFN"
+    },
+    {
+      "product": "QEX Market Maker Program",
+      "price_id": "price_1T0X9EAqs2ifkfkqNiRcDpT8",
+      "amount": "$249.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJe28q92WanF7hzcqYcEw0C",
+      "payment_link_id": "plink_1T0XVkAqs2ifkfkqPr1W7PLX"
+    },
+    {
+      "product": "QEX Trading Fee",
+      "price_id": "price_1T0X9DAqs2ifkfkq4q01QuNx",
+      "amount": "$1.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/dRm6oGa703Zh9pHgHecEw0D",
+      "payment_link_id": "plink_1T0XVlAqs2ifkfkqr57PcgOR"
+    },
+    {
+      "product": "QEX Exchange - Institutional",
+      "price_id": "price_1T0X9DAqs2ifkfkqX1GqhyqN",
+      "amount": "$499.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14A7sKfrkcvNfO58aIcEw0E",
+      "payment_link_id": "plink_1T0XVnAqs2ifkfkqolCmg2jF"
+    },
+    {
+      "product": "QEX Exchange - Pro Trader",
+      "price_id": "price_1T0X9CAqs2ifkfkqifeA75SJ",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cI4gy3IC3ZhgS9fDacEw0F",
+      "payment_link_id": "plink_1T0XVoAqs2ifkfkqnGtRm9WJ"
+    },
+    {
+      "product": "QEX Exchange - Basic Trader",
+      "price_id": "price_1T0X9BAqs2ifkfkqDMJtqrbW",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sY7sKgvoanFbxPaiQcEw0G",
+      "payment_link_id": "plink_1T0XVoAqs2ifkfkq4rqdRJ2x"
+    },
+    {
+      "product": "QuranChain Governance Council Seat",
+      "price_id": "price_1T0X9AAqs2ifkfkqTW1IwQlw",
+      "amount": "$999.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM9AS2Ey2VdbxPdv2cEw0H",
+      "payment_link_id": "plink_1T0XVpAqs2ifkfkqjXnFqPfz"
+    },
+    {
+      "product": "QuranChain Governance Participation",
+      "price_id": "price_1T0X99Aqs2ifkfkqLNU59vFP",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM5kCcf89jBdFX76EcEw0I",
+      "payment_link_id": "plink_1T0XVpAqs2ifkfkqzLw80H17"
+    },
+    {
+      "product": "QuranChain Smart Contract SDK",
+      "price_id": "price_1T0X98Aqs2ifkfkqOthnuGCj",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVq3cua7053ldFXez6cEw0J",
+      "payment_link_id": "plink_1T0XVqAqs2ifkfkq6SGdNblR"
+    },
+    {
+      "product": "QuranChain Smart Contract Audit",
+      "price_id": "price_1T0X98Aqs2ifkfkqx8atyr8J",
+      "amount": "$2499.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/6oU6oG5QK67p7hz9eMcEw0K",
+      "payment_link_id": "plink_1T0XVqAqs2ifkfkqknjqOWAR"
+    },
+    {
+      "product": "QuranChain Smart Contract Deployment",
+      "price_id": "price_1T0X97Aqs2ifkfkqHZmTBXTz",
+      "amount": "$99.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/5kQ14m2Ey7btbxPaiQcEw0L",
+      "payment_link_id": "plink_1T0XVrAqs2ifkfkqLZk0DLHs"
+    },
+    {
+      "product": "QuranChain Staking - Institutional",
+      "price_id": "price_1T0X96Aqs2ifkfkqkkFGQ8Fe",
+      "amount": "$499.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRmcN44MG8fxgS9bmUcEw0M",
+      "payment_link_id": "plink_1T0XVsAqs2ifkfkqMUcbL8kh"
+    },
+    {
+      "product": "QuranChain Staking - Delegator",
+      "price_id": "price_1T0X95Aqs2ifkfkq93E7d88Y",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/9B6bJ0a70gM37hz0IgcEw0N",
+      "payment_link_id": "plink_1T0XVsAqs2ifkfkqDYerUNvP"
+    },
+    {
+      "product": "QuranChain Staking - Basic",
+      "price_id": "price_1T0X95Aqs2ifkfkqW2tEQIOB",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00w8wO0wq9jB45n4YwcEw0O",
+      "payment_link_id": "plink_1T0XVuAqs2ifkfkqS6EvC0rk"
+    },
+    {
+      "product": "QuranChain Bridge Transaction Fee",
+      "price_id": "price_1T0X94Aqs2ifkfkq32cfw2Df",
+      "amount": "$5.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/7sYaEW1AueDV59r76EcEw0P",
+      "payment_link_id": "plink_1T0XVvAqs2ifkfkqqhwMoTsC"
+    },
+    {
+      "product": "QuranChain Bridge - Enterprise",
+      "price_id": "price_1T0X94Aqs2ifkfkqcoT3oZQY",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQcN4frkbrJatL76EcEw0Q",
+      "payment_link_id": "plink_1T0XVwAqs2ifkfkqT75Zz5qA"
+    },
+    {
+      "product": "QuranChain Bridge - Standard",
+      "price_id": "price_1T0X93Aqs2ifkfkqe08osL8R",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cIeVc4MG53l45n4YwcEw0R",
+      "payment_link_id": "plink_1T0XVwAqs2ifkfkqYkqC91XA"
+    },
+    {
+      "product": "Gas Toll Unlimited Pass",
+      "price_id": "price_1T0X92Aqs2ifkfkqcWqnO2tV",
+      "amount": "$499.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVqdR8frk0N5eK1bmUcEw0S",
+      "payment_link_id": "plink_1T0XVxAqs2ifkfkqRlqyuNUW"
+    },
+    {
+      "product": "QuranChain Gas Toll - Critical",
+      "price_id": "price_1T0X91Aqs2ifkfkqasOLqY1h",
+      "amount": "$1.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/bJe4gy2EybrJ9pH2QocEw0T",
+      "payment_link_id": "plink_1T0XVyAqs2ifkfkqvA4Dg58j"
+    },
+    {
+      "product": "QuranChain Gas Toll - Priority",
+      "price_id": "price_1T0X91Aqs2ifkfkqXPJhNMf5",
+      "amount": "$0.75",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/6oU00idjccvNgS90IgcEw0U",
+      "payment_link_id": "plink_1T0XVyAqs2ifkfkqRfpf3HDO"
+    },
+    {
+      "product": "QuranChain Gas Toll - Standard",
+      "price_id": "price_1T0X90Aqs2ifkfkqAra4H3MH",
+      "amount": "$0.50",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/cNicN4cf8brJatL76EcEw0V",
+      "payment_link_id": "plink_1T0XVzAqs2ifkfkqyteCkAod"
+    },
+    {
+      "product": "QuranChain RPC API Access - Enterprise",
+      "price_id": "price_1T0X90Aqs2ifkfkqFjHCYMsS",
+      "amount": "$249.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00weVc6UO2VddFX4YwcEw0W",
+      "payment_link_id": "plink_1T0XVzAqs2ifkfkqJGMm4C6I"
+    },
+    {
+      "product": "QuranChain RPC API Access - Developer",
+      "price_id": "price_1T0X8zAqs2ifkfkqTrYFSaJd",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/9B6dR8a70fHZeK1cqYcEw0X",
+      "payment_link_id": "plink_1T0XW0Aqs2ifkfkqjeMcbWkA"
+    },
+    {
+      "product": "QuranChain Full Node Hosting",
+      "price_id": "price_1T0X8zAqs2ifkfkq57ElQfaD",
+      "amount": "$299.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQ9AScf8gM3gS9bmUcEw0Y",
+      "payment_link_id": "plink_1T0XW3Aqs2ifkfkq6VDg2538"
+    },
+    {
+      "product": "QuranChain Validator Node - Enterprise",
+      "price_id": "price_1T0X8yAqs2ifkfkqY4ZdpqjV",
+      "amount": "$1999.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVq9AS2Ey9jBeK12QocEw0Z",
+      "payment_link_id": "plink_1T0XW4Aqs2ifkfkqhBgbzrxi"
+    },
+    {
+      "product": "QuranChain Validator Node - Standard",
+      "price_id": "price_1T0X8yAqs2ifkfkqPkyUwoqT",
+      "amount": "$499.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRmcN4bb467p6dvfDacEw10",
+      "payment_link_id": "plink_1T0XW5Aqs2ifkfkq9IkAtzyB"
+    },
+    {
+      "product": "QuranChain Layer 1 Node License",
+      "price_id": "price_1T0X8xAqs2ifkfkqJsZpwJvq",
+      "amount": "$999.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/cNi4gyfrkbrJgS9cqYcEw11",
+      "payment_link_id": "plink_1T0XW5Aqs2ifkfkqWu2lpDC7"
+    },
+    {
+      "product": "Dar Al-Nas Sharia Advisory Retainer",
+      "price_id": "price_1T0X8wAqs2ifkfkqeYLyk0nH",
+      "amount": "$499.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJe3cu6UOgM36dv8aIcEw12",
+      "payment_link_id": "plink_1T0XW6Aqs2ifkfkq47dz1zuC"
+    },
+    {
+      "product": "Dar Al-Nas Sharia Compliance Audit",
+      "price_id": "price_1T0X8wAqs2ifkfkqWYQPwSDj",
+      "amount": "$2499.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/fZu8wOa708fx1Xf8aIcEw13",
+      "payment_link_id": "plink_1T0XW6Aqs2ifkfkqkpYlSQnf"
+    },
+    {
+      "product": "Dar Al-Nas Card Replacement",
+      "price_id": "price_1T0X8vAqs2ifkfkqnsBWH9Bl",
+      "amount": "$25.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/3cIaEWfrkgM331j4YwcEw14",
+      "payment_link_id": "plink_1T0XW7Aqs2ifkfkqGUaJ8mAS"
+    },
+    {
+      "product": "Dar Al-Nas Card Issuance Fee",
+      "price_id": "price_1T0X8vAqs2ifkfkq36OkJHgj",
+      "amount": "$15.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/6oU14mgvodzR9pH0IgcEw15",
+      "payment_link_id": "plink_1T0XW8Aqs2ifkfkqarzftO4m"
+    },
+    {
+      "product": "Dar Al-Nas Prepaid Card",
+      "price_id": "price_1T0X8uAqs2ifkfkqMfDTiyap",
+      "amount": "$5.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/fZufZgfrkfHZ6dvfDacEw16",
+      "payment_link_id": "plink_1T0XW8Aqs2ifkfkqg18ETZsR"
+    },
+    {
+      "product": "Dar Al-Nas Business Expense Card",
+      "price_id": "price_1T0X8uAqs2ifkfkqliZbGD9B",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/aFa28qbb40N559rbmUcEw17",
+      "payment_link_id": "plink_1T0XW9Aqs2ifkfkqlGjI3ekG"
+    },
+    {
+      "product": "Dar Al-Nas Virtual Card",
+      "price_id": "price_1T0X8tAqs2ifkfkqrTfawgIT",
+      "amount": "$4.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/8x26oG1AufHZ59rez6cEw18",
+      "payment_link_id": "plink_1T0XWAAqs2ifkfkqtf5cFEJ7"
+    },
+    {
+      "product": "Dar Al-Nas Debit Card - Premium Metal",
+      "price_id": "price_1T0X8tAqs2ifkfkqeijj4YWw",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQ8wOfrkbrJ8lD76EcEw19",
+      "payment_link_id": "plink_1T0XWAAqs2ifkfkqVh6u5zof"
+    },
+    {
+      "product": "Dar Al-Nas Debit Card - Standard",
+      "price_id": "price_1T0X8sAqs2ifkfkq2lkI2jgd",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00w7sKengbrJeK1bmUcEw1a",
+      "payment_link_id": "plink_1T0XWCAqs2ifkfkqUimplqpN"
+    },
+    {
+      "product": "Dar Al-Nas Gold Savings",
+      "price_id": "price_1T0X8qAqs2ifkfkqkAg9nAkg",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sYaEWbb4gM345n3UscEw1b",
+      "payment_link_id": "plink_1T0XWCAqs2ifkfkqYfb72M73"
+    },
+    {
+      "product": "Dar Al-Nas Halal ETF Access",
+      "price_id": "price_1T0X8qAqs2ifkfkqT1xfDPMm",
+      "amount": "$39.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00w3cu7YSfHZ1XfcqYcEw1c",
+      "payment_link_id": "plink_1T0XWDAqs2ifkfkq6rQzK1j5"
+    },
+    {
+      "product": "Dar Al-Nas Sukuk Bond",
+      "price_id": "price_1T0X8pAqs2ifkfkqihra0G1n",
+      "amount": "$1000.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/6oU4gy92W9jBbxPbmUcEw1d",
+      "payment_link_id": "plink_1T0XWEAqs2ifkfkqy1qGyHtc"
+    },
+    {
+      "product": "Dar Al-Nas Institution Evaluation",
+      "price_id": "price_1T0X8pAqs2ifkfkqzpnOGG6n",
+      "amount": "$4999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/fZu7sK4MG8fx9pHfDacEw1e",
+      "payment_link_id": "plink_1T0XWFAqs2ifkfkqtakzGbxG"
+    },
+    {
+      "product": "Dar Al-Nas Market Strategy",
+      "price_id": "price_1T0X8nAqs2ifkfkq8Jlefvb6",
+      "amount": "$1999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/4gMfZg92WanFgS90IgcEw1f",
+      "payment_link_id": "plink_1T0XWGAqs2ifkfkqYmJnKgKJ"
+    },
+    {
+      "product": "Dar Al-Nas Treasury Optimization",
+      "price_id": "price_1T0X8mAqs2ifkfkqJ9KSQyX3",
+      "amount": "$999.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/bJedR83IC53l7hzez6cEw1g",
+      "payment_link_id": "plink_1T0XWHAqs2ifkfkqCFHhiAJP"
+    },
+    {
+      "product": "Dar Al-Nas Enterprise License",
+      "price_id": "price_1T0X8mAqs2ifkfkqy2gxm6zo",
+      "amount": "$8333.33",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/6oU7sKcf80N5atLcqYcEw1h",
+      "payment_link_id": "plink_1T0XWIAqs2ifkfkqiSI1fMrv"
+    },
+    {
+      "product": "Dar Al-Nas Media Distribution",
+      "price_id": "price_1T0X8lAqs2ifkfkq73V1BBPX",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVq00i5QK1R91Xf4YwcEw1i",
+      "payment_link_id": "plink_1T0XWKAqs2ifkfkq4R7QCEWM"
+    },
+    {
+      "product": "Dar Al-Nas Content Creator",
+      "price_id": "price_1T0X8lAqs2ifkfkq6f8K1jUG",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM3cu92W8fx0Tb8aIcEw1j",
+      "payment_link_id": "plink_1T0XWLAqs2ifkfkqq6HmMrEO"
+    },
+    {
+      "product": "Dar Al-Nas Author Publishing",
+      "price_id": "price_1T0X8kAqs2ifkfkqpSQcF1Ac",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/aFacN4a70eDV9pHaiQcEw1k",
+      "payment_link_id": "plink_1T0XWMAqs2ifkfkqkr453n7l"
+    },
+    {
+      "product": "Muslim Wallet Transaction Fee",
+      "price_id": "price_1T0X8kAqs2ifkfkq37UpLHkM",
+      "amount": "$0.50",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/7sY9AS92W67p1Xf8aIcEw1l",
+      "payment_link_id": "plink_1T0XWMAqs2ifkfkqy5GjQXva"
+    },
+    {
+      "product": "Muslim Wallet Enterprise",
+      "price_id": "price_1T0X8jAqs2ifkfkq8IRZzW4e",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/cNi7sKgvodzRfO52QocEw1m",
+      "payment_link_id": "plink_1T0XWNAqs2ifkfkqRrmLNgd8"
+    },
+    {
+      "product": "Muslim Wallet Pro",
+      "price_id": "price_1T0X8jAqs2ifkfkq3c3bWTkh",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQbJ01Au2Vd0Tb76EcEw1n",
+      "payment_link_id": "plink_1T0XWNAqs2ifkfkqQDcvYMcI"
+    },
+    {
+      "product": "Muslim Wallet Basic",
+      "price_id": "price_1T0X8iAqs2ifkfkqIHN5ZlvP",
+      "amount": "$4.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRm00i2EyeDVatLcqYcEw1o",
+      "payment_link_id": "plink_1T0XWOAqs2ifkfkq7gMcyaPc"
+    },
+    {
+      "product": "Dar Al-Nas Real Estate Investment Trust",
+      "price_id": "price_1T0X8hAqs2ifkfkqw6efeBEh",
+      "amount": "$499.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/cNibJ01AucvNbxP4YwcEw1p",
+      "payment_link_id": "plink_1T0XWPAqs2ifkfkq7XPnYMqm"
+    },
+    {
+      "product": "Dar Al-Nas Property Halal Certification",
+      "price_id": "price_1T0X8hAqs2ifkfkqOUKvdNnQ",
+      "amount": "$249.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/4gMbJ0djceDVeK1ez6cEw1q",
+      "payment_link_id": "plink_1T0XWQAqs2ifkfkql76OppyA"
+    },
+    {
+      "product": "Dar Al-Nas Halal Property Search",
+      "price_id": "price_1T0X8gAqs2ifkfkqiQ9Nl2YV",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/fZu9ASgvocvNbxPfDacEw1r",
+      "payment_link_id": "plink_1T0XWQAqs2ifkfkqNkNbJMTA"
+    },
+    {
+      "product": "Dar Al-Nas Waqf Endowment",
+      "price_id": "price_1T0X8fAqs2ifkfkqHovkAgU9",
+      "amount": "$499.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/28E6oG4MGgM3atL2QocEw1s",
+      "payment_link_id": "plink_1T0XWRAqs2ifkfkqkOJCj4g0"
+    },
+    {
+      "product": "Dar Al-Nas Sadaqah Platform",
+      "price_id": "price_1T0X8fAqs2ifkfkqGa0pPHyo",
+      "amount": "$5.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/7sY3cudjcgM359r0IgcEw1t",
+      "payment_link_id": "plink_1T0XWRAqs2ifkfkqqrhj7A4e"
+    },
+    {
+      "product": "Dar Al-Nas Zakat Calculator & Distribution",
+      "price_id": "price_1T0X8eAqs2ifkfkqCpE3WJv4",
+      "amount": "$9.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/5kQeVc2Ey7bt9pHbmUcEw1u",
+      "payment_link_id": "plink_1T0XWSAqs2ifkfkqbA61cCpK"
+    },
+    {
+      "product": "Dar Al-Nas Telehealth Consultation",
+      "price_id": "price_1T0X8eAqs2ifkfkqb7Fp1FHC",
+      "amount": "$50.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/28E6oG4MG67patL1MkcEw1v",
+      "payment_link_id": "plink_1T0XWTAqs2ifkfkqBXKnWpjF"
+    },
+    {
+      "product": "Dar Al-Nas Healthcare Family",
+      "price_id": "price_1T0X8dAqs2ifkfkqGSmywnz9",
+      "amount": "$299.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQ6oGfrk9jBatL1MkcEw1w",
+      "payment_link_id": "plink_1T0XWVAqs2ifkfkqpeMZkYik"
+    },
+    {
+      "product": "Dar Al-Nas Healthcare Premium",
+      "price_id": "price_1T0X8dAqs2ifkfkqsIpk9G6O",
+      "amount": "$149.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRmbJ04MGdzRatLbmUcEw1x",
+      "payment_link_id": "plink_1T0XWVAqs2ifkfkqzlReMNJo"
+    },
+    {
+      "product": "Dar Al-Nas Healthcare Basic",
+      "price_id": "price_1T0X8cAqs2ifkfkq1Lhvzqga",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sYdR80wqanFfO562AcEw1y",
+      "payment_link_id": "plink_1T0XWWAqs2ifkfkqxuSW0ay8"
+    },
+    {
+      "product": "Dar Al-Nas Takaful Business Insurance",
+      "price_id": "price_1T0X8cAqs2ifkfkqanzo1FV4",
+      "amount": "$500.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00w7sK92W8fxbxP1MkcEw1z",
+      "payment_link_id": "plink_1T0XWWAqs2ifkfkqZikaUd2c"
+    },
+    {
+      "product": "Dar Al-Nas Takaful Property Insurance",
+      "price_id": "price_1T0X8bAqs2ifkfkqJcbERvFQ",
+      "amount": "$200.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQ4gy4MG67p6dv76EcEw1A",
+      "payment_link_id": "plink_1T0XWXAqs2ifkfkqcwyHJjAQ"
+    },
+    {
+      "product": "Dar Al-Nas Takaful Life Insurance",
+      "price_id": "price_1T0X8bAqs2ifkfkqgWMM5ZBY",
+      "amount": "$150.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRmbJ06UO2Vd7hzcqYcEw1B",
+      "payment_link_id": "plink_1T0XWXAqs2ifkfkque5JzYU7"
+    },
+    {
+      "product": "Dar Al-Nas Takaful Auto Insurance",
+      "price_id": "price_1T0X8aAqs2ifkfkqNwZiDOEJ",
+      "amount": "$125.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14A14m4MG0N5gS99eMcEw1C",
+      "payment_link_id": "plink_1T0XWaAqs2ifkfkqnNRQc8be"
+    },
+    {
+      "product": "Dar Al-Nas Takaful Health Insurance",
+      "price_id": "price_1T0X8aAqs2ifkfkqjA6JTNz9",
+      "amount": "$75.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cI00i7YSfHZbxPcqYcEw1D",
+      "payment_link_id": "plink_1T0XWbAqs2ifkfkqn0I9u0Id"
+    },
+    {
+      "product": "Dar Al-Nas Mortgage Processing",
+      "price_id": "price_1T0X8ZAqs2ifkfkqZUIyzkAD",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/fZu8wObb4gM359rbmUcEw1E",
+      "payment_link_id": "plink_1T0XWcAqs2ifkfkqmBeJztUL"
+    },
+    {
+      "product": "Dar Al-Nas Halal Mortgage - Premium",
+      "price_id": "price_1T0X8YAqs2ifkfkq4BiMnPMt",
+      "amount": "$1999.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/4gM9AS2EyeDVbxPfDacEw1F",
+      "payment_link_id": "plink_1T0XWcAqs2ifkfkqTMkctDGh"
+    },
+    {
+      "product": "Dar Al-Nas Halal Mortgage - Standard",
+      "price_id": "price_1T0X8YAqs2ifkfkqjiUc6GSR",
+      "amount": "$999.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/dRm7sK6UOdzR59rdv2cEw1G",
+      "payment_link_id": "plink_1T0XWdAqs2ifkfkqjCVjwX2L"
+    },
+    {
+      "product": "Dar Al-Nas Halal Mortgage - Starter",
+      "price_id": "price_1T0X8XAqs2ifkfkqC2ISXqPO",
+      "amount": "$499.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/fZu8wOfrk7btgS9aiQcEw1H",
+      "payment_link_id": "plink_1T0XWeAqs2ifkfkqEF0ArMX1"
+    },
+    {
+      "product": "Dar Al-Nas Wire Transfer",
+      "price_id": "price_1T0X8WAqs2ifkfkqrHvNbESC",
+      "amount": "$25.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/eVqdR8cf80N50Tb62AcEw1I",
+      "payment_link_id": "plink_1T0XWeAqs2ifkfkqkZjbxX1H"
+    },
+    {
+      "product": "Dar Al-Nas Business Banking",
+      "price_id": "price_1T0X8WAqs2ifkfkqBKtwaGOm",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQfZgcf8anF8lD62AcEw1J",
+      "payment_link_id": "plink_1T0XWfAqs2ifkfkqjtIDZKqx"
+    },
+    {
+      "product": "Dar Al-Nas Premium Banking",
+      "price_id": "price_1T0X8VAqs2ifkfkqu8ejD0BU",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28EeVc2EycvNfO53UscEw1K",
+      "payment_link_id": "plink_1T0XWgAqs2ifkfkqUgM7wwyt"
+    },
+    {
+      "product": "Dar Al-Nas Investment Account",
+      "price_id": "price_1T0X8UAqs2ifkfkqaqQRvHPZ",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRmcN41AuanFatLcqYcEw1L",
+      "payment_link_id": "plink_1T0XWhAqs2ifkfkqhTsC1lzE"
+    },
+    {
+      "product": "Dar Al-Nas Current Account",
+      "price_id": "price_1T0X8UAqs2ifkfkqnw1M3deM",
+      "amount": "$14.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14AeVcbb40N531j1MkcEw1M",
+      "payment_link_id": "plink_1T0XWhAqs2ifkfkqB0NARW50"
+    },
+    {
+      "product": "Dar Al-Nas Savings Account",
+      "price_id": "price_1T0X8TAqs2ifkfkqwkMH5BS0",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJe7sK5QK9jBeK10IgcEw1N",
+      "payment_link_id": "plink_1T0XWiAqs2ifkfkqkm0VYflU"
+    },
+    {
+      "product": "WhisperNet Secure Voice",
+      "price_id": "price_1T0X8SAqs2ifkfkqR6wYuaKG",
+      "amount": "$14.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVq00igvo0N5bxP8aIcEw1O",
+      "payment_link_id": "plink_1T0XWiAqs2ifkfkqd2Vkt05q"
+    },
+    {
+      "product": "WhisperNet Anonymous Email",
+      "price_id": "price_1T0X8SAqs2ifkfkqiIAMbdkV",
+      "amount": "$7.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM5kC3ICfHZeK19eMcEw1P",
+      "payment_link_id": "plink_1T0XWjAqs2ifkfkq7aX20nDy"
+    },
+    {
+      "product": "WhisperNet Secure File Vault",
+      "price_id": "price_1T0X8RAqs2ifkfkq86Cwinar",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/6oU8wO1AufHZ45n1MkcEw1Q",
+      "payment_link_id": "plink_1T0XWkAqs2ifkfkqlua2Z5Ev"
+    },
+    {
+      "product": "WhisperNet Mesh Relay Node",
+      "price_id": "price_1T0X8RAqs2ifkfkql964si6I",
+      "amount": "$99.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQ4gy4MG7btfO58aIcEw1R",
+      "payment_link_id": "plink_1T0XWkAqs2ifkfkqzpOWQyoq"
+    },
+    {
+      "product": "WhisperNet Stealth VPN - Enterprise",
+      "price_id": "price_1T0X8PAqs2ifkfkqhMkuJq6h",
+      "amount": "$499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/cNi3cufrkcvN9pH9eMcEw1S",
+      "payment_link_id": "plink_1T0XWlAqs2ifkfkq0eBRVEUE"
+    },
+    {
+      "product": "WhisperNet Stealth VPN - Business",
+      "price_id": "price_1T0X8PAqs2ifkfkq13C3jsOk",
+      "amount": "$99.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM6oGa7067peK1cqYcEw1T",
+      "payment_link_id": "plink_1T0XWlAqs2ifkfkq6QqN8IYF"
+    },
+    {
+      "product": "WhisperNet Stealth VPN",
+      "price_id": "price_1T0X8OAqs2ifkfkqp3LS15II",
+      "amount": "$14.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cIdR8gvo3ZhgS90IgcEw1U",
+      "payment_link_id": "plink_1T0XWmAqs2ifkfkq0du9pL6X"
+    },
+    {
+      "product": "WhisperNet - Enterprise",
+      "price_id": "price_1T0X8OAqs2ifkfkqN6ucYG91",
+      "amount": "$199.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00wbJ092W0N50TbfDacEw1V",
+      "payment_link_id": "plink_1T0XWmAqs2ifkfkqPzw9HLv2"
+    },
+    {
+      "product": "WhisperNet - Professional",
+      "price_id": "price_1T0X8NAqs2ifkfkqvCH4TguO",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00wdR85QK53ldFX0IgcEw1W",
+      "payment_link_id": "plink_1T0XWpAqs2ifkfkqMVbPjxjb"
+    },
+    {
+      "product": "WhisperNet - Personal Secure",
+      "price_id": "price_1T0X8NAqs2ifkfkq9NM388Z0",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/aFa7sK3ICcvN31jcqYcEw1X",
+      "payment_link_id": "plink_1T0XWpAqs2ifkfkqPZFGhlk5"
+    },
+    {
+      "product": "MeshTalk Business VPN",
+      "price_id": "price_1T0X8MAqs2ifkfkqheZ1wyrl",
+      "amount": "$149.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRm7sKbb42Vd6dvdv2cEw1Y",
+      "payment_link_id": "plink_1T0XWqAqs2ifkfkqCof99ugm"
+    },
+    {
+      "product": "MeshTalk Cloud PBX - Enterprise",
+      "price_id": "price_1T0X8LAqs2ifkfkqOO3KdvvL",
+      "amount": "$299.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRm14m4MG53lgS9bmUcEw1Z",
+      "payment_link_id": "plink_1T0XWrAqs2ifkfkqs8fjjp0Y"
+    },
+    {
+      "product": "MeshTalk Cloud PBX - Small Business",
+      "price_id": "price_1T0X8LAqs2ifkfkqoWMvTeEn",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28E7sK6UO67p9pH9eMcEw20",
+      "payment_link_id": "plink_1T0XWrAqs2ifkfkqNtY5dbFe"
+    },
+    {
+      "product": "MeshTalk IoT Gateway",
+      "price_id": "price_1T0X8KAqs2ifkfkqzKizLDoT",
+      "amount": "$449.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/8x2dR8cf867pbxPbmUcEw21",
+      "payment_link_id": "plink_1T0XWsAqs2ifkfkqmvBK8QIJ"
+    },
+    {
+      "product": "MeshTalk Emergency Communicator",
+      "price_id": "price_1T0X8KAqs2ifkfkqbHR6rE2P",
+      "amount": "$399.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/aFa00i6UO53l45n3UscEw22",
+      "payment_link_id": "plink_1T0XWtAqs2ifkfkqsHjK5lYs"
+    },
+    {
+      "product": "MeshTalk Signal Booster",
+      "price_id": "price_1T0X8KAqs2ifkfkqftNK3BXW",
+      "amount": "$199.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/4gM3cu6UOdzRgS94YwcEw23",
+      "payment_link_id": "plink_1T0XWuAqs2ifkfkq2Fz0nWZC"
+    },
+    {
+      "product": "MeshTalk Mesh Router",
+      "price_id": "price_1T0X8JAqs2ifkfkqwx9IXDyU",
+      "amount": "$299.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/fZucN45QK8fx7hzfDacEw24",
+      "payment_link_id": "plink_1T0XWuAqs2ifkfkqn7k5H0rn"
+    },
+    {
+      "product": "MeshTalk Mesh Phone",
+      "price_id": "price_1T0X8JAqs2ifkfkqldVXoGR3",
+      "amount": "$599.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/9B628qcf82Vd59r2QocEw25",
+      "payment_link_id": "plink_1T0XWvAqs2ifkfkqmj2cSucZ"
+    },
+    {
+      "product": "MeshTalk IoT - Enterprise",
+      "price_id": "price_1T0X8IAqs2ifkfkqhWAZruOQ",
+      "amount": "$499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/9B628q2Ey67pgS976EcEw26",
+      "payment_link_id": "plink_1T0XWwAqs2ifkfkqf2WcndtQ"
+    },
+    {
+      "product": "MeshTalk IoT - Starter",
+      "price_id": "price_1T0X8HAqs2ifkfkqVwY05IrT",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/9B600i6UO8fxdFXaiQcEw27",
+      "payment_link_id": "plink_1T0XWwAqs2ifkfkq060ZIek5"
+    },
+    {
+      "product": "MeshTalk Global - Data Roaming Pack",
+      "price_id": "price_1T0X8HAqs2ifkfkqGhT3nsBu",
+      "amount": "$49.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/aFa5kC2EyanF6dvgHecEw28",
+      "payment_link_id": "plink_1T0XWxAqs2ifkfkqXGavY44H"
+    },
+    {
+      "product": "MeshTalk Global - International Calling",
+      "price_id": "price_1T0X8GAqs2ifkfkqdSjdtFwJ",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/9B6cN40wq0N5cBT0IgcEw29",
+      "payment_link_id": "plink_1T0XWyAqs2ifkfkqfQwFlA9F"
+    },
+    {
+      "product": "MeshTalk Global - International Roaming",
+      "price_id": "price_1T0X8GAqs2ifkfkqaPz0PZwe",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/6oUdR80wq2VdfO5dv2cEw2a",
+      "payment_link_id": "plink_1T0XWyAqs2ifkfkqcVPtfFMx"
+    },
+    {
+      "product": "MeshTalk OS - Full Protocol Bundle",
+      "price_id": "price_1T0X8FAqs2ifkfkqusN6dvNi",
+      "amount": "$799.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJecN4frk3Zh7hz62AcEw2b",
+      "payment_link_id": "plink_1T0XWzAqs2ifkfkqbxEjBS6w"
+    },
+    {
+      "product": "MeshTalk OS - FM Radio Broadcast License",
+      "price_id": "price_1T0X8FAqs2ifkfkqMNmsHsFJ",
+      "amount": "$149.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00w8wOgvo1R91Xf62AcEw2c",
+      "payment_link_id": "plink_1T0XWzAqs2ifkfkqBx4027R9"
+    },
+    {
+      "product": "MeshTalk OS - Bluetooth 5.2 IoT Hub",
+      "price_id": "price_1T0X8DAqs2ifkfkqVvw1TrUl",
+      "amount": "$99.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28EeVc4MG2Vd8lD8aIcEw2d",
+      "payment_link_id": "plink_1T0XX0Aqs2ifkfkqTN670qHN"
+    },
+    {
+      "product": "MeshTalk OS - WiFi 6 Mesh License",
+      "price_id": "price_1T0X8BAqs2ifkfkqu8HM6OaL",
+      "amount": "$199.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/aFaaEW2EyanFcBTgHecEw2e",
+      "payment_link_id": "plink_1T0XX0Aqs2ifkfkqOgGuIn2j"
+    },
+    {
+      "product": "MeshTalk OS - Open5G Node License",
+      "price_id": "price_1T0X8BAqs2ifkfkqXGfJbslY",
+      "amount": "$499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00w5kC92WanF8lDfDacEw2f",
+      "payment_link_id": "plink_1T0XX1Aqs2ifkfkqYwjbigIP"
+    },
+    {
+      "product": "MeshTalk Mobile Hotspot",
+      "price_id": "price_1T0X8AAqs2ifkfkqSaaOm2Ir",
+      "amount": "$39.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQfZg92W67patL0IgcEw2g",
+      "payment_link_id": "plink_1T0XX3Aqs2ifkfkqMn6Bap68"
+    },
+    {
+      "product": "MeshTalk Internet - Business",
+      "price_id": "price_1T0X89Aqs2ifkfkqMcXOgnrz",
+      "amount": "$299.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28E5kCdjc53l59rbmUcEw2h",
+      "payment_link_id": "plink_1T0XX4Aqs2ifkfkqzHQ41Iyx"
+    },
+    {
+      "product": "MeshTalk Internet - Home Premium",
+      "price_id": "price_1T0X89Aqs2ifkfkqonBovmod",
+      "amount": "$79.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sY28qdjc53l9pH1MkcEw2i",
+      "payment_link_id": "plink_1T0XX5Aqs2ifkfkqlWnDGvQx"
+    },
+    {
+      "product": "MeshTalk Internet - Home Basic",
+      "price_id": "price_1T0X88Aqs2ifkfkqkLWyhGbH",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14AeVc7YS67p31j3UscEw2j",
+      "payment_link_id": "plink_1T0XX5Aqs2ifkfkqW2eoG4bK"
+    },
+    {
+      "product": "MeshTalk Global Enterprise",
+      "price_id": "price_1T0X88Aqs2ifkfkqwuTcrrAT",
+      "amount": "$2500.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gMfZg1Au7bt7hz76EcEw2k",
+      "payment_link_id": "plink_1T0XX6Aqs2ifkfkqprP5nW17"
+    },
+    {
+      "product": "MeshTalk Business - Enterprise",
+      "price_id": "price_1T0X87Aqs2ifkfkqfsE3GCPO",
+      "amount": "$999.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM9AS0wq3ZhatLdv2cEw2l",
+      "payment_link_id": "plink_1T0XX7Aqs2ifkfkqITaVcLLF"
+    },
+    {
+      "product": "MeshTalk Business - Professional",
+      "price_id": "price_1T0X87Aqs2ifkfkqL07sim8e",
+      "amount": "$299.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/cNi9AS0wq53lgS9dv2cEw2m",
+      "payment_link_id": "plink_1T0XX8Aqs2ifkfkquMrm2gvU"
+    },
+    {
+      "product": "MeshTalk Business - Starter",
+      "price_id": "price_1T0X85Aqs2ifkfkq4PXeB3Jy",
+      "amount": "$99.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJe00i5QK1R91Xf2QocEw2n",
+      "payment_link_id": "plink_1T0XX9Aqs2ifkfkq6iF2WGm1"
+    },
+    {
+      "product": "MeshTalk Cell - Family Plan",
+      "price_id": "price_1T0X85Aqs2ifkfkqh1Lv24vt",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM5kC1Au3Zh59rez6cEw2o",
+      "payment_link_id": "plink_1T0XX9Aqs2ifkfkqq2L1I3O9"
+    },
+    {
+      "product": "MeshTalk Cell - Personal Premium",
+      "price_id": "price_1T0X84Aqs2ifkfkqnuWHkiDE",
+      "amount": "$59.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRmcN43ICdzRcBTaiQcEw2p",
+      "payment_link_id": "plink_1T0XXAAqs2ifkfkqApeyYLow"
+    },
+    {
+      "product": "MeshTalk Cell - Personal Standard",
+      "price_id": "price_1T0X83Aqs2ifkfkqy0MYgLBi",
+      "amount": "$39.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQcN41AudzRdFXdv2cEw2q",
+      "payment_link_id": "plink_1T0XXBAqs2ifkfkqUHwdskiB"
+    },
+    {
+      "product": "MeshTalk Cell - Personal Basic",
+      "price_id": "price_1T0X83Aqs2ifkfkqbJdVMQLv",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVqeVc6UObrJ9pHfDacEw2r",
+      "payment_link_id": "plink_1T0XXDAqs2ifkfkqRBI1fhWA"
+    },
+    {
+      "product": "OliveSea Port Operations Platform",
+      "price_id": "price_1T0X82Aqs2ifkfkqmLjKKPCP",
+      "amount": "$999.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVq00icf8anFgS92QocEw2s",
+      "payment_link_id": "plink_1T0XXEAqs2ifkfkqQw2JpjBX"
+    },
+    {
+      "product": "OliveAir Supply Chain Analytics",
+      "price_id": "price_1T0X81Aqs2ifkfkqURDLtq61",
+      "amount": "$299.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/fZu8wO3IC9jB31j4YwcEw2t",
+      "payment_link_id": "plink_1T0XXGAqs2ifkfkqnkkQ3DxH"
+    },
+    {
+      "product": "OliveAir Air-Sea Multimodal",
+      "price_id": "price_1T0X7zAqs2ifkfkqbLrC7IIC",
+      "amount": "$599.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cIbJ0frkbrJatLaiQcEw2u",
+      "payment_link_id": "plink_1T0XXJAqs2ifkfkquXC42NaB"
+    },
+    {
+      "product": "OliveAir Carrier Integration - Ocean Lines",
+      "price_id": "price_1T0X7zAqs2ifkfkq8v2vqQWJ",
+      "amount": "$399.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28E28q7YS1R96dv0IgcEw2v",
+      "payment_link_id": "plink_1T0XXKAqs2ifkfkqdW6ViPra"
+    },
+    {
+      "product": "OliveAir Carrier Integration - FedEx/UPS/DHL",
+      "price_id": "price_1T0X7yAqs2ifkfkqRoUqyIEi",
+      "amount": "$199.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM14m2EygM3fO5aiQcEw2w",
+      "payment_link_id": "plink_1T0XXKAqs2ifkfkqkt2jwpYK"
+    },
+    {
+      "product": "Dar Logistics - Global Shipping",
+      "price_id": "price_1T0X7yAqs2ifkfkqm3TCO1Lo",
+      "amount": "$299.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/fZu5kC92W0N5cBT62AcEw2x",
+      "payment_link_id": "plink_1T0XXLAqs2ifkfkq7JYsTJbv"
+    },
+    {
+      "product": "Dar Logistics - Warehousing",
+      "price_id": "price_1T0X7xAqs2ifkfkq1fF0eGJ5",
+      "amount": "$499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14A9ASbb4eDV0Tb62AcEw2y",
+      "payment_link_id": "plink_1T0XXLAqs2ifkfkqzEppEBqG"
+    },
+    {
+      "product": "Dar Logistics - Halal Supply Chain",
+      "price_id": "price_1T0X7wAqs2ifkfkqXMchTTCD",
+      "amount": "$799.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM5kCgvogM359r4YwcEw2z",
+      "payment_link_id": "plink_1T0XXMAqs2ifkfkq06O7gZau"
+    },
+    {
+      "product": "OliveSea Blockchain Cargo Tracking",
+      "price_id": "price_1T0X7wAqs2ifkfkq80d3rO4O",
+      "amount": "$99.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM00ibb48fxcBT2QocEw2A",
+      "payment_link_id": "plink_1T0XXOAqs2ifkfkqED6PDeWj"
+    },
+    {
+      "product": "OliveSea Customs Clearance",
+      "price_id": "price_1T0X7vAqs2ifkfkq5wkulz8W",
+      "amount": "$299.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/6oUfZgbb42VdbxP3UscEw2B",
+      "payment_link_id": "plink_1T0XXPAqs2ifkfkqdhWYq0Ux"
+    },
+    {
+      "product": "OliveSea Bulk Cargo",
+      "price_id": "price_1T0X7tAqs2ifkfkqjD7E6WN8",
+      "amount": "$35.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/5kQ3cu0wq67p8lD0IgcEw2C",
+      "payment_link_id": "plink_1T0XXPAqs2ifkfkqslDuNGPq"
+    },
+    {
+      "product": "OliveSea Oversized Cargo",
+      "price_id": "price_1T0X7tAqs2ifkfkqQOr3LCM1",
+      "amount": "$120.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/5kQ4gygvo3ZhbxPcqYcEw2D",
+      "payment_link_id": "plink_1T0XXQAqs2ifkfkqeCbAlO8z"
+    },
+    {
+      "product": "OliveSea Dangerous Goods Shipping",
+      "price_id": "price_1T0X7sAqs2ifkfkqJy5o5xUE",
+      "amount": "$95.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/cNi4gyfrk1R9bxP1MkcEw2E",
+      "payment_link_id": "plink_1T0XXQAqs2ifkfkqoGwGwd9l"
+    },
+    {
+      "product": "OliveSea Refrigerated Cargo",
+      "price_id": "price_1T0X7rAqs2ifkfkqBzMWkIvZ",
+      "amount": "$75.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/4gM5kCbb4eDV45ncqYcEw2F",
+      "payment_link_id": "plink_1T0XXQAqs2ifkfkqU72sXQm6"
+    },
+    {
+      "product": "OliveSea Freight Forwarding - Enterprise",
+      "price_id": "price_1T0X7qAqs2ifkfkqzignnHx5",
+      "amount": "$2499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sY4gygvo0N5dFX76EcEw2G",
+      "payment_link_id": "plink_1T0XXRAqs2ifkfkqMb7R6eWx"
+    },
+    {
+      "product": "OliveSea Freight Forwarding - Standard",
+      "price_id": "price_1T0X7qAqs2ifkfkqr0oph9x8",
+      "amount": "$499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/cNi6oG7YSdzRdFXfDacEw2H",
+      "payment_link_id": "plink_1T0XXSAqs2ifkfkqsZI06yYf"
+    },
+    {
+      "product": "OliveSea LCL Consolidation",
+      "price_id": "price_1T0X7pAqs2ifkfkqKuPog7JA",
+      "amount": "$45.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/5kQ8wO92W7bteK1dv2cEw2I",
+      "payment_link_id": "plink_1T0XXSAqs2ifkfkqFPJxOCJA"
+    },
+    {
+      "product": "OliveSea Container Shipping - 40ft FCL",
+      "price_id": "price_1T0X7pAqs2ifkfkqKxoXe69p",
+      "amount": "$4500.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/8x2fZg1Au2Vd6dv62AcEw2J",
+      "payment_link_id": "plink_1T0XXSAqs2ifkfkqcISLBb5X"
+    },
+    {
+      "product": "OliveSea Container Shipping - 20ft FCL",
+      "price_id": "price_1T0X7oAqs2ifkfkqtwl4XuM6",
+      "amount": "$2500.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/28E3cu3IC1R96dv2QocEw2K",
+      "payment_link_id": "plink_1T0XXTAqs2ifkfkqlzHlSDk5"
+    },
+    {
+      "product": "OliveSea Maritime Shipping - Enterprise",
+      "price_id": "price_1T0X7oAqs2ifkfkq4nhfNQUu",
+      "amount": "$4999.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cI14m4MGcvN8lD8aIcEw2L",
+      "payment_link_id": "plink_1T0XXTAqs2ifkfkqqDqAHfEG"
+    },
+    {
+      "product": "OliveSea Maritime Shipping - Standard",
+      "price_id": "price_1T0X7nAqs2ifkfkqBO4IJs2D",
+      "amount": "$999.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/aFa7sK1Au1R9dFX3UscEw2M",
+      "payment_link_id": "plink_1T0XXUAqs2ifkfkqNQkGqw0x"
+    },
+    {
+      "product": "OliveAir Customer Retention Suite",
+      "price_id": "price_1T0X7nAqs2ifkfkqYOEJtPtz",
+      "amount": "$199.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sY9ASgvoanF8lDbmUcEw2N",
+      "payment_link_id": "plink_1T0XXUAqs2ifkfkqcCY062Ty"
+    },
+    {
+      "product": "OliveAir Returns Processing",
+      "price_id": "price_1T0X7lAqs2ifkfkq2oTs6cer",
+      "amount": "$149.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00wcN42EycvNdFX3UscEw2O",
+      "payment_link_id": "plink_1T0XXVAqs2ifkfkqOIz5uOmG"
+    },
+    {
+      "product": "OliveAir Per-Delivery Fee",
+      "price_id": "price_1T0X7lAqs2ifkfkqF7mrEF4i",
+      "amount": "$2.99",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/00w8wO0wqdzRfO54YwcEw2P",
+      "payment_link_id": "plink_1T0XXVAqs2ifkfkqIYRd09oj"
+    },
+    {
+      "product": "OliveAir Last-Mile Delivery - Enterprise",
+      "price_id": "price_1T0X7kAqs2ifkfkqdUx22cE6",
+      "amount": "$999.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28E9AS6UO9jB0Tb9eMcEw2Q",
+      "payment_link_id": "plink_1T0XXWAqs2ifkfkqdeDbHxEv"
+    },
+    {
+      "product": "OliveAir Last-Mile Delivery - Business",
+      "price_id": "price_1T0X7jAqs2ifkfkqgcp4LvPr",
+      "amount": "$299.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRm4gycf80N5eK10IgcEw2R",
+      "payment_link_id": "plink_1T0XXWAqs2ifkfkqZNLYtzZU"
+    },
+    {
+      "product": "OliveAir Last-Mile Delivery - Starter",
+      "price_id": "price_1T0X7iAqs2ifkfkqxJIVebHb",
+      "amount": "$99.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00w5kCa70cvNatL0IgcEw2S",
+      "payment_link_id": "plink_1T0XXXAqs2ifkfkq7fL5UTRe"
+    },
+    {
+      "product": "OliveAir Real-Time Tracking API",
+      "price_id": "price_1T0X7hAqs2ifkfkqyhqltBMy",
+      "amount": "$149.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/cNi00ifrkfHZdFX3UscEw2T",
+      "payment_link_id": "plink_1T0XXXAqs2ifkfkqYZNy9lbX"
+    },
+    {
+      "product": "OliveAir 3PL Integration Hub",
+      "price_id": "price_1T0X7gAqs2ifkfkqlMEKUgYW",
+      "amount": "$399.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14AcN4bb41R945n1MkcEw2U",
+      "payment_link_id": "plink_1T0XXaAqs2ifkfkqcmDR8teW"
+    },
+    {
+      "product": "OliveAir Compliance & Customs Automation",
+      "price_id": "price_1T0X7fAqs2ifkfkqmudtSQg8",
+      "amount": "$199.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/3cI4gy3ICeDVcBTfDacEw2V",
+      "payment_link_id": "plink_1T0XXaAqs2ifkfkqN7JkgS0N"
+    },
+    {
+      "product": "OliveAir Dynamic Pricing Engine",
+      "price_id": "price_1T0X7eAqs2ifkfkqhgvupKcf",
+      "amount": "$599.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM14m92W9jB6dvcqYcEw2W",
+      "payment_link_id": "plink_1T0XXbAqs2ifkfkqc9eWE7st"
+    },
+    {
+      "product": "OliveAir Fleet Management - Enterprise",
+      "price_id": "price_1T0X7dAqs2ifkfkq3N7AldeR",
+      "amount": "$1499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/00wdR84MGdzRfO5aiQcEw2X",
+      "payment_link_id": "plink_1T0XXbAqs2ifkfkqaNoRleJ8"
+    },
+    {
+      "product": "OliveAir Fleet Management",
+      "price_id": "price_1T0X7cAqs2ifkfkqYreWSDZl",
+      "amount": "$499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM14m1Au2Vd9pH2QocEw2Y",
+      "payment_link_id": "plink_1T0XXcAqs2ifkfkqnXDmf1tO"
+    },
+    {
+      "product": "OliveAir Dispatch & Route Optimization",
+      "price_id": "price_1T0X7aAqs2ifkfkqNOfL4vPW",
+      "amount": "$399.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJe4gy2EybrJ31jcqYcEw2Z",
+      "payment_link_id": "plink_1T0XXcAqs2ifkfkq9LtESIKb"
+    },
+    {
+      "product": "OliveAir Contractor Recruitment",
+      "price_id": "price_1T0X7ZAqs2ifkfkqDgOn87Mm",
+      "amount": "$299.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVq4gy3IC0N5bxP0IgcEw30",
+      "payment_link_id": "plink_1T0XXdAqs2ifkfkqTwnzFYUS"
+    },
+    {
+      "product": "OliveAir Per-Shipment Fee",
+      "price_id": "price_1T0X7ZAqs2ifkfkqkRtUxMWp",
+      "amount": "$18.75",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/dRm28qgvobrJ0TbbmUcEw31",
+      "payment_link_id": "plink_1T0XXdAqs2ifkfkqjp370M4H"
+    },
+    {
+      "product": "OliveAir Logistics - Enterprise",
+      "price_id": "price_1T0X7YAqs2ifkfkqYjckXxWP",
+      "amount": "$1999.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gMdR8cf81R959r8aIcEw32",
+      "payment_link_id": "plink_1T0XXeAqs2ifkfkq9lnBpqnt"
+    },
+    {
+      "product": "OliveAir Logistics - Small Business",
+      "price_id": "price_1T0X7YAqs2ifkfkqLria0lCu",
+      "amount": "$99.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRmeVceng3ZheK19eMcEw33",
+      "payment_link_id": "plink_1T0XXeAqs2ifkfkqoaJ4JewT"
+    },
+    {
+      "product": "OliveAir Logistics - Freight Brokering",
+      "price_id": "price_1T0X7XAqs2ifkfkq8rRNoiMW",
+      "amount": "$499.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVqcN43IC9jB8lDaiQcEw34",
+      "payment_link_id": "plink_1T0XXfAqs2ifkfkqJU9Hw0vv"
+    },
+    {
+      "product": "DarCloud Mesh Deployer",
+      "price_id": "price_1T0X7VAqs2ifkfkqWIdgnfmZ",
+      "amount": "$24.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/fZu4gy0wq67p7hz62AcEw35",
+      "payment_link_id": "plink_1T0XXgAqs2ifkfkqhFAUAPpn"
+    },
+    {
+      "product": "DarCloud Software License - Basic",
+      "price_id": "price_1T0X7UAqs2ifkfkqcoA1URh8",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sY3cu92W7btgS92QocEw36",
+      "payment_link_id": "plink_1T0XXgAqs2ifkfkqM4k76JMg"
+    },
+    {
+      "product": "DarCloud AI Agent School",
+      "price_id": "price_1T0X7TAqs2ifkfkqzjVLjQ4S",
+      "amount": "$79.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/8x25kCbb467p0Tb62AcEw37",
+      "payment_link_id": "plink_1T0XXhAqs2ifkfkqwcBjs3Jm"
+    },
+    {
+      "product": "DarCloud Blockchain Storage",
+      "price_id": "price_1T0X7SAqs2ifkfkqfUWqJMdT",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28E7sKfrkcvN7hz62AcEw38",
+      "payment_link_id": "plink_1T0XXiAqs2ifkfkqg4krUZv2"
+    },
+    {
+      "product": "DarCloud Mail Service - Business",
+      "price_id": "price_1T0X7RAqs2ifkfkqskQOIDmK",
+      "amount": "$5.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQ00i7YS2Vd0Tb1MkcEw39",
+      "payment_link_id": "plink_1T0XXiAqs2ifkfkqYzNcFWaF"
+    },
+    {
+      "product": "DarCloud SSL Certificate - Standard",
+      "price_id": "price_1T0X7QAqs2ifkfkqudQuhnfx",
+      "amount": "$69.00",
+      "interval": "year",
+      "payment_link_url": "https://buy.stripe.com/cNi5kC2EybrJfO52QocEw3a",
+      "payment_link_id": "plink_1T0XXjAqs2ifkfkqCvYzO0Al"
+    },
+    {
+      "product": "DarCloud CDN Distribution",
+      "price_id": "price_1T0X7OAqs2ifkfkqQxzzQVl7",
+      "amount": "$19.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/6oU8wO92W67peK1aiQcEw3b",
+      "payment_link_id": "plink_1T0XXjAqs2ifkfkq4cZ0WoLo"
+    },
+    {
+      "product": "DarCloud Dedicated Server",
+      "price_id": "price_1T0X7MAqs2ifkfkq2dJibeyM",
+      "amount": "$99.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJe3cucf8cvN7hz2QocEw3c",
+      "payment_link_id": "plink_1T0XXkAqs2ifkfkqGYgS6HoA"
+    },
+    {
+      "product": "DarCloud Autonomous Server",
+      "price_id": "price_1T0X7MAqs2ifkfkqpawQ4aN6",
+      "amount": "$29.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28E14m3IC67p0Tb2QocEw3d",
+      "payment_link_id": "plink_1T0XXlAqs2ifkfkqPw8ET0v2"
+    },
+    {
+      "product": "DarCloud Personal Cloud - Family",
+      "price_id": "price_1T0X7LAqs2ifkfkqEhkhCzJl",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQ3cu1AufHZ8lD1MkcEw3e",
+      "payment_link_id": "plink_1T0XXnAqs2ifkfkqvW0otK0o"
+    },
+    {
+      "product": "DarCloud Personal Cloud - Pro",
+      "price_id": "price_1T0X7LAqs2ifkfkqgNxbUvJK",
+      "amount": "$24.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/14A8wO0wq7btbxPdv2cEw3f",
+      "payment_link_id": "plink_1T0XXoAqs2ifkfkqKN85Rsil"
+    },
+    {
+      "product": "DarCloud Personal Cloud - Basic",
+      "price_id": "price_1T0X7KAqs2ifkfkqFyzA73Gm",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM9AScf8anF45n1MkcEw3g",
+      "payment_link_id": "plink_1T0XXpAqs2ifkfkq7uXfKbR6"
+    },
+    {
+      "product": "DarCloud Cloud Storage - Pay As You Go",
+      "price_id": "price_1T0X7JAqs2ifkfkqBUX5eNrp",
+      "amount": "$9.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/cNieVcdjc67pgS9ez6cEw3h",
+      "payment_link_id": "plink_1T0XXqAqs2ifkfkqStASSDs4"
+    },
+    {
+      "product": "DarCloud Domain Registration - .host/.cloud",
+      "price_id": "price_1T0X7JAqs2ifkfkqgsMk02Jm",
+      "amount": "$4.99",
+      "interval": "year",
+      "payment_link_url": "https://buy.stripe.com/28E5kCdjc53l59raiQcEw3i",
+      "payment_link_id": "plink_1T0XXrAqs2ifkfkqM2qMhNsq"
+    },
+    {
+      "product": "DarCloud Domain Registration - .io/.dev/.app",
+      "price_id": "price_1T0X7IAqs2ifkfkqIPgJaOo6",
+      "amount": "$34.99",
+      "interval": "year",
+      "payment_link_url": "https://buy.stripe.com/7sY8wOa70gM3dFXez6cEw3j",
+      "payment_link_id": "plink_1T0XXsAqs2ifkfkqQMuaYKjg"
+    },
+    {
+      "product": "DarCloud Domain Registration - .net/.org",
+      "price_id": "price_1T0X7GAqs2ifkfkq6htmPIDh",
+      "amount": "$14.99",
+      "interval": "year",
+      "payment_link_url": "https://buy.stripe.com/8x2aEWgvo1R931j4YwcEw3k",
+      "payment_link_id": "plink_1T0XXtAqs2ifkfkqGW9vHiyQ"
+    },
+    {
+      "product": "DarCloud Domain Registration - .com",
+      "price_id": "price_1T0X7FAqs2ifkfkq3sHOm34r",
+      "amount": "$12.99",
+      "interval": "year",
+      "payment_link_url": "https://buy.stripe.com/00wcN41Au1R945n9eMcEw3l",
+      "payment_link_id": "plink_1T0XXtAqs2ifkfkqFqyrGk4z"
+    },
+    {
+      "product": "DarCloud Web Hosting - Enterprise",
+      "price_id": "price_1T0X7FAqs2ifkfkqVg3Z3YRz",
+      "amount": "$49.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/dRm4gyengeDV31jbmUcEw3m",
+      "payment_link_id": "plink_1T0XXuAqs2ifkfkqU6jD3pte"
+    },
+    {
+      "product": "DarCloud Web Hosting - Business",
+      "price_id": "price_1T0X7EAqs2ifkfkqNNkSsPBj",
+      "amount": "$14.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/bJe00icf8dzR6dv0IgcEw3n",
+      "payment_link_id": "plink_1T0XXuAqs2ifkfkqMWwqD9jU"
+    },
+    {
+      "product": "DarCloud Web Hosting - Starter",
+      "price_id": "price_1T0X7DAqs2ifkfkq1OgtgZf0",
+      "amount": "$4.99",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/4gM4gyengdzR45n76EcEw3o",
+      "payment_link_id": "plink_1T0XXvAqs2ifkfkq8gK7uEps"
+    },
+    {
+      "product": "Network Provider Service",
+      "price_id": "price_1T0X7CAqs2ifkfkqqNRZcS14",
+      "amount": "$10.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/28E28qeng0N531j9eMcEw3p",
+      "payment_link_id": "plink_1T0XXvAqs2ifkfkqCY75876R"
+    },
+    {
+      "product": "Offline Gas Toll Service",
+      "price_id": "price_1T0X7BAqs2ifkfkqEr3hBi9c",
+      "amount": "$5.00",
+      "interval": "one-time",
+      "payment_link_url": "https://buy.stripe.com/9B600i1Au2Vd8lD0IgcEw3q",
+      "payment_link_id": "plink_1T0XXwAqs2ifkfkq96wW1or4"
+    },
+    {
+      "product": "CRM System Access",
+      "price_id": "price_1T0X7AAqs2ifkfkqwQSVh6UU",
+      "amount": "$20.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/7sY28q5QK9jB0TbcqYcEw3r",
+      "payment_link_id": "plink_1T0XXwAqs2ifkfkqrW5votNL"
+    },
+    {
+      "product": "AI Agent Service",
+      "price_id": "price_1T0X7AAqs2ifkfkqkiR9BpmH",
+      "amount": "$50.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/5kQcN4eng9jB1Xf8aIcEw3s",
+      "payment_link_id": "plink_1T0XXxAqs2ifkfkqUT1alhxb"
+    },
+    {
+      "product": "QuranChain OS Core Subscription",
+      "price_id": "price_1T0X79Aqs2ifkfkqHV4odX5J",
+      "amount": "$100.00",
+      "interval": "month",
+      "payment_link_url": "https://buy.stripe.com/eVq6oG3ICanF6dv2QocEw3t",
+      "payment_link_id": "plink_1T0XXzAqs2ifkfkqp6lH96f6"
+    }
+  ]
+}
