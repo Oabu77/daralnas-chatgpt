@@ -70,7 +70,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Check Cloudflare credentials
+        id: check_credentials
+        run: |
+          if [ -n "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ] && [ -n "${{ secrets.CLOUDFLARE_API_TOKEN }}" ]; then
+            echo "credentials_available=true" >> $GITHUB_OUTPUT
+            echo "✅ Cloudflare credentials are configured"
+          else
+            echo "credentials_available=false" >> $GITHUB_OUTPUT
+            echo "⚠️ Cloudflare credentials are not configured - skipping deployment steps"
+          fi
+
       - name: Repair - Reapply Migrations
+        if: steps.check_credentials.outputs.credentials_available == 'true'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -79,6 +91,7 @@ jobs:
           npx wrangler d1 migrations apply DB --remote || true
 
       - name: Repair - Redeploy Worker
+        if: steps.check_credentials.outputs.credentials_available == 'true'
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -87,11 +100,13 @@ jobs:
           npx wrangler deploy
 
       - name: Wait for service recovery
+        if: steps.check_credentials.outputs.credentials_available == 'true'
         run: |
           echo "⏳ Waiting 30 seconds for service to stabilize..."
           sleep 30
 
       - name: Verify repair
+        if: steps.check_credentials.outputs.credentials_available == 'true'
         env:
           WORKER_URL: ${{ secrets.WORKER_URL || 'https://daralnas-chatgpt.oabu77.workers.dev' }}
         run: |
@@ -107,6 +122,15 @@ jobs:
             echo "❌ REPAIR FAILED - Health: $HEALTH_STATUS, Sentinel: $SENTINEL_STATUS"
             exit 1
           fi
+
+      - name: Skip repair (credentials not available)
+        if: steps.check_credentials.outputs.credentials_available == 'false'
+        run: |
+          echo "⚠️ Skipping repair steps - Cloudflare credentials not configured"
+          echo "📝 To enable auto-repair, please configure the following secrets:"
+          echo "   - CLOUDFLARE_ACCOUNT_ID"
+          echo "   - CLOUDFLARE_API_TOKEN"
+          exit 0
 
   notify:
     needs: [health-check, auto-repair]
