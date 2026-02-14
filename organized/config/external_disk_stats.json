@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-01-13T07:58:28.947733",
+  "stats": {
+    "path": "/tmp/quranchain_external",
+    "total_gb": 467.8895797729492,
+    "used_gb": 412.6946144104004,
+    "free_gb": 31.357418060302734,
+    "percent_used": 92.9,
+    "total_files": 0,
+    "total_size_gb": 0.0
+  },
+  "config": {
+    "external_disk_path": "/tmp/quranchain_external",
+    "ai_memory_overflow_dir": "/tmp/quranchain_external/ai_agent_memory",
+    "temp_expansion_quota_gb": 100,
+    "ram_threshold_percent": 80,
+    "disk_threshold_percent": 90,
+    "auto_compress_enabled": true,
+    "cloud_archive_enabled": false
+  }
+}

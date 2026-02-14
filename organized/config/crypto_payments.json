@@ -1,0 +1,109 @@
+{
+  "invoices": {
+    "B8D4ABEB5CB90677": {
+      "invoice_id": "B8D4ABEB5CB90677",
+      "amount_usd": 299.0,
+      "description": "QuranChain Pay Monthly Subscription",
+      "merchant_id": "test_merchant_001",
+      "created_at": "2026-01-13T10:24:51.941136",
+      "expires_at": null,
+      "payment_options": [
+        {
+          "currency": "BTC",
+          "amount": 0.00324489,
+          "address": "bc1q...",
+          "network": "Bitcoin",
+          "qr_code_url": "bitcoin:bc1q...?amount=0.003244886834300342",
+          "explorer_url": "https://blockchair.com/bitcoin/address/bc1q..."
+        },
+        {
+          "currency": "ETH",
+          "amount": 0.095381,
+          "address": "0x...",
+          "network": "Ethereum",
+          "qr_code_url": "ethereum:0x...?value=95380733410850128",
+          "explorer_url": "https://etherscan.io/address/0x..."
+        },
+        {
+          "currency": "USDC",
+          "amount": 299.0,
+          "address": "0x...",
+          "network": "Ethereum (ERC-20)",
+          "qr_code_url": "ethereum:0x...",
+          "explorer_url": "https://etherscan.io/address/0x...",
+          "recommended": true
+        },
+        {
+          "currency": "USDC",
+          "amount": 299.0,
+          "address": "0x...",
+          "network": "Polygon (lower fees)",
+          "qr_code_url": "ethereum:0x...",
+          "explorer_url": "https://polygonscan.com/address/0x...",
+          "cheapest": true
+        }
+      ],
+      "instructions": [
+        "1. Choose your preferred cryptocurrency",
+        "2. Send exact amount to the address shown",
+        "3. Payment will be confirmed on-chain (1-60 mins)",
+        "4. You'll receive a receipt via email"
+      ],
+      "support": "payments@quranchain.com"
+    },
+    "58027F4DE3C39D07": {
+      "invoice_id": "58027F4DE3C39D07",
+      "amount_usd": 100.0,
+      "description": "Test Payment - QuranChain",
+      "merchant_id": "omar_test",
+      "created_at": "2026-01-13T10:35:15.283812",
+      "expires_at": null,
+      "payment_options": [
+        {
+          "currency": "BTC",
+          "amount": 0.00108493,
+          "address": "bc1q...",
+          "network": "Bitcoin",
+          "qr_code_url": "bitcoin:bc1q...?amount=0.0010849281777546326",
+          "explorer_url": "https://blockchair.com/bitcoin/address/bc1q..."
+        },
+        {
+          "currency": "ETH",
+          "amount": 0.031896,
+          "address": "0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9",
+          "network": "Ethereum",
+          "qr_code_url": "ethereum:0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9?value=31896400491204568",
+          "explorer_url": "https://etherscan.io/address/0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9"
+        },
+        {
+          "currency": "USDC",
+          "amount": 100.0,
+          "address": "0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9",
+          "network": "Ethereum (ERC-20)",
+          "qr_code_url": "ethereum:0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9",
+          "explorer_url": "https://etherscan.io/address/0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9",
+          "recommended": true
+        },
+        {
+          "currency": "USDC",
+          "amount": 100.0,
+          "address": "0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9",
+          "network": "Polygon (lower fees)",
+          "qr_code_url": "ethereum:0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9",
+          "explorer_url": "https://polygonscan.com/address/0x1FDFb0e08D7a98Ce96a737741DA6babdBeee45A9",
+          "cheapest": true
+        }
+      ],
+      "instructions": [
+        "1. Choose your preferred cryptocurrency",
+        "2. Send exact amount to the address shown",
+        "3. Payment will be confirmed on-chain (1-60 mins)",
+        "4. You'll receive a receipt via email"
+      ],
+      "support": "payments@quranchain.com"
+    }
+  },
+  "payments": [],
+  "revenue_usd": 0.0,
+  "founder_royalty_usd": 0.0
+}

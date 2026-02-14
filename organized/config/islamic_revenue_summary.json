@@ -1,0 +1,28 @@
+{
+  "total_transactions": 5,
+  "crypto_payments": 3,
+  "fiat_payments": 2,
+  "total_usd_reference": 24034.05,
+  "founder_usd_reference": 7210.214999999999,
+  "total_revenue_by_coin": {
+    "QURAN": 2000.0,
+    "DAN": 1500.0,
+    "ZAKAT": 0,
+    "HALAL": 625.0,
+    "SALAH": 0,
+    "UMRAH": 2500,
+    "BARAKAH": 0,
+    "MASJID": 100.0
+  },
+  "founder_revenue_by_coin": {
+    "QURAN": 600.0,
+    "DAN": 450.0,
+    "ZAKAT": 0,
+    "HALAL": 187.5,
+    "SALAH": 0,
+    "UMRAH": 750.0,
+    "BARAKAH": 0,
+    "MASJID": 30.0
+  },
+  "coin_count": 5
+}

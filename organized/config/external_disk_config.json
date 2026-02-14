@@ -1,0 +1,9 @@
+{
+  "external_disk_path": "/tmp/quranchain_external",
+  "ai_memory_overflow_dir": "/tmp/quranchain_external/ai_agent_memory",
+  "temp_expansion_quota_gb": 100,
+  "ram_threshold_percent": 80,
+  "disk_threshold_percent": 90,
+  "auto_compress_enabled": true,
+  "cloud_archive_enabled": false
+}

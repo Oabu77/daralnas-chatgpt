@@ -1,0 +1,411 @@
+{
+  "timestamp": "2025-12-10T20:04:17.497859",
+  "deployment_type": "NETWORK_EXPANSION",
+  "network": "MeshTalk OS",
+  "previous_nodes": 12,
+  "new_nodes": 31,
+  "total_nodes": 43,
+  "coverage": {
+    "USA": 19,
+    "Europe": 9,
+    "MENA": 7,
+    "Asia": 6,
+    "UK": 2
+  },
+  "nodes": [
+    {
+      "id": "MT-0001",
+      "country": "USA",
+      "lat": 37.464037,
+      "lng": -122.858347,
+      "signal": 78
+    },
+    {
+      "id": "MT-0002",
+      "country": "USA",
+      "lat": 37.478239,
+      "lng": -122.19397,
+      "signal": 48
+    },
+    {
+      "id": "MT-0003",
+      "country": "USA",
+      "lat": 38.171984,
+      "lng": -122.256174,
+      "signal": 67
+    },
+    {
+      "id": "MT-0004",
+      "country": "USA",
+      "lat": 37.499849,
+      "lng": -122.220276,
+      "signal": 99
+    },
+    {
+      "id": "MT-0005",
+      "country": "USA",
+      "lat": 38.185045,
+      "lng": -122.230854,
+      "signal": 41
+    },
+    {
+      "id": "MT-0006",
+      "country": "USA",
+      "lat": 38.168564,
+      "lng": -122.050564,
+      "signal": 60
+    },
+    {
+      "id": "MT-0007",
+      "country": "USA",
+      "lat": 37.299358,
+      "lng": -122.167763,
+      "signal": 57
+    },
+    {
+      "id": "MT-0008",
+      "country": "USA",
+      "lat": 37.869409,
+      "lng": -122.909486,
+      "signal": 45
+    },
+    {
+      "id": "MT-0009",
+      "country": "USA",
+      "lat": 37.658321,
+      "lng": -122.171287,
+      "signal": 100
+    },
+    {
+      "id": "MT-0010",
+      "country": "USA",
+      "lat": 37.639501,
+      "lng": -122.502901,
+      "signal": 72
+    },
+    {
+      "id": "MT-0011",
+      "country": "UK",
+      "lat": 51.154168,
+      "lng": -0.118989,
+      "signal": 66
+    },
+    {
+      "id": "MT-0012",
+      "country": "UK",
+      "lat": 51.507351,
+      "lng": -0.127758,
+      "signal": 81
+    },
+    {
+      "id": "MT-0013",
+      "country": "USA-East",
+      "city": "New York",
+      "lat": 40.69322761211273,
+      "lng": -74.01681355306508,
+      "signal": 88,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497381"
+    },
+    {
+      "id": "MT-0014",
+      "country": "USA-East",
+      "city": "New York",
+      "lat": 40.73945147303304,
+      "lng": -74.0204977170893,
+      "signal": 80,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497753"
+    },
+    {
+      "id": "MT-0015",
+      "country": "USA-East",
+      "city": "New York",
+      "lat": 40.68579615557987,
+      "lng": -74.0454231212172,
+      "signal": 74,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497757"
+    },
+    {
+      "id": "MT-0016",
+      "country": "USA-East",
+      "city": "Boston",
+      "lat": 42.40933083342187,
+      "lng": -71.01404719224713,
+      "signal": 74,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497761"
+    },
+    {
+      "id": "MT-0017",
+      "country": "USA-East",
+      "city": "Boston",
+      "lat": 42.340228334546104,
+      "lng": -71.03537841623474,
+      "signal": 70,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497764"
+    },
+    {
+      "id": "MT-0018",
+      "country": "USA-East",
+      "city": "Miami",
+      "lat": 25.73329392282071,
+      "lng": -80.15479062026226,
+      "signal": 84,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497769"
+    },
+    {
+      "id": "MT-0019",
+      "country": "USA-East",
+      "city": "Miami",
+      "lat": 25.802877776025216,
+      "lng": -80.14679854584149,
+      "signal": 85,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497772"
+    },
+    {
+      "id": "MT-0020",
+      "country": "USA-East",
+      "city": "Atlanta",
+      "lat": 33.75311296151215,
+      "lng": -84.41331492778454,
+      "signal": 65,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497775"
+    },
+    {
+      "id": "MT-0021",
+      "country": "USA-East",
+      "city": "Atlanta",
+      "lat": 33.749042332025525,
+      "lng": -84.43497983603321,
+      "signal": 87,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497778"
+    },
+    {
+      "id": "MT-0022",
+      "country": "EU",
+      "city": "Berlin",
+      "lat": 52.47658117254021,
+      "lng": 13.429385831476493,
+      "signal": 86,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497781"
+    },
+    {
+      "id": "MT-0023",
+      "country": "EU",
+      "city": "Berlin",
+      "lat": 52.493274612502475,
+      "lng": 13.446161279795275,
+      "signal": 78,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497784"
+    },
+    {
+      "id": "MT-0024",
+      "country": "EU",
+      "city": "Paris",
+      "lat": 48.86979137677386,
+      "lng": 2.3818976419466935,
+      "signal": 82,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497787"
+    },
+    {
+      "id": "MT-0025",
+      "country": "EU",
+      "city": "Paris",
+      "lat": 48.82105176297066,
+      "lng": 2.3733167027805613,
+      "signal": 95,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497791"
+    },
+    {
+      "id": "MT-0026",
+      "country": "EU",
+      "city": "Amsterdam",
+      "lat": 52.366743234318584,
+      "lng": 4.873022958417858,
+      "signal": 86,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497794"
+    },
+    {
+      "id": "MT-0027",
+      "country": "EU",
+      "city": "Amsterdam",
+      "lat": 52.379503085571805,
+      "lng": 4.85562237909043,
+      "signal": 67,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497797"
+    },
+    {
+      "id": "MT-0028",
+      "country": "EU",
+      "city": "Dubai",
+      "lat": 25.23338266366658,
+      "lng": 55.26602880111589,
+      "signal": 99,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497800"
+    },
+    {
+      "id": "MT-0029",
+      "country": "EU",
+      "city": "Dubai",
+      "lat": 25.21708590101151,
+      "lng": 55.24162689576338,
+      "signal": 95,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497802"
+    },
+    {
+      "id": "MT-0030",
+      "country": "EU",
+      "city": "Dubai",
+      "lat": 25.231264987084074,
+      "lng": 55.310046306670024,
+      "signal": 83,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497805"
+    },
+    {
+      "id": "MT-0031",
+      "country": "MENA",
+      "city": "Riyadh",
+      "lat": 24.703015306416887,
+      "lng": 46.70060309234292,
+      "signal": 93,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497808"
+    },
+    {
+      "id": "MT-0032",
+      "country": "MENA",
+      "city": "Riyadh",
+      "lat": 24.716837595780007,
+      "lng": 46.69179058941534,
+      "signal": 68,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497811"
+    },
+    {
+      "id": "MT-0033",
+      "country": "MENA",
+      "city": "Riyadh",
+      "lat": 24.702711978846313,
+      "lng": 46.64760768337949,
+      "signal": 65,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497813"
+    },
+    {
+      "id": "MT-0034",
+      "country": "MENA",
+      "city": "Cairo",
+      "lat": 30.057796323735797,
+      "lng": 31.280124680969312,
+      "signal": 96,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497816"
+    },
+    {
+      "id": "MT-0035",
+      "country": "MENA",
+      "city": "Cairo",
+      "lat": 30.042696028678627,
+      "lng": 31.25463866705256,
+      "signal": 74,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497819"
+    },
+    {
+      "id": "MT-0036",
+      "country": "MENA",
+      "city": "Istanbul",
+      "lat": 41.01308053020013,
+      "lng": 29.020229432570382,
+      "signal": 69,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497822"
+    },
+    {
+      "id": "MT-0037",
+      "country": "MENA",
+      "city": "Istanbul",
+      "lat": 40.96883863802582,
+      "lng": 29.020637807908805,
+      "signal": 86,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497825"
+    },
+    {
+      "id": "MT-0038",
+      "country": "Asia",
+      "city": "Singapore",
+      "lat": 1.3549976378344468,
+      "lng": 103.7920793385347,
+      "signal": 83,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497829"
+    },
+    {
+      "id": "MT-0039",
+      "country": "Asia",
+      "city": "Singapore",
+      "lat": 1.3110165543549954,
+      "lng": 103.81597880201882,
+      "signal": 72,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497832"
+    },
+    {
+      "id": "MT-0040",
+      "country": "Asia",
+      "city": "Hong Kong",
+      "lat": 22.343783627849355,
+      "lng": 114.18588442976572,
+      "signal": 99,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497835"
+    },
+    {
+      "id": "MT-0041",
+      "country": "Asia",
+      "city": "Hong Kong",
+      "lat": 22.303314614957415,
+      "lng": 114.16576023676265,
+      "signal": 96,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497837"
+    },
+    {
+      "id": "MT-0042",
+      "country": "Asia",
+      "city": "Tokyo",
+      "lat": 35.67687756787598,
+      "lng": 139.63561890201586,
+      "signal": 94,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497840"
+    },
+    {
+      "id": "MT-0043",
+      "country": "Asia",
+      "city": "Tokyo",
+      "lat": 35.6911271972508,
+      "lng": 139.61714424084414,
+      "signal": 93,
+      "status": "active",
+      "deployed": "2025-12-10T20:04:17.497857"
+    }
+  ]
+}

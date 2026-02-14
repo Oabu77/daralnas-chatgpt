@@ -1,0 +1,34 @@
+{
+  "production_mode": true,
+  "use_paid_apis": true,
+  "apis": {
+    "ethereum": {
+      "blocknative": "wss://api.blocknative.com/v0",
+      "alchemy": "wss://eth-mainnet.g.alchemy.com/v2/YOUR_KEY",
+      "infura": "wss://mainnet.infura.io/ws/v3/YOUR_KEY",
+      "priority": [
+        "alchemy",
+        "infura",
+        "blocknative"
+      ]
+    },
+    "bitcoin": {
+      "mempool_space": "wss://mempool.space/api/v1/ws",
+      "blockcypher": "wss://socket.blockcypher.com/v1/btc/main",
+      "priority": [
+        "mempool_space",
+        "blockcypher"
+      ]
+    },
+    "polygon": {
+      "alchemy": "wss://polygon-mainnet.g.alchemy.com/v2/YOUR_KEY"
+    },
+    "bsc": {
+      "nodereal": "wss://bsc-mainnet.nodereal.io/ws/v1/YOUR_KEY"
+    },
+    "arbitrum": {
+      "alchemy": "wss://arb-mainnet.g.alchemy.com/v2/YOUR_KEY"
+    }
+  },
+  "notes": "Replace YOUR_KEY with actual API keys from Alchemy, Infura, NodeReal"
+}

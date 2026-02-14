@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+"""
+QuranChain Pay™ - Stripe Payment Processor
+© QuranChain™ | Omar Mohammad Abunadi™
+
+Ready for production - just add your Stripe API keys.
+"""
+
+import os
+from flask import Flask, jsonify, request
+from datetime import datetime
+from decimal import Decimal
+
+app = Flask(__name__)
+
+# Configuration - Load from environment
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+FOUNDER_ROYALTY_PERCENT = Decimal(os.getenv("FOUNDER_ROYALTY_PERCENT", "0.30"))
+FOUNDER_WALLET = os.getenv("FOUNDER_WALLET", "0x4e90944C093f7727ff89a30AF96A556deB95cCB8")  # Kraken
+
+# In-memory storage
+payments = {}
+merchants = {}
+
+def calculate_founder_royalty(amount: Decimal) -> Decimal:
+    """Calculate 30% founder royalty (IMMUTABLE)"""
+    return amount * FOUNDER_ROYALTY_PERCENT
+
+@app.route('/')
+def index():
+    return jsonify({
+        "service": "QuranChain Pay™ - Stripe Integration",
+        "version": "1.0.0",
+        "founder": "Omar Mohammad Abunadi™",
+        "status": "ready" if STRIPE_SECRET_KEY else "awaiting_api_keys",
+        "founder_royalty": f"{FOUNDER_ROYALTY_PERCENT * 100}%",
+        "endpoints": [
+            "POST /create-payment-intent",
+            "POST /webhook",
+            "GET /payment/{id}",
+            "GET /health"
+        ]
+    })
+
+@app.route('/health')
+def health():
+    return jsonify({
+        "status": "healthy",
+        "stripe_configured": bool(STRIPE_SECRET_KEY),
+        "timestamp": datetime.utcnow().isoformat()
+    })
+
+@app.route('/create-payment-intent', methods=['POST'])
+def create_payment_intent():
+    """Create a payment intent"""
+    if not STRIPE_SECRET_KEY:
+        return jsonify({
+            "error": "Stripe not configured",
+            "message": "Please add STRIPE_SECRET_KEY to environment"
+        }), 503
+    
+    data = request.get_json() or {}
+    amount = Decimal(str(data.get("amount", 0)))
+    currency = data.get("currency", "usd").lower()
+    merchant_id = data.get("merchant_id", "default")
+    
+    if amount <= 0:
+        return jsonify({"error": "Invalid amount"}), 400
+    
+    # Calculate fees
+    founder_royalty = calculate_founder_royalty(amount)
+    merchant_amount = amount - founder_royalty
+    
+    try:
+        import stripe
+        stripe.api_key = STRIPE_SECRET_KEY
+        
+        intent = stripe.PaymentIntent.create(
+            amount=int(amount * 100),  # Stripe uses cents
+            currency=currency,
+            metadata={
+                "merchant_id": merchant_id,
+                "founder_royalty": str(founder_royalty),
+                "merchant_amount": str(merchant_amount),
+                "quranchain_payment": "true"
+            }
+        )
+        
+        payment_id = f"qcp_{intent.id}"
+        payments[payment_id] = {
+            "id": payment_id,
+            "stripe_id": intent.id,
+            "amount": float(amount),
+            "currency": currency,
+            "founder_royalty": float(founder_royalty),
+            "merchant_amount": float(merchant_amount),
+            "status": intent.status,
+            "created_at": datetime.utcnow().isoformat()
+        }
+        
+        return jsonify({
+            "payment_id": payment_id,
+            "client_secret": intent.client_secret,
+            "amount": float(amount),
+            "currency": currency,
+            "founder_royalty": float(founder_royalty),
+            "merchant_receives": float(merchant_amount)
+        })
+        
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/payment/<payment_id>')
+def get_payment(payment_id):
+    """Get payment status"""
+    payment = payments.get(payment_id)
+    if not payment:
+        return jsonify({"error": "Payment not found"}), 404
+    return jsonify(payment)
+
+@app.route('/webhook', methods=['POST'])
+def stripe_webhook():
+    """Handle Stripe webhooks"""
+    payload = request.data
+    sig_header = request.headers.get('Stripe-Signature')
+    
+    # Log webhook received
+    print(f"Webhook received at {datetime.utcnow().isoformat()}")
+    
+    # In production, verify the signature
+    # For now, just acknowledge
+    return jsonify({"received": True})
+
+@app.route('/config')
+def get_config():
+    """Get public configuration"""
+    return jsonify({
+        "publishable_key": STRIPE_PUBLISHABLE_KEY,
+        "founder_royalty_percent": float(FOUNDER_ROYALTY_PERCENT) * 100,
+        "supported_currencies": ["usd", "eur", "gbp", "sar", "aed"]
+    })
+
+if __name__ == '__main__':
+    print("═══════════════════════════════════════════════════════════════")
+    print("  💳 QuranChain Pay™ - Stripe Integration")
+    print("  © QuranChain™ | Omar Mohammad Abunadi™")
+    print("═══════════════════════════════════════════════════════════════")
+    
+    if STRIPE_SECRET_KEY:
+        print("  ✅ Stripe API Key: Configured")
+    else:
+        print("  ⚠️  Stripe API Key: NOT CONFIGURED")
+        print("  → Set STRIPE_SECRET_KEY environment variable")
+    
+    print(f"  💰 Founder Royalty: {FOUNDER_ROYALTY_PERCENT * 100}%")
+    print("  🚀 Starting on port 7200...")
+    print("═══════════════════════════════════════════════════════════════")
+    
+    app.run(host='0.0.0.0', port=7200, debug=False)

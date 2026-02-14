@@ -1,0 +1,14 @@
+# QuranChain AI Agent Task Scheduler
+# Installed: 2026-01-13T11:26:40.202466
+
+0 */2 * * * cd /home/omar/Desktop/QuranChain && /usr/bin/python3 /home/omar/Desktop/QuranChain/ai_daily_lead_generation.py >> /home/omar/Desktop/QuranChain/logs/ai_workforce/ai_daily_lead_generation.log 2>&1
+30 */4 * * * cd /home/omar/Desktop/QuranChain && /usr/bin/python3 /home/omar/Desktop/QuranChain/ai_sales_followups.py >> /home/omar/Desktop/QuranChain/logs/ai_workforce/ai_sales_followups.log 2>&1
+0 9 * * * cd /home/omar/Desktop/QuranChain && /usr/bin/python3 /home/omar/Desktop/QuranChain/ai_lead_scoring_update.py >> /home/omar/Desktop/QuranChain/logs/ai_workforce/ai_lead_scoring_update.log 2>&1
+0 17 * * * cd /home/omar/Desktop/QuranChain && /usr/bin/python3 /home/omar/Desktop/QuranChain/ai_revenue_optimization.py >> /home/omar/Desktop/QuranChain/logs/ai_workforce/ai_revenue_optimization.log 2>&1
+*/30 * * * * cd /home/omar/Desktop/QuranChain && /usr/bin/python3 /home/omar/Desktop/QuranChain/ai_response_monitor.py >> /home/omar/Desktop/QuranChain/logs/ai_workforce/ai_response_monitor.log 2>&1
+
+# 59 Agent Orchestration
+*/15 * * * * cd /home/omar/Desktop/QuranChain && /usr/bin/python3 /home/omar/Desktop/QuranChain/agent_orchestration_59.py >> /home/omar/Desktop/QuranChain/logs/ai_workforce/agent_orchestration_59.log 2>&1
+
+# 59 Agent Orchestration
+*/15 * * * * cd /home/omar/Desktop/QuranChain && /usr/bin/python3 /home/omar/Desktop/QuranChain/agent_orchestration_59.py >> /home/omar/Desktop/QuranChain/logs/ai_workforce/agent_orchestration_59.log 2>&1

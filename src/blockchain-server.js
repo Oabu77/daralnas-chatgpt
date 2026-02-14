@@ -27,6 +27,7 @@ const { Blockchain } = require('./blockchain/Blockchain');
 const { P2PNetwork } = require('./p2p/P2PNetwork');
 const FungiMeshService = require('./services/fungiMeshService');
 const { MeshIntegrationBridge } = require('./services/meshIntegrationBridge');
+const crossProjectBridge = require('./services/crossProjectBridge');
 const { BLOCKCHAIN_SEED_NODES, NETWORK_CONFIG } = require('./config/meshConfig');
 
 const app = express();
@@ -325,7 +326,17 @@ app.get('/health', (req, res) => {
       edgeNodes: meshBridge.edgeNodes.size,
       darcloud: meshBridge.darcloudDomain,
     },
+    crossProject: crossProjectBridge.getStatus(),
   });
+});
+
+// Cross-Project Bridge API Routes
+app.get('/api/cross-project/status', (req, res) => {
+  res.json(crossProjectBridge.getStatus());
+});
+
+app.get('/api/cross-project/inventory', (req, res) => {
+  res.json(crossProjectBridge.getServiceInventory());
 });
 
 // Start server and networks
@@ -347,6 +358,14 @@ async function startServer() {
       p2pNetwork,
     });
     console.log('🌉 MeshIntegrationBridge started — devices → blockchain → DarCloud');
+
+    // Start CrossProjectBridge — sync with Project QuranChain (Python/Go)
+    await crossProjectBridge.initialize({
+      blockchain,
+      fungiMesh: fungiMeshService.network,
+      meshBridge,
+    });
+    console.log('🔄 CrossProjectBridge started — syncing with Project QuranChain');
 
     // Start HTTP server with port retry
     const startHTTP = (tryPort) => {
@@ -377,6 +396,7 @@ async function startServer() {
 process.on('SIGTERM', async () => {
   console.log('SIGTERM received, shutting down gracefully');
 
+  await crossProjectBridge.shutdown();
   await meshBridge.shutdown();
   await p2pNetwork.stop();
   await fungiMeshService.shutdown();
@@ -387,6 +407,7 @@ process.on('SIGTERM', async () => {
 process.on('SIGINT', async () => {
   console.log('SIGINT received, shutting down gracefully');
 
+  await crossProjectBridge.shutdown();
   await meshBridge.shutdown();
   await p2pNetwork.stop();
   await fungiMeshService.shutdown();

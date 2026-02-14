@@ -10,7 +10,7 @@ stripe.api_key = os.getenv('STRIPE_SECRET_KEY')
 
 def create_stripe_products():
     """
-    Create Stripe products for all QuranChain-OS revenue streams with correct pricing.
+    Create Stripe products for all QuranChain revenue streams with correct pricing.
     """
     products = [
         {
