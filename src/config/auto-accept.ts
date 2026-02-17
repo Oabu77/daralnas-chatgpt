@@ -33,3 +33,7 @@ export const AUTO_ACCEPT_CONFIG = {
   auto_grow_network: true,
   
   // Background Operations
+  auto_run_background_tasks: true,
+  auto_sync_data: true,
+  auto_backup_data: true,
+};
