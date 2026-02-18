@@ -58,10 +58,7 @@ const openapi = fromHono(app, {
 		servers: [
 			{
 				url: "https://darcloud.host",
-				descriptAI Services (Workers AI)
-openapi.route("/", aiRouter);
-
-// Register ion: "Production (DarCloud.host)",
+				description: "Production (DarCloud.host)",
 			},
 			{
 				url: "https://api.darcloud.host",

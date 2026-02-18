@@ -33,3 +33,14 @@ export const AUTO_ACCEPT_CONFIG = {
   auto_grow_network: true,
   
   // Background Operations
+  auto_sync_data: true,
+  auto_backup: true,
+  auto_monitor: true,
+  
+  // Display
+  hide_confirmation_dialogs: true,
+  hide_permission_prompts: true,
+  
+  // Default action for all prompts
+  default_action: "accept" as const,
+};
