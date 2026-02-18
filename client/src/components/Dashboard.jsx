@@ -44,49 +44,110 @@ function Dashboard() {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <header className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">QuranChain Dashboard</h1>
-        <div className="space-x-4">
-          <button onClick={handleManageSubscription} className="bg-blue-500 text-white px-4 py-2 rounded">
-            {subscription ? 'Manage Subscription' : 'Subscribe'}
-          </button>
-          <button onClick={handleLogout} className="bg-red-500 text-white px-4 py-2 rounded">Logout</button>
-        </div>
-      </header>
-
-      {subscription && (
-        <div className="bg-blue-50 p-4 rounded mb-6">
-          <h2 className="text-lg font-semibold">Subscription Status</h2>
-          <p>Status: <strong>{subscription.status}</strong></p>
-          {subscription.current_period_end && (
-            <p>Next billing: {new Date(subscription.current_period_end * 1000).toLocaleDateString()}</p>
-          )}
-        </div>
-      )}
-
-      {error && <p className="text-red-500">{error}</p>}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-2xl mb-4">Quran Verses</h2>
-          <div className="space-y-4 max-h-96 overflow-y-auto">
-            {verses.map(verse => (
-              <div key={verse._id} className="bg-white p-4 rounded shadow">
-                <p><strong>{verse.surahNumber}:{verse.verseNumber}</strong> {verse.arabicText}</p>
-                <p className="text-sm text-gray-500">Hash: {verse.hash}</p>
-              </div>
-            ))}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <div className="container mx-auto p-6">
+        {/* Header with Glassmorphism */}
+        <header className="backdrop-blur-md bg-white/80 rounded-2xl p-6 mb-8 shadow-xl border border-white/20">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                🕌 QuranChain Dashboard
+              </h1>
+              <p className="text-gray-600 mt-2">Welcome to your decentralized Islamic platform</p>
+            </div>
+            <div className="flex space-x-4">
+              <button 
+                onClick={handleManageSubscription} 
+                className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                {subscription ? '⚙️ Manage Subscription' : '🚀 Subscribe Now'}
+              </button>
+              <button 
+                onClick={handleLogout} 
+                className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white px-6 py-3 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1"
+              >
+                🚪 Logout
+              </button>
+            </div>
           </div>
-        </div>
-        <div>
-          <h2 className="text-2xl mb-4">Translations</h2>
-          <div className="space-y-4 max-h-96 overflow-y-auto">
-            {translations.map(translation => (
-              <div key={translation._id} className="bg-white p-4 rounded shadow">
-                <p><strong>{translation.language}</strong>: {translation.text}</p>
-                <p className="text-sm text-gray-500">Verse: {translation.verseId.surahNumber}:{translation.verseId.verseNumber}</p>
+        </header>
+
+        {/* Subscription Status Card */}
+        {subscription && (
+          <div className="backdrop-blur-md bg-gradient-to-r from-green-50 to-blue-50 rounded-2xl p-6 mb-8 shadow-xl border border-green-200/50">
+            <div className="flex items-center space-x-4">
+              <div className="bg-green-500 rounded-full p-3">
+                <span className="text-white text-2xl">✅</span>
               </div>
-            ))}
+              <div>
+                <h2 className="text-2xl font-bold text-gray-800">Active Subscription</h2>
+                <p className="text-gray-600">Status: <strong className="text-green-600">{subscription.status}</strong></p>
+                {subscription.current_period_end && (
+                  <p className="text-gray-600">Next billing: <strong>{new Date(subscription.current_period_end * 1000).toLocaleDateString()}</strong></p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Error Alert */}
+        {error && (
+          <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-8 rounded-r-xl">
+            <div className="flex items-center">
+              <span className="text-red-500 text-xl mr-3">⚠️</span>
+              <p className="text-red-700 font-semibold">{error}</p>
+            </div>
+          </div>
+        )}
+
+        {/* Main Content Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Quran Verses Section */}
+          <div className="backdrop-blur-md bg-white/80 rounded-2xl p-6 shadow-xl border border-white/20">
+            <div className="flex items-center mb-6">
+              <span className="text-3xl mr-3">📖</span>
+              <h2 className="text-2xl font-bold text-gray-800">Quran Verses</h2>
+            </div>
+            <div className="space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-blue-300 scrollbar-track-blue-100">
+              {verses.map(verse => (
+                <div key={verse._id} className="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-blue-100/50">
+                  <div className="flex items-start space-x-3">
+                    <span className="bg-blue-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                      {verse.surahNumber}:{verse.verseNumber}
+                    </span>
+                    <div className="flex-1">
+                      <p className="text-gray-800 font-medium leading-relaxed">{verse.arabicText}</p>
+                      <p className="text-xs text-gray-500 mt-2 font-mono">Hash: {verse.hash.substring(0, 16)}...</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Translations Section */}
+          <div className="backdrop-blur-md bg-white/80 rounded-2xl p-6 shadow-xl border border-white/20">
+            <div className="flex items-center mb-6">
+              <span className="text-3xl mr-3">🌍</span>
+              <h2 className="text-2xl font-bold text-gray-800">Translations</h2>
+            </div>
+            <div className="space-y-4 max-h-96 overflow-y-auto scrollbar-thin scrollbar-thumb-purple-300 scrollbar-track-purple-100">
+              {translations.map(translation => (
+                <div key={translation._id} className="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 border border-purple-100/50">
+                  <div className="flex items-start space-x-3">
+                    <span className="bg-purple-500 text-white rounded-full w-8 h-8 flex items-center justify-center font-bold text-sm">
+                      {translation.language.substring(0, 2).toUpperCase()}
+                    </span>
+                    <div className="flex-1">
+                      <p className="text-gray-800 font-medium leading-relaxed">{translation.text}</p>
+                      <p className="text-xs text-gray-500 mt-2">
+                        Verse: {translation.verseId.surahNumber}:{translation.verseId.verseNumber}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

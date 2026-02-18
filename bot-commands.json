@@ -1,0 +1,82 @@
+{
+  "run-enterprise-email": {
+    "name": "run-enterprise-email",
+    "description": "Send enterprise outreach campaign",
+    "type": "script",
+    "action": "email-campaign",
+    "payload": { "args": ["enterprise_outreach"] },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "run-developer-email": {
+    "name": "run-developer-email",
+    "description": "Send developer pitch campaign",
+    "type": "script",
+    "action": "email-campaign",
+    "payload": { "args": ["developer_pitch"] },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "run-startup-email": {
+    "name": "run-startup-email",
+    "description": "Send startup offer campaign",
+    "type": "script",
+    "action": "email-campaign",
+    "payload": { "args": ["startup_offer"] },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "generate-social-posts": {
+    "name": "generate-social-posts",
+    "description": "Generate new social media posts",
+    "type": "script",
+    "action": "social-generate",
+    "payload": { "args": [] },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "partner-outreach": {
+    "name": "partner-outreach",
+    "description": "Generate partner outreach list and messages",
+    "type": "script",
+    "action": "partner-generate",
+    "payload": { "args": [] },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "affiliate-create": {
+    "name": "affiliate-create",
+    "description": "Create a new affiliate code (supply name/email in args)",
+    "type": "script",
+    "action": "affiliate-create",
+    "payload": { "args": ["Partner Name", "partner@example.com"] },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "start-marketing-bots": {
+    "name": "start-marketing-bots",
+    "description": "Start marketing bots (email + social)",
+    "type": "script",
+    "action": "start-marketing-bots",
+    "payload": { "args": [] },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "stop-marketing-bots": {
+    "name": "stop-marketing-bots",
+    "description": "Stop marketing bots",
+    "type": "script",
+    "action": "stop-marketing-bots",
+    "payload": { "args": [] },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "dashboard-health": {
+    "name": "dashboard-health",
+    "description": "Check marketing dashboard health",
+    "type": "http",
+    "action": "get",
+    "payload": { "url": "http://localhost:3100/api/marketing/health" },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  },
+  "dashboard-summary": {
+    "name": "dashboard-summary",
+    "description": "Fetch marketing dashboard summary",
+    "type": "http",
+    "action": "get",
+    "payload": { "url": "http://localhost:3100/api/marketing/dashboard" },
+    "createdAt": "2026-02-16T00:00:00.000Z"
+  }
+}

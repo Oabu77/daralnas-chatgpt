@@ -1,0 +1,23 @@
+# Upload Instructions for QCMesh2
+# ═══════════════════════════════════════════════════════
+# 
+# Method 1: Minehut File Manager (Web Dashboard)
+#   1. Go to https://minehut.com/dashboard
+#   2. Select server: QCMesh2
+#   3. Click "File Manager"
+#   4. Navigate to plugins/QuranChain/
+#   5. Upload: quranchain_os_20260216_235451.tar.gz
+#
+# Method 2: Minehut SFTP (if available on plan)
+#   Host: QCMesh2.minehut.gg
+#   Port: Check Minehut dashboard for SFTP port
+#   Upload to: /plugins/QuranChain/
+#
+# Method 3: Plugin Channel (automated)
+#   The FungiMesh plugin can receive data via MC protocol:
+#   /qcmesh backup-receive <chunk_id>
+#
+# Archive: quranchain_os_20260216_235451.tar.gz
+# Size: 287,587 bytes
+# SHA256: 78eeab573fc7aae940b9877ed162715394936407f7f5d462b181205ffbd97f6a
+# Created: 2026-02-16T23:54:51.348199

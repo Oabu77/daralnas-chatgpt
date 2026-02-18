@@ -1,0 +1,39 @@
+{
+  "total_received": 4,
+  "total_processed": 4,
+  "total_failed": 0,
+  "events_by_type": {
+    "response.completed": 4
+  },
+  "recent_events": [
+    {
+      "id": "resp_test_1771299532",
+      "type": "response.completed",
+      "status": "processed",
+      "timestamp": "2026-02-17T03:38:54.308498+00:00",
+      "data_preview": "{'output_preview': None}"
+    },
+    {
+      "id": "resp_test_1771299536",
+      "type": "response.completed",
+      "status": "processed",
+      "timestamp": "2026-02-17T03:38:57.359925+00:00",
+      "data_preview": "{'output_preview': None}"
+    },
+    {
+      "id": "resp_test_1771299791",
+      "type": "response.completed",
+      "status": "processed",
+      "timestamp": "2026-02-17T03:43:11.341776+00:00",
+      "data_preview": "{'output_preview': None}"
+    },
+    {
+      "id": "resp_test_1771299794",
+      "type": "response.completed",
+      "status": "processed",
+      "timestamp": "2026-02-17T03:43:14.922726+00:00",
+      "data_preview": "{'output_preview': None}"
+    }
+  ],
+  "started_at": "2026-02-17T03:38:44.681921+00:00"
+}

@@ -15,7 +15,7 @@
  */
 
 const { FungiMeshNetwork } = require('../p2p/FungiMeshNetwork');
-const { SEED_NODES, NETWORK_CONFIG, TASK_REQUIREMENTS } = require('../config/meshConfig');
+const { SEED_NODES, NETWORK_CONFIG, TASK_REQUIREMENTS, inferTaskRequirements } = require('../config/meshConfig');
 const crypto = require('crypto');
 
 class FungiMeshService {
@@ -159,10 +159,18 @@ class FungiMeshService {
   }
 
   /**
-   * Submit QuranChain-specific computation task
+   * Submit QuranChain-specific computation task.
+   * If the taskType is not in the registry the fungi will auto-infer
+   * requirements from the name and learn it for future calls.
    */
   async submitQuranChainTask(taskType, data) {
-    const requirements = TASK_REQUIREMENTS[taskType] || TASK_REQUIREMENTS.cpu_intensive;
+    let requirements = TASK_REQUIREMENTS[taskType];
+    if (!requirements) {
+      // Auto-learn: infer from name and persist in the live registry
+      requirements = inferTaskRequirements(taskType);
+      TASK_REQUIREMENTS[taskType] = requirements;
+      console.log(`🍄 Auto-learned new task type "${taskType}" → cores:${requirements.minCores} gpu:${requirements.requiresGPU} pri:${requirements.priority}`);
+    }
 
     const taskConfig = {
       type: taskType,
@@ -174,6 +182,40 @@ class FungiMeshService {
     };
 
     return this.submitTask(taskConfig);
+  }
+
+  /**
+   * Hot-register a new task type (or update an existing one) at runtime.
+   * Returns the full registry after the patch.
+   */
+  registerTaskType(name, spec) {
+    TASK_REQUIREMENTS[name] = {
+      minCores:          spec.minCores          ?? 1,
+      requiresGPU:       spec.requiresGPU       ?? false,
+      priority:          spec.priority           ?? 'normal',
+      estimatedDuration: spec.estimatedDuration  ?? 5000,
+    };
+    console.log(`🍄 Hot-patched task type "${name}":`, JSON.stringify(TASK_REQUIREMENTS[name]));
+    return TASK_REQUIREMENTS;
+  }
+
+  /**
+   * Bulk-register many task types at once (hot-patch).
+   */
+  registerTaskTypes(types) {
+    const added = [];
+    for (const [name, spec] of Object.entries(types)) {
+      this.registerTaskType(name, spec);
+      added.push(name);
+    }
+    return { added, totalRegistered: Object.keys(TASK_REQUIREMENTS).length, registry: TASK_REQUIREMENTS };
+  }
+
+  /**
+   * Return the live task-type registry for introspection.
+   */
+  getTaskRegistry() {
+    return { totalTypes: Object.keys(TASK_REQUIREMENTS).length, types: TASK_REQUIREMENTS };
   }
 
   /**

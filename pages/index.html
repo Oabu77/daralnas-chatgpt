@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarCloud — Quantum-Secured Mesh Cloud Platform</title>
+    <meta name="description" content="DarCloud: Revenue-focused blockchain ecosystem with Islamic principles. 340,000 mesh nodes, quantum encryption, 70+ services.">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☁️</text></svg>">
+    <style>
+        :root {
+            --bg: #0a0e17;
+            --surface: #111827;
+            --border: #1f2937;
+            --primary: #10b981;
+            --accent: #3b82f6;
+            --gold: #f59e0b;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+        }
+        * { margin:0; padding:0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+        .gradient-bg {
+            background: radial-gradient(ellipse at 20% 50%, rgba(16,185,129,0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(59,130,246,0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 50% 100%, rgba(245,158,11,0.08) 0%, transparent 50%);
+        }
+
+        /* Header */
+        header {
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10,14,23,0.9);
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            margin-left: 2rem;
+            transition: color 0.2s;
+        }
+        nav a:hover { color: var(--primary); }
+
+        /* Hero */
+        .hero {
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--muted);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+        .bismillah {
+            font-family: 'Noto Naskh Arabic', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            direction: rtl;
+        }
+        .cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+        .btn {
+            padding: 0.875rem 2rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), #059669);
+            color: white;
+            border: none;
+        }
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(16,185,129,0.3); }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+        }
+        .stat {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        .stat-label { color: var(--muted); font-size: 0.875rem; }
+        #live-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+            margin-right: 4px;
+        }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+
+        /* Services Grid */
+        .section { max-width: 1200px; margin: 0 auto; padding: 4rem 2rem; }
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        .section .subtitle { color: var(--muted); margin-bottom: 2rem; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.2s;
+        }
+        .card:hover { border-color: var(--primary); transform: translateY(-2px); }
+        .card-icon { font-size: 2rem; margin-bottom: 0.75rem; }
+        .card h3 { font-size: 1.1rem; margin-bottom: 0.5rem; }
+        .card p { color: var(--muted); font-size: 0.875rem; line-height: 1.5; }
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.75rem;
+        }
+        .badge-live { background: rgba(16,185,129,0.15); color: var(--primary); }
+        .badge-gold { background: rgba(245,158,11,0.15); color: var(--gold); }
+
+        /* Agent Fleet */
+        .fleet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.75rem; }
+        .agent-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.875rem;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .agent-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--primary);
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.875rem;
+        }
+        footer a { color: var(--primary); text-decoration: none; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.2rem; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            header { flex-direction: column; gap: 1rem; }
+        }
+    </style>
+</head>
+<body class="gradient-bg">
+    <header>
+        <div class="logo">
+            <div class="logo-icon">☁️</div>
+            <span>DarCloud</span>
+        </div>
+        <nav>
+            <a href="#services">Services</a>
+            <a href="#agents">AI Fleet</a>
+            <a href="#blockchain">Blockchain</a>
+            <a href="https://mcp.darcloud.host" target="_blank">API</a>
+            <a href="https://blockchain.darcloud.host" target="_blank">Explorer</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+            <h1>Quantum-Secured Mesh Cloud Platform</h1>
+            <p>Enterprise blockchain infrastructure with Islamic principles. 340,000 mesh nodes, quantum encryption, 63 AI agents, and 47 monitored blockchain networks — all running on the DarCloud FungiMesh.</p>
+            <div class="cta-group">
+                <a href="https://mcp.darcloud.host" class="btn btn-primary">MCP Endpoint</a>
+                <a href="https://blockchain.darcloud.host/health" class="btn btn-secondary">Blockchain Status</a>
+            </div>
+        </section>
+
+        <!-- Live Stats -->
+        <div class="stats" id="live-stats">
+            <div class="stat">
+                <div class="stat-value" id="s-nodes">340,000</div>
+                <div class="stat-label"><span id="live-indicator"></span>Mesh Nodes</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="s-chains">47</div>
+                <div class="stat-label">Blockchain Networks</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="s-agents">63</div>
+                <div class="stat-label">AI Agents</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="s-services">70+</div>
+                <div class="stat-label">Live Services</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="s-storage">2.8PB</div>
+                <div class="stat-label">Data Ocean Storage</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value" id="s-bandwidth">102Tbps</div>
+                <div class="stat-label">Mesh Bandwidth</div>
+            </div>
+        </div>
+
+        <!-- Services -->
+        <section class="section" id="services">
+            <h2>Platform Services</h2>
+            <p class="subtitle">Enterprise-grade infrastructure powered by FungiMesh</p>
+            <div class="grid">
+                <div class="card">
+                    <div class="card-icon">⛓️</div>
+                    <h3>QuranChain Blockchain</h3>
+                    <p>Custom blockchain with quantum-resistant encryption (Kyber-1024 + Dilithium-5), 30% founder royalty, AI-powered validation.</p>
+                    <span class="badge badge-live">● Live</span>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🍄</div>
+                    <h3>FungiMesh Network</h3>
+                    <p>340,000 nodes across 6 continents. Dual-layer architecture: Node.js WebSocket mesh + Python simulation. 102 Tbps bandwidth.</p>
+                    <span class="badge badge-live">● Live</span>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🌊</div>
+                    <h3>Data Ocean</h3>
+                    <p>2.8PB distributed storage with quantum encryption. Redundant across mesh nodes with automatic replication.</p>
+                    <span class="badge badge-live">● Live</span>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔐</div>
+                    <h3>Quantum Compute</h3>
+                    <p>Post-quantum cryptography: Kyber-1024, Dilithium-5, BB84 QKD. Future-proof against quantum attacks.</p>
+                    <span class="badge badge-live">● Active</span>
+                </div>
+                <div class="card">
+                    <div class="card-icon">⛽</div>
+                    <h3>Gas Toll Highway</h3>
+                    <p>Collecting tolls across 47+ blockchain networks with dynamic pricing. 30% founder royalty on all collections.</p>
+                    <span class="badge badge-gold">💰 Revenue</span>
+                </div>
+                <div class="card">
+                    <div class="card-icon">💳</div>
+                    <h3>Payment Processing</h3>
+                    <p>Live Stripe integration with real invoicing. Supports subscriptions, enterprise billing, and crypto payments.</p>
+                    <span class="badge badge-gold">💰 Revenue</span>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🤖</div>
+                    <h3>AI Agent Fleet</h3>
+                    <p>63 specialized AI agents across 7 projects. From customer service to gas toll monitoring, all powered by GPT-4o.</p>
+                    <span class="badge badge-live">● Deployed</span>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🔌</div>
+                    <h3>MCP Server</h3>
+                    <p>10 tools via Model Context Protocol. Dual transport (StreamableHTTP + SSE). ChatGPT App integration ready.</p>
+                    <span class="badge badge-live">● Live</span>
+                </div>
+                <div class="card">
+                    <div class="card-icon">🏢</div>
+                    <h3>Enterprise Services</h3>
+                    <p>Billing, analytics, compliance, SLA management, and auto-provisioning for enterprise customers.</p>
+                    <span class="badge badge-live">● Active</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Agent Fleet -->
+        <section class="section" id="agents">
+            <h2>AI Agent Fleet — 63 Agents</h2>
+            <p class="subtitle">Deployed on OpenAI + Cloudflare Workers edge network</p>
+            <div class="fleet-grid" id="agent-grid">
+                <!-- Populated by JS -->
+            </div>
+        </section>
+
+        <!-- Blockchain -->
+        <section class="section" id="blockchain">
+            <h2>Blockchain & Revenue</h2>
+            <p class="subtitle">Real-time chain metrics</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value" id="s-height">—</div>
+                    <div class="stat-label">Chain Height</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="s-peers">—</div>
+                    <div class="stat-label">Mesh Peers</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="s-gas">—</div>
+                    <div class="stat-label">Gas Toll Collected</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="s-royalty">—</div>
+                    <div class="stat-label">Founder Royalty (30%)</div>
+                </div>
+            </div>
+            <div style="text-align:center;margin-top:1rem;">
+                <p style="color:var(--gold);font-size:0.9rem;">Revenue Distribution: 30% Founder | 40% AI Validators | 10% Hardware | 18% Ecosystem | 2% Zakat</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 DarCloud — QuranChain Ecosystem | <a href="https://mcp.darcloud.host/.well-known/openapi.json">API Docs</a> | <a href="https://blockchain.darcloud.host">Explorer</a> | <a href="https://ai.darcloud.host/api/fleet">Agent Fleet</a></p>
+        <p style="margin-top:0.5rem;font-size:0.75rem;">Powered by FungiMesh • Quantum-Encrypted • Islamic Principles</p>
+    </footer>
+
+    <script>
+        const AGENTS = [
+            'QuranChain AI','DarCloud AI','Revenue Engine AI','Developer Platform AI',
+            'Blockchain Expert AI','DarCloud Autonomous Server AI','MCP Connected AI',
+            'DarCloud Infrastructure AI','DarCloud Commerce AI','Quran Scholar AI',
+            'AI Orchestrator Agent','FungiMesh Agent','MeshTalk OS Agent',
+            'Docker Container Agent','Auto Deploy Agent','Dedicated Server Agent',
+            'DarCloud Server Agent','Omar AI Validator','QuranChain AI Validator',
+            'Compliance AI Agent','Security AI Agent',
+            'Customer Service Bot','Sales Outreach Bot','Content Creator Bot',
+            'Data Analyst Bot','DevOps Bot','Islamic Finance Bot','Security Bot',
+            'Payment Processor Bot','Revenue Analytics Bot',
+            'Core Services Expert','Blockchain Tools Expert','AI/ML Tools Expert',
+            'Database Expert','Network Telecom Expert','Fiat Payment Expert','DevOps Tools Expert',
+            'Customer Support AI Agent','Marketing AI Agent','Sales AI Agent',
+            'IT Operations AI Agent','Fraud Detection AI Agent','Optimization AI Agent',
+            'Partner Integration Agent','Subscription Manager Bot',
+            'Ethereum Gas Toll Agent','BSC Gas Toll Agent','Polygon Gas Toll Agent',
+            'Arbitrum Gas Toll Agent','Solana Gas Toll Agent','Bridge Gas Toll Agent',
+            'NFT Gas Toll Agent','Staking Gas Toll Agent','Governance Gas Toll Agent',
+            'Dynamic Pricing Gas Agent','Revenue Optimization Gas Agent','Fraud Detection Gas Agent',
+            'Payment Tools Expert','Security Tools Expert','System Tools Expert',
+            'Web API Tools Expert','Data Science ML Expert','Logistics Bot',
+        ];
+
+        // Populate agent grid
+        const grid = document.getElementById('agent-grid');
+        AGENTS.forEach(name => {
+            const card = document.createElement('div');
+            card.className = 'agent-card';
+            card.innerHTML = `<span class="agent-dot"></span>${name}`;
+            grid.appendChild(card);
+        });
+
+        // Fetch live blockchain data
+        async function fetchLive() {
+            try {
+                const resp = await fetch('https://blockchain.darcloud.host/health');
+                const d = await resp.json();
+                document.getElementById('s-height').textContent = d.blockchain?.height || '—';
+                document.getElementById('s-peers').textContent = d.mesh?.peers || '—';
+                document.getElementById('s-gas').textContent = '$' + (d.gasTollHighway?.totalCollected || 0).toFixed(2);
+                document.getElementById('s-royalty').textContent = '$' + (d.gasTollHighway?.founderRoyalty || 0).toFixed(2);
+            } catch(e) {
+                console.log('Live data fetch failed:', e);
+            }
+        }
+        fetchLive();
+        setInterval(fetchLive, 30000); // Refresh every 30s
+    </script>
+</body>
+</html>

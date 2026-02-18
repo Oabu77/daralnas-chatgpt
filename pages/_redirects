@@ -1,0 +1,5 @@
+/api https://api.darcloud.host/api 301
+/mcp https://mcp.darcloud.host/mcp 301
+/explorer https://blockchain.darcloud.host/health 301
+/fleet https://ai.darcloud.host/api/fleet 301
+/docs /docs.html 200

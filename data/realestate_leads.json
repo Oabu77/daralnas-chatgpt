@@ -1,0 +1,17 @@
+[
+  {
+    "id": "lead_de5ae1f84716",
+    "name": "Ahmed Hassan",
+    "email": "ahmed@test.com",
+    "phone": "+971501234567",
+    "region": "UAE",
+    "budget": 600000,
+    "score": 55,
+    "qualified": true,
+    "tier": "warm",
+    "status": "qualified",
+    "source": "website",
+    "createdAt": "2026-02-17T06:24:16.171Z",
+    "followUps": []
+  }
+]

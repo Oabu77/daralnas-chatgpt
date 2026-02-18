@@ -1,0 +1,14 @@
+{
+  "priceIds": {
+    "starter": "price_1T1i5jAqs2ifkfkqL76nEkAj",
+    "standard": "price_1T1i5lAqs2ifkfkq2Ggqh1ht",
+    "premium": "price_1T1i5mAqs2ifkfkqBTj48bp9",
+    "commercial": "price_1T1i5pAqs2ifkfkq6IvTPRhi"
+  },
+  "paymentLinks": {
+    "starter": "https://buy.stripe.com/28EfZgdjc53ldFX9eMcEw3F",
+    "standard": "https://buy.stripe.com/8x29AS0wqeDVatL8aIcEw3G",
+    "premium": "https://buy.stripe.com/7sYfZgengcvN1Xf3UscEw3H",
+    "commercial": "https://buy.stripe.com/7sY4gygvo3ZhcBTgHecEw3I"
+  }
+}

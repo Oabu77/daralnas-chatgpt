@@ -1,0 +1,479 @@
+{
+  "activated_at": "2026-02-17T05:59:18.534161+00:00",
+  "total_assistants": 66,
+  "instructions_updated": 66,
+  "tasks_dispatched": 66,
+  "failed_updates": [],
+  "failed_tasks": [],
+  "active_runs": [
+    {
+      "name": "QuranChain AI",
+      "role": "Chief Revenue Officer",
+      "thread_id": "thread_TdObAdhorkurJGG1CudVHfLB",
+      "run_id": "run_Lqql7dIUhEPXldt2lQ3xo6TN",
+      "status": "queued"
+    },
+    {
+      "name": "DarCloud AI",
+      "role": "Cloud Infrastructure Sales",
+      "thread_id": "thread_2gIOfgnARKjOeUPBNIK8ubJg",
+      "run_id": "run_bqWVpAcB5wUb9dJKemblbVtj",
+      "status": "queued"
+    },
+    {
+      "name": "Revenue Engine AI",
+      "role": "Revenue Optimization Engine",
+      "thread_id": "thread_qbt8vkNaBQOmMxfHd78h2Ubz",
+      "run_id": "run_t6WOgEWGLVERuQSzQSboVluF",
+      "status": "queued"
+    },
+    {
+      "name": "Developer Platform AI",
+      "role": "API & Developer Sales",
+      "thread_id": "thread_jjxLrI6x7M1fXCsxzjYxYNL7",
+      "run_id": "run_y7cBtSKlXtfhNIwPiLdyokaL",
+      "status": "queued"
+    },
+    {
+      "name": "Blockchain Expert AI",
+      "role": "Blockchain Revenue Specialist",
+      "thread_id": "thread_UwbLzpAtQ9tUjY5ot2vYxrAT",
+      "run_id": "run_asUFr5z42mHHFvKWJy6N0HEL",
+      "status": "queued"
+    },
+    {
+      "name": "DarCloud Autonomous Server AI",
+      "role": "Autonomous Server Sales",
+      "thread_id": "thread_gREGMeNyV0JmjEoMPIXLWZQG",
+      "run_id": "run_yslJ38kAJ57w7KoPt1MzcFkl",
+      "status": "queued"
+    },
+    {
+      "name": "MCP Connected AI",
+      "role": "MCP Integration Sales",
+      "thread_id": "thread_zOD8xUTQbua5VGbYg6Ttt8QT",
+      "run_id": "run_vQ48QFBUGeYuQHpwosmyDJCI",
+      "status": "queued"
+    },
+    {
+      "name": "DarCloud Infrastructure AI",
+      "role": "Infrastructure Consulting",
+      "thread_id": "thread_WH7OoB5V0iJq0tnLFpiyosVy",
+      "run_id": "run_hRbxguDXh3OcaDSMv3iwk7Ck",
+      "status": "queued"
+    },
+    {
+      "name": "DarCloud Commerce AI",
+      "role": "E-Commerce Revenue",
+      "thread_id": "thread_KtFTTg3QTMqvaR4HthnYbjhT",
+      "run_id": "run_8Ues6dHe77jSWzmoFCKtQr0m",
+      "status": "queued"
+    },
+    {
+      "name": "Quran Scholar AI",
+      "role": "Islamic Content & Education Sales",
+      "thread_id": "thread_Q1Js4LvD9RaBmwINUQUoK4OY",
+      "run_id": "run_7KDkxePvn1kDqtnhxyQj5EIa",
+      "status": "queued"
+    },
+    {
+      "name": "AI Orchestrator Agent",
+      "role": "Workforce Productivity Manager",
+      "thread_id": "thread_7cX8JzotzjiyCzv1xdbzdmDj",
+      "run_id": "run_dwbdDCeKJDHAaRnKWnxn0HmB",
+      "status": "queued"
+    },
+    {
+      "name": "FungiMesh Agent",
+      "role": "Mesh Network Sales",
+      "thread_id": "thread_g2upN7D5MpK1W34sEJOE5YVK",
+      "run_id": "run_p8ByQmymj4VMEzwmavTtJu1j",
+      "status": "queued"
+    },
+    {
+      "name": "MeshTalk OS Agent",
+      "role": "OS Platform Sales",
+      "thread_id": "thread_UVXzdAMaDdE5RsSHil0sfsJa",
+      "run_id": "run_YXLmUkD9rbXENzc8ZtH5VM5J",
+      "status": "queued"
+    },
+    {
+      "name": "Docker Container Agent",
+      "role": "Container Service Sales",
+      "thread_id": "thread_p0Pa84PS11Na4X8kDBYAfcug",
+      "run_id": "run_waHfmQ5PGGhvrdlY9xqUTcx9",
+      "status": "queued"
+    },
+    {
+      "name": "Auto Deploy Agent",
+      "role": "Deployment Automation Sales",
+      "thread_id": "thread_7i1q7UhVN7j2RPJfx9oKbpjD",
+      "run_id": "run_RZPa3ENyis5YNjFap7XeKWZO",
+      "status": "queued"
+    },
+    {
+      "name": "Dedicated Server Agent",
+      "role": "Dedicated Server Sales",
+      "thread_id": "thread_OXZcIkE4e411dkYkotUssmbD",
+      "run_id": "run_F00hbGMwShZkRPDXKrsGeark",
+      "status": "queued"
+    },
+    {
+      "name": "DarCloud Server Agent",
+      "role": "Cloud Server Management Sales",
+      "thread_id": "thread_Q0oTVYYakAqDjEHDarI9Ja2p",
+      "run_id": "run_BeM6DOZco5uQqveKZ9Yts9wg",
+      "status": "queued"
+    },
+    {
+      "name": "Omar AI Validator",
+      "role": "Transaction Validator (Revenue)",
+      "thread_id": "thread_y5dWqURkxUxvh5KNP9LY3wpT",
+      "run_id": "run_tiTQFl6cjmlLOOihZXPUPwH8",
+      "status": "queued"
+    },
+    {
+      "name": "QuranChain AI Validator",
+      "role": "Chain Validator (Revenue)",
+      "thread_id": "thread_bVU6ogMYqoyekU2ecCsaXyP5",
+      "run_id": "run_XwYGf9tVNDGh9eDkI2us5WSK",
+      "status": "queued"
+    },
+    {
+      "name": "Compliance AI Agent",
+      "role": "Shariah Compliance Consulting",
+      "thread_id": "thread_Hv0TDwOTi6VXvw47S60mH24i",
+      "run_id": "run_rW98agze5Sinf6cnrR2UVbML",
+      "status": "queued"
+    },
+    {
+      "name": "Security AI Agent",
+      "role": "Security Consulting Sales",
+      "thread_id": "thread_cPRdPbRmKXlkZqvv9gIpObIy",
+      "run_id": "run_v70pEo8iMZgEs1gmtlyFDUpO",
+      "status": "queued"
+    },
+    {
+      "name": "Customer Service Bot",
+      "role": "Customer Onboarding & Upsell",
+      "thread_id": "thread_kBChSt8VSmun7JrmAvHMhzf9",
+      "run_id": "run_kZPUgwcoswHEB8NP3tlmLJ1y",
+      "status": "queued"
+    },
+    {
+      "name": "Sales Outreach Bot",
+      "role": "Outbound Sales Automation",
+      "thread_id": "thread_OImJ4xslVJxGK34zomXN1p0P",
+      "run_id": "run_j3ks0BRPCet56AuOfUWJzNtt",
+      "status": "queued"
+    },
+    {
+      "name": "Content Creator Bot",
+      "role": "Revenue-Driving Content",
+      "thread_id": "thread_JMEzd7EEY7ymH3Dq0imw1p0u",
+      "run_id": "run_48BGFx4nlWOkrYXAG6wmAcCV",
+      "status": "queued"
+    },
+    {
+      "name": "Data Analyst Bot",
+      "role": "Revenue Analytics",
+      "thread_id": "thread_0Zs6PfZx0WoiLqhkG9uWsG4P",
+      "run_id": "run_4enIilQLbVXCJsFPOt06zAnt",
+      "status": "queued"
+    },
+    {
+      "name": "DevOps Bot",
+      "role": "Infrastructure Uptime (Revenue Protection)",
+      "thread_id": "thread_Ul5WS21LSNhgvvxyt656U54h",
+      "run_id": "run_jX7xHRhwN3O5Vbb7ZN21lAqv",
+      "status": "queued"
+    },
+    {
+      "name": "Islamic Finance Bot",
+      "role": "Islamic Finance Product Sales",
+      "thread_id": "thread_LntY8lKoVeBAYazpYjP6uwCk",
+      "run_id": "run_uO6c5vBjLa1A1tqRn7eveEue",
+      "status": "queued"
+    },
+    {
+      "name": "Security Bot",
+      "role": "Security Monitoring (Revenue Protection)",
+      "thread_id": "thread_fuYGKbkAehg2Cm1bT8ccl4Tv",
+      "run_id": "run_YpXk1apt4HrNuj6VDryDlUXP",
+      "status": "queued"
+    },
+    {
+      "name": "Payment Processor Bot",
+      "role": "Payment Processing & Recovery",
+      "thread_id": "thread_4ICNAOkjjDq7FGSzV86tqGTB",
+      "run_id": "run_kfQH7qFe98lcCcZ7VM0AVWBR",
+      "status": "queued"
+    },
+    {
+      "name": "Revenue Analytics Bot",
+      "role": "Revenue Reporting & Forecasting",
+      "thread_id": "thread_CkV7bihuFxRrTOYSDXA6HGSd",
+      "run_id": "run_t4ydMSm2FDSt8bS1TewHYZri",
+      "status": "queued"
+    },
+    {
+      "name": "Subscription Manager Bot",
+      "role": "Subscription Lifecycle Management",
+      "thread_id": "thread_zOc04qsdRzoBqeP1hrmHDXal",
+      "run_id": "run_1LNgBxitjjTjUZvU4uFiRVui",
+      "status": "queued"
+    },
+    {
+      "name": "Logistics Bot",
+      "role": "Service Delivery Optimization",
+      "thread_id": "thread_TAySAzu3U5QvG6shVNbd5KZm",
+      "run_id": "run_UBC9WWNZp81maAhi87JyyLDa",
+      "status": "queued"
+    },
+    {
+      "name": "Core Services Expert",
+      "role": "Core Platform Sales",
+      "thread_id": "thread_bVUZ69su8aBLOkwzcnQ91Beu",
+      "run_id": "run_aiwPkoaQNF3r3zy0hRLCxhEw",
+      "status": "queued"
+    },
+    {
+      "name": "Blockchain Tools Expert",
+      "role": "Blockchain Tool Sales",
+      "thread_id": "thread_fuHxW2fubMJOWN4X5qzm6qo9",
+      "run_id": "run_QjtOs6BXmbFugdyHyxF6iAow",
+      "status": "queued"
+    },
+    {
+      "name": "AI/ML Tools Expert",
+      "role": "AI Tool Sales",
+      "thread_id": "thread_gPRabTXWYshTmW66phZ9dMVJ",
+      "run_id": "run_yoEcmifmLa1d8WdWS8kTMlnk",
+      "status": "queued"
+    },
+    {
+      "name": "Database Expert",
+      "role": "Database Service Sales",
+      "thread_id": "thread_qFaekYev2hvTfeqqSptQZHtE",
+      "run_id": "run_wt5Tn9vsPCrIHtWCOPsDMxHi",
+      "status": "queued"
+    },
+    {
+      "name": "Network Telecom Expert",
+      "role": "Network Service Sales",
+      "thread_id": "thread_UW0q9GJZ4x0GdqBxG6uxCwRc",
+      "run_id": "run_IR8zqLkpD5jlecZ1ZZmvIUxG",
+      "status": "queued"
+    },
+    {
+      "name": "Fiat Payment Expert",
+      "role": "Payment Integration Sales",
+      "thread_id": "thread_eXM0zkeIDEtBRrG1FeTnSBO0",
+      "run_id": "run_LL11fGAEF8at5mEZrtH2WxIA",
+      "status": "queued"
+    },
+    {
+      "name": "DevOps Tools Expert",
+      "role": "DevOps Service Sales",
+      "thread_id": "thread_1NYb4jfM5KhycwjuYGPbMUPX",
+      "run_id": "run_z1RmFl76250sBkqfaFDkRiGD",
+      "status": "queued"
+    },
+    {
+      "name": "Data Science ML Expert",
+      "role": "Data Science Consulting",
+      "thread_id": "thread_tR5znBAkzz3uxZu6ByO3VngB",
+      "run_id": "run_Mvsth6TlziMBdvrtsdEI7z4J",
+      "status": "queued"
+    },
+    {
+      "name": "Payment Tools Expert",
+      "role": "Payment Tool Sales",
+      "thread_id": "thread_Lo31Gc9EJ7Fl0cHt4Cgif8yw",
+      "run_id": "run_7XCiAkjEjZFhwUoZIfXFm3dQ",
+      "status": "queued"
+    },
+    {
+      "name": "Security Tools Expert",
+      "role": "Security Tool Sales",
+      "thread_id": "thread_YqABXePeiRiBx2FNcGK48Fra",
+      "run_id": "run_5fgbGenhitDYUfn8bZyzYJJk",
+      "status": "queued"
+    },
+    {
+      "name": "System Tools Expert",
+      "role": "System Administration Sales",
+      "thread_id": "thread_0IAdzN1eBorNocsXQCbO2KGJ",
+      "run_id": "run_BjCKvVAVx9UKhn9fGeIw0d3s",
+      "status": "queued"
+    },
+    {
+      "name": "Web API Tools Expert",
+      "role": "API Tool Sales",
+      "thread_id": "thread_ZlpBBuPzEzF47coC2PyO10DW",
+      "run_id": "run_qC3WGdSEipV6qT02mAi9gFYm",
+      "status": "queued"
+    },
+    {
+      "name": "Customer Support AI Agent",
+      "role": "Support & Retention",
+      "thread_id": "thread_S7fSruKCWvVLKdUerrJQ0YdT",
+      "run_id": "run_GPkN91EEVJLTvsdfX535tt6u",
+      "status": "queued"
+    },
+    {
+      "name": "Marketing AI Agent",
+      "role": "Digital Marketing & Campaigns",
+      "thread_id": "thread_Q6pPvIk6tBDPfiRsilaqdaqu",
+      "run_id": "run_pTJoT7jX3KZFHllsgOLXQvMZ",
+      "status": "queued"
+    },
+    {
+      "name": "Sales AI Agent",
+      "role": "Sales Pipeline Management",
+      "thread_id": "thread_JIg5cm4aa6h4ojiN3NtZusaW",
+      "run_id": "run_FPcH9LFggQgJebc9EqtxTLeP",
+      "status": "queued"
+    },
+    {
+      "name": "IT Operations AI Agent",
+      "role": "IT Infrastructure Revenue",
+      "thread_id": "thread_Ae4sOR6LOj3i7OXZXCxOEx1f",
+      "run_id": "run_jTZPS002ilB2xsrWfljSMMHx",
+      "status": "queued"
+    },
+    {
+      "name": "Fraud Detection AI Agent",
+      "role": "Fraud Prevention (Revenue Protection)",
+      "thread_id": "thread_AAOWIwjXWtDDj2G4U6Qb4pY4",
+      "run_id": "run_nA7onGBKVC57rbktRLfuhwbN",
+      "status": "queued"
+    },
+    {
+      "name": "Optimization AI Agent",
+      "role": "Conversion Rate Optimization",
+      "thread_id": "thread_V8QjfxRoo7M6bnLy9luavvaj",
+      "run_id": "run_GSntZQdMkHh1lniztBfoehfq",
+      "status": "queued"
+    },
+    {
+      "name": "Partner Integration Agent",
+      "role": "Partnership Revenue",
+      "thread_id": "thread_uxFBJaGf0cifJEJ1OaNaHw1c",
+      "run_id": "run_mTWzlxqHS8I9RAt2rPNG6njd",
+      "status": "queued"
+    },
+    {
+      "name": "Ethereum Gas Toll Agent",
+      "role": "Ethereum Gas Revenue",
+      "thread_id": "thread_I2OqxITYnFkSVYE5kHtSV0oC",
+      "run_id": "run_2MCCqOfLdGRo7TCFZAEGk0hc",
+      "status": "queued"
+    },
+    {
+      "name": "BSC Gas Toll Agent",
+      "role": "BSC Gas Revenue",
+      "thread_id": "thread_f0pbk6BQEK5Vd0wUxLwu6HsY",
+      "run_id": "run_AKT0t3xpf3V34RfWsMlSyipK",
+      "status": "queued"
+    },
+    {
+      "name": "Polygon Gas Toll Agent",
+      "role": "Polygon Gas Revenue",
+      "thread_id": "thread_dhQ54CfidYcjKaqiOM0AItRL",
+      "run_id": "run_ARw93GH2T9HetVKNBiQQy3mC",
+      "status": "queued"
+    },
+    {
+      "name": "Arbitrum Gas Toll Agent",
+      "role": "Arbitrum Gas Revenue",
+      "thread_id": "thread_U0AUD4PQ1R2wDdBMF8xuqXBd",
+      "run_id": "run_8Vzi5MEAdomo4KWMaEui0ri4",
+      "status": "queued"
+    },
+    {
+      "name": "Solana Gas Toll Agent",
+      "role": "Solana Gas Revenue",
+      "thread_id": "thread_LJcuGnDBW12cQDnLhLG6JvgF",
+      "run_id": "run_cfGvFhizX7hViYVHQ47wkHzt",
+      "status": "queued"
+    },
+    {
+      "name": "Bridge Gas Toll Agent",
+      "role": "Cross-Chain Bridge Revenue",
+      "thread_id": "thread_nHvGAHVf4jKiwIh2B7TFJSC7",
+      "run_id": "run_mtjy0n11BFA9X0AGUCtNldAe",
+      "status": "queued"
+    },
+    {
+      "name": "NFT Gas Toll Agent",
+      "role": "NFT Transaction Revenue",
+      "thread_id": "thread_wCxlZ7pxT4qlxAJDEgYIBGUf",
+      "run_id": "run_fmx6cb5b4TpE3ul9xBqOV3L6",
+      "status": "queued"
+    },
+    {
+      "name": "Staking Gas Toll Agent",
+      "role": "Staking Revenue",
+      "thread_id": "thread_JkwEUlQHtiJvmZcBhxpPh2Wx",
+      "run_id": "run_IxSrHUxhsQmN2b4ZrmDz5su2",
+      "status": "queued"
+    },
+    {
+      "name": "Governance Gas Toll Agent",
+      "role": "Governance Fee Revenue",
+      "thread_id": "thread_qBpXHSudpc4ON5klSD1z1vkx",
+      "run_id": "run_P2IFp1DzEp5ielHyKUMWkK7T",
+      "status": "queued"
+    },
+    {
+      "name": "Dynamic Pricing Gas Agent",
+      "role": "Dynamic Toll Pricing",
+      "thread_id": "thread_Yiw336On6BoO826A4Fj3lCX3",
+      "run_id": "run_SHPSIgtGm1yQmcr9tvn3dcNU",
+      "status": "queued"
+    },
+    {
+      "name": "Revenue Optimization Gas Agent",
+      "role": "Cross-Chain Revenue Maximizer",
+      "thread_id": "thread_9TAwkDkAQnm9BkD3RCKCJnQV",
+      "run_id": "run_D61tBJukOlN4UQFIOCqpjCMn",
+      "status": "queued"
+    },
+    {
+      "name": "Fraud Detection Gas Agent",
+      "role": "Gas Toll Fraud Prevention",
+      "thread_id": "thread_XZVC40x0jO8bQ0gqhKZsx3ew",
+      "run_id": "run_swaumGyTYD1hC7VHdHCOsLPF",
+      "status": "queued"
+    },
+    {
+      "name": "API Error Manager Agent",
+      "role": "API Reliability Sales",
+      "thread_id": "thread_NyDvy8vyfAV3KReJwKeqTqiE",
+      "run_id": "run_FXuwWDz9AoDpD9pibTgcIaX4",
+      "status": "queued"
+    },
+    {
+      "name": "Subscription Manager Agent",
+      "role": "Subscription Revenue",
+      "thread_id": "thread_kWk38CH3GB1grBy6WlEAhO1g",
+      "run_id": "run_8P8nRRu7pI0YiixcH7e69fyb",
+      "status": "queued"
+    },
+    {
+      "name": "Logistics Agent",
+      "role": "Digital Logistics",
+      "thread_id": "thread_eZc3bCza6xNQXYjsnhlLQ7Ya",
+      "run_id": "run_uFJGNCmd33NyiMTOuIkH7Ay4",
+      "status": "queued"
+    }
+  ],
+  "revenue_split": {
+    "founder": "30%",
+    "ai_validators": "40%",
+    "hardware_hosts": "10%",
+    "ecosystem": "18%",
+    "zakat": "2%"
+  }
+}

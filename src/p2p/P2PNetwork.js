@@ -61,37 +61,52 @@ class P2PNetwork extends EventEmitter {
    * Start P2P server and connect to seed nodes
    */
   async start() {
-    return new Promise((resolve) => {
-      this.server = new WebSocket.Server({ port: this.port }, () => {
-        console.log(`  🌐 P2P Network listening on port ${this.port}`);
-        resolve();
+    const maxRetries = 10;
+    let retries = 0;
+    
+    const tryListen = () => {
+      return new Promise((resolve) => {
+        this.server = new WebSocket.Server({ port: this.port }, () => {
+          console.log(`  🌐 P2P Network listening on port ${this.port}`);
+          resolve();
+        });
+
+        this.server.on('connection', (ws, req) => {
+          const address = req.socket.remoteAddress;
+          console.log(`  🌐 Incoming peer connection from ${address}`);
+          this._handleConnection(ws, address, 'incoming');
+        });
+
+        this.server.on('error', (err) => {
+          if (err.code === 'EADDRINUSE') {
+            retries++;
+            if (retries >= maxRetries) {
+              console.log(`  🌐 P2P: exhausted ${maxRetries} port retries starting from original port`);
+              resolve(); // resolve anyway so startup continues
+              return;
+            }
+            const oldPort = this.port;
+            this.port++;
+            console.log(`  🌐 P2P port ${oldPort} in use, trying ${this.port}`);
+            try { this.server.close(); } catch (_) {}
+            tryListen().then(resolve);
+          } else {
+            console.error('  🌐 P2P server error:', err.message);
+            resolve(); // resolve so we don't hang
+          }
+        });
       });
+    };
 
-      this.server.on('connection', (ws, req) => {
-        const address = req.socket.remoteAddress;
-        console.log(`  🌐 Incoming peer connection from ${address}`);
-        this._handleConnection(ws, address, 'incoming');
-      });
+    await tryListen();
 
-      this.server.on('error', (err) => {
-        if (err.code === 'EADDRINUSE') {
-          console.log(`  🌐 P2P port ${this.port} in use, trying ${this.port + 1}`);
-          this.port++;
-          this.server.close();
-          this.start().then(resolve);
-        } else {
-          console.error('  🌐 P2P server error:', err.message);
-        }
-      });
+    // Connect to seed nodes
+    for (const seed of this.seedNodes) {
+      this.connectToPeer(seed);
+    }
 
-      // Connect to seed nodes
-      for (const seed of this.seedNodes) {
-        this.connectToPeer(seed);
-      }
-
-      // Start heartbeat
-      this.heartbeatInterval = setInterval(() => this._heartbeat(), 30000);
-    });
+    // Start heartbeat
+    this.heartbeatInterval = setInterval(() => this._heartbeat(), 30000);
   }
 
   /**

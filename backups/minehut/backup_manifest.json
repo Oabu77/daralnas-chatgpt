@@ -1,0 +1,52 @@
+{
+  "backup_timestamp": "2026-02-17T00:10:27.234181",
+  "backup_type": "full_ecosystem_auto",
+  "version": "2.0",
+  "founder_royalty_rate": 0.3,
+  "archives": {
+    "quranchain": {
+      "filename": "quranchain_20260217_001020.tar.gz",
+      "files": 389,
+      "size_bytes": 2285813,
+      "sha256": "eb731d04d86a50b7d1e041aadaae53c52a3b420d25852cb1462a5bb23f916faf"
+    },
+    "quranchain_os": {
+      "filename": "quranchain_os_20260217_001026.tar.gz",
+      "files": 90,
+      "size_bytes": 298963,
+      "sha256": "deffb54a5ca09c2b7f45cc58d52482834d30fba4d63cedc7c3066d9ffd09783e"
+    }
+  },
+  "upload_results": {
+    "QCMesh1": {
+      "status": "local_only",
+      "reason": "no_auth"
+    },
+    "QCMesh2": {
+      "status": "local_only",
+      "reason": "no_auth"
+    }
+  },
+  "servers": {
+    "QCMesh1": {
+      "id": "69900a476a79cd81c5a50307",
+      "region": "us-east",
+      "role": "primary"
+    },
+    "QCMesh2": {
+      "id": "69900a90712b794f6247495b",
+      "region": "eu-west",
+      "role": "secondary"
+    }
+  },
+  "ecosystem": {
+    "openai_assistants": 76,
+    "cloudflare_workers": 8,
+    "node_bots": 36,
+    "python_agents_backed_up": 389,
+    "domains": [
+      "darcloud.host",
+      "darcloud.net"
+    ]
+  }
+}

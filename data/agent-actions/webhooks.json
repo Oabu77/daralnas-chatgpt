@@ -1,0 +1,14 @@
+[
+  {
+    "webhookId": "949d572d-fc4d-4844-bdf3-7925c649d789",
+    "agentId": "43a42487-8cfc-4118-8978-1a9f64927017",
+    "url": "https://hooks.example.com/agent",
+    "events": [
+      "task.succeeded",
+      "task.failed",
+      "deployment.succeeded"
+    ],
+    "secretId": null,
+    "createdAt": "2026-02-16T23:59:29.935Z"
+  }
+]

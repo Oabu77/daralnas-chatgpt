@@ -1,0 +1,18 @@
+{
+  "headers": {
+    "/*.html": {
+      "Cache-Control": "public, max-age=300",
+      "X-Frame-Options": "DENY",
+      "X-Content-Type-Options": "nosniff"
+    },
+    "/*": {
+      "Access-Control-Allow-Origin": "*"
+    }
+  },
+  "redirects": {
+    "/api": "https://api.darcloud.host/api",
+    "/mcp": "https://mcp.darcloud.host/mcp",
+    "/explorer": "https://blockchain.darcloud.host/health",
+    "/fleet": "https://ai.darcloud.host/api/fleet"
+  }
+}

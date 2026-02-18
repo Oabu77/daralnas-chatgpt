@@ -1,8 +1,32 @@
 #!/usr/bin/env python3
 """
-Simplified Revenue Generation Script
-Simulates AI agent revenue generation for demonstration
+⚠️  DEPRECATED - DEMO ONLY — DO NOT USE IN PRODUCTION ⚠️
+
+This script simulates revenue for DEMONSTRATION purposes only.
+It does NOT create real Stripe customers or transactions.
+
+For REAL revenue generation, use:
+  - src/services/liveAgentFleet.js (creates real Stripe customers/invoices)
+  - src/services/liveInvoiceEngine.js (creates real Stripe invoices)
+  - organized/revenue/auto_revenue_payout.py (real blockchain payouts)
+
+This file generates FAKE data and should NEVER be run in production.
 """
+
+import sys
+import os
+
+# DEPRECATED: Exit immediately if not explicitly enabled
+if os.environ.get('ALLOW_SIMULATED_REVENUE') != 'true':
+    print("❌ ERROR: live_revenue_simulation.py is DEPRECATED")
+    print("   This script creates FAKE data, not real Stripe customers.")
+    print("")
+    print("   For REAL revenue generation, use:")
+    print("   • Node.js: src/services/liveAgentFleet.js")
+    print("   • Python:  organized/revenue/auto_revenue_payout.py")
+    print("")
+    print("   To force-run this demo script, set ALLOW_SIMULATED_REVENUE=true")
+    sys.exit(1)
 
 import time
 import random
@@ -12,7 +36,7 @@ class SimulatedRevenueEngine:
     def __init__(self):
         self.revenue_tracker = {
             'total_earnings': 0,
-            'monthly_target': 1400,
+            'monthly_target': 4000000.00,
             'transactions': [],
             'start_time': datetime.now(),
             'agents': [

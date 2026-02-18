@@ -1,0 +1,868 @@
+{
+  "updatedAt": "2026-02-17T04:05:38.935Z",
+  "validatorCount": 2,
+  "validators": [
+    {
+      "nodeId": "df1a9af5ad36aba8cb1ea52e2cbba8c0",
+      "collectedAt": "2026-02-17T04:02:41.233Z",
+      "name": "omar-GL75-Leopard-10SDK",
+      "ip": {
+        "primary": "192.168.1.98",
+        "all": [
+          {
+            "iface": "wlo1",
+            "address": "192.168.1.98",
+            "family": "IPv4",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "255.255.255.0",
+            "cidr": "192.168.1.98/24"
+          },
+          {
+            "iface": "wlo1",
+            "address": "2603:8001:3c06:6af7::1daa",
+            "family": "IPv6",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+            "cidr": "2603:8001:3c06:6af7::1daa/128"
+          },
+          {
+            "iface": "wlo1",
+            "address": "2603:8001:3c06:6af7:ab62:b997:b099:726b",
+            "family": "IPv6",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "2603:8001:3c06:6af7:ab62:b997:b099:726b/64"
+          },
+          {
+            "iface": "wlo1",
+            "address": "2603:8001:3c06:6af7:2516:9ccb:c53e:a43a",
+            "family": "IPv6",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "2603:8001:3c06:6af7:2516:9ccb:c53e:a43a/64"
+          },
+          {
+            "iface": "wlo1",
+            "address": "fe80::105b:8bed:4719:3059",
+            "family": "IPv6",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::105b:8bed:4719:3059/64"
+          },
+          {
+            "iface": "ogstun",
+            "address": "10.45.0.1",
+            "family": "IPv4",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "255.255.0.0",
+            "cidr": "10.45.0.1/16"
+          },
+          {
+            "iface": "ogstun",
+            "address": "2001:db8:cafe::1",
+            "family": "IPv6",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "ffff:ffff:ffff::",
+            "cidr": "2001:db8:cafe::1/48"
+          },
+          {
+            "iface": "ogstun",
+            "address": "fe80::7ef9:a0c5:f8a1:34f1",
+            "family": "IPv6",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::7ef9:a0c5:f8a1:34f1/64"
+          },
+          {
+            "iface": "docker0",
+            "address": "172.17.0.1",
+            "family": "IPv4",
+            "mac": "66:ca:d5:03:fb:3d",
+            "netmask": "255.255.0.0",
+            "cidr": "172.17.0.1/16"
+          },
+          {
+            "iface": "docker0",
+            "address": "fe80::64ca:d5ff:fe03:fb3d",
+            "family": "IPv6",
+            "mac": "66:ca:d5:03:fb:3d",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::64ca:d5ff:fe03:fb3d/64"
+          },
+          {
+            "iface": "CloudflareWARP",
+            "address": "172.16.0.2",
+            "family": "IPv4",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "255.255.255.255",
+            "cidr": "172.16.0.2/32"
+          },
+          {
+            "iface": "CloudflareWARP",
+            "address": "2606:4700:110:8301:5fc3:bd6f:cba2:363",
+            "family": "IPv6",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+            "cidr": "2606:4700:110:8301:5fc3:bd6f:cba2:363/128"
+          },
+          {
+            "iface": "CloudflareWARP",
+            "address": "fe80::9618:ebe1:cdfe:e306",
+            "family": "IPv6",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::9618:ebe1:cdfe:e306/64"
+          },
+          {
+            "iface": "vethc9387af",
+            "address": "fe80::6019:b3ff:fe15:8d49",
+            "family": "IPv6",
+            "mac": "62:19:b3:15:8d:49",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::6019:b3ff:fe15:8d49/64"
+          }
+        ],
+        "publicIP": "104.28.214.73"
+      },
+      "type": {
+        "platform": "linux",
+        "arch": "x64",
+        "chassis": "laptop",
+        "virtualization": "none\nbare-metal",
+        "model": "Linux",
+        "release": "5.15.0-170-generic"
+      },
+      "hardware": {
+        "cpu": {
+          "model": "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz",
+          "cores": 12,
+          "physicalCores": 6,
+          "speed": 4140,
+          "maxSpeed": 5000,
+          "architecture": "x64",
+          "flags": [
+            "fpu",
+            "vme",
+            "de",
+            "pse",
+            "tsc",
+            "msr",
+            "pae",
+            "mce",
+            "cx8",
+            "apic",
+            "sep",
+            "mtrr",
+            "pge",
+            "mca",
+            "cmov",
+            "pat",
+            "pse36",
+            "clflush",
+            "dts",
+            "acpi",
+            "mmx",
+            "fxsr",
+            "sse",
+            "sse2",
+            "ss",
+            "ht",
+            "tm",
+            "pbe",
+            "syscall",
+            "nx"
+          ],
+          "temperature": "96.0°C"
+        },
+        "gpu": {
+          "count": 1,
+          "devices": [
+            {
+              "vendor": "NVIDIA",
+              "name": "NVIDIA GeForce GTX 1660 Ti",
+              "memoryMB": 6144,
+              "freeMemoryMB": 5432,
+              "temperature": "60°C",
+              "driver": "535.288.01",
+              "utilization": "8%"
+            }
+          ]
+        },
+        "memory": {
+          "totalGB": 15.38,
+          "freeGB": 1.04,
+          "usedGB": 14.34,
+          "usagePercent": 93.2,
+          "slots": [],
+          "swapTotalGB": 8,
+          "swapUsedGB": 8
+        },
+        "disk": {
+          "partitions": [
+            {
+              "device": "/dev/nvme0n1p2",
+              "sizeGB": 468,
+              "usedGB": 364,
+              "availGB": 81,
+              "usePercent": "82%",
+              "mountPoint": "/"
+            },
+            {
+              "device": "/dev/nvme0n1p1",
+              "sizeGB": 1,
+              "usedGB": 1,
+              "availGB": 1,
+              "usePercent": "2%",
+              "mountPoint": "/boot/efi"
+            }
+          ],
+          "physicalDisks": [
+            {
+              "name": "sda",
+              "size": "1.8T",
+              "type": "HDD",
+              "transport": "1",
+              "model": "BUP"
+            },
+            {
+              "name": "nvme0n1",
+              "size": "476.9G",
+              "type": "HDD",
+              "transport": "0",
+              "model": "KINGSTON"
+            }
+          ]
+        },
+        "motherboard": {
+          "manufacturer": "Micro-Star International Co., Ltd.",
+          "product": "MS-17E7",
+          "version": "REV:1.0"
+        },
+        "bios": {
+          "vendor": "American Megatrends Inc.",
+          "version": "E17E7IMS.10C",
+          "date": "11/17/2020"
+        }
+      },
+      "network": [
+        {
+          "name": "lo",
+          "addresses": [
+            {
+              "address": "127.0.0.1",
+              "family": "IPv4",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "255.0.0.0",
+              "internal": true
+            },
+            {
+              "address": "::1",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+              "internal": true
+            }
+          ],
+          "type": "loopback",
+          "speed": "unknown",
+          "state": "unknown",
+          "driver": "unknown"
+        },
+        {
+          "name": "wlo1",
+          "addresses": [
+            {
+              "address": "192.168.1.98",
+              "family": "IPv4",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "255.255.255.0",
+              "internal": false
+            },
+            {
+              "address": "2603:8001:3c06:6af7::1daa",
+              "family": "IPv6",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+              "internal": false
+            },
+            {
+              "address": "2603:8001:3c06:6af7:ab62:b997:b099:726b",
+              "family": "IPv6",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            },
+            {
+              "address": "2603:8001:3c06:6af7:2516:9ccb:c53e:a43a",
+              "family": "IPv6",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            },
+            {
+              "address": "fe80::105b:8bed:4719:3059",
+              "family": "IPv6",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "wifi",
+          "speed": "unknown",
+          "state": "up",
+          "driver": "iwlwifi"
+        },
+        {
+          "name": "ogstun",
+          "addresses": [
+            {
+              "address": "10.45.0.1",
+              "family": "IPv4",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "255.255.0.0",
+              "internal": false
+            },
+            {
+              "address": "2001:db8:cafe::1",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff::",
+              "internal": false
+            },
+            {
+              "address": "fe80::7ef9:a0c5:f8a1:34f1",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "vpn",
+          "speed": "10 Mbps",
+          "state": "up",
+          "driver": "unknown"
+        },
+        {
+          "name": "docker0",
+          "addresses": [
+            {
+              "address": "172.17.0.1",
+              "family": "IPv4",
+              "mac": "66:ca:d5:03:fb:3d",
+              "netmask": "255.255.0.0",
+              "internal": false
+            },
+            {
+              "address": "fe80::64ca:d5ff:fe03:fb3d",
+              "family": "IPv6",
+              "mac": "66:ca:d5:03:fb:3d",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "container",
+          "speed": "10000 Mbps",
+          "state": "up",
+          "driver": "unknown"
+        },
+        {
+          "name": "CloudflareWARP",
+          "addresses": [
+            {
+              "address": "172.16.0.2",
+              "family": "IPv4",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "255.255.255.255",
+              "internal": false
+            },
+            {
+              "address": "2606:4700:110:8301:5fc3:bd6f:cba2:363",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+              "internal": false
+            },
+            {
+              "address": "fe80::9618:ebe1:cdfe:e306",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "other",
+          "speed": "10 Mbps",
+          "state": "unknown",
+          "driver": "unknown"
+        },
+        {
+          "name": "vethc9387af",
+          "addresses": [
+            {
+              "address": "fe80::6019:b3ff:fe15:8d49",
+              "family": "IPv6",
+              "mac": "62:19:b3:15:8d:49",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "container",
+          "speed": "10000 Mbps",
+          "state": "up",
+          "driver": "unknown"
+        }
+      ],
+      "os": {
+        "type": "Linux",
+        "platform": "linux",
+        "release": "5.15.0-170-generic",
+        "arch": "x64",
+        "hostname": "omar-GL75-Leopard-10SDK",
+        "distro": "Linux Mint 21.3",
+        "kernel": "5.15.0-170-generic"
+      },
+      "uptime": {
+        "seconds": 27210.37,
+        "human": "0d 7h 33m"
+      },
+      "performance": {
+        "loadAvg1m": 6.46,
+        "loadAvg5m": 5.47,
+        "loadAvg15m": 5.52,
+        "cpuUsagePercent": 26.9,
+        "processCount": 1039
+      }
+    },
+    {
+      "nodeId": "9369307e071740225dcdf1a69b25864b",
+      "collectedAt": "2026-02-17T04:02:42.351Z",
+      "name": "omar-GL75-Leopard-10SDK",
+      "ip": {
+        "primary": "192.168.1.98",
+        "all": [
+          {
+            "iface": "wlo1",
+            "address": "192.168.1.98",
+            "family": "IPv4",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "255.255.255.0",
+            "cidr": "192.168.1.98/24"
+          },
+          {
+            "iface": "wlo1",
+            "address": "2603:8001:3c06:6af7::1daa",
+            "family": "IPv6",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+            "cidr": "2603:8001:3c06:6af7::1daa/128"
+          },
+          {
+            "iface": "wlo1",
+            "address": "2603:8001:3c06:6af7:ab62:b997:b099:726b",
+            "family": "IPv6",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "2603:8001:3c06:6af7:ab62:b997:b099:726b/64"
+          },
+          {
+            "iface": "wlo1",
+            "address": "2603:8001:3c06:6af7:2516:9ccb:c53e:a43a",
+            "family": "IPv6",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "2603:8001:3c06:6af7:2516:9ccb:c53e:a43a/64"
+          },
+          {
+            "iface": "wlo1",
+            "address": "fe80::105b:8bed:4719:3059",
+            "family": "IPv6",
+            "mac": "c8:b2:9b:61:2f:24",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::105b:8bed:4719:3059/64"
+          },
+          {
+            "iface": "ogstun",
+            "address": "10.45.0.1",
+            "family": "IPv4",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "255.255.0.0",
+            "cidr": "10.45.0.1/16"
+          },
+          {
+            "iface": "ogstun",
+            "address": "2001:db8:cafe::1",
+            "family": "IPv6",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "ffff:ffff:ffff::",
+            "cidr": "2001:db8:cafe::1/48"
+          },
+          {
+            "iface": "ogstun",
+            "address": "fe80::7ef9:a0c5:f8a1:34f1",
+            "family": "IPv6",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::7ef9:a0c5:f8a1:34f1/64"
+          },
+          {
+            "iface": "docker0",
+            "address": "172.17.0.1",
+            "family": "IPv4",
+            "mac": "66:ca:d5:03:fb:3d",
+            "netmask": "255.255.0.0",
+            "cidr": "172.17.0.1/16"
+          },
+          {
+            "iface": "docker0",
+            "address": "fe80::64ca:d5ff:fe03:fb3d",
+            "family": "IPv6",
+            "mac": "66:ca:d5:03:fb:3d",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::64ca:d5ff:fe03:fb3d/64"
+          },
+          {
+            "iface": "CloudflareWARP",
+            "address": "172.16.0.2",
+            "family": "IPv4",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "255.255.255.255",
+            "cidr": "172.16.0.2/32"
+          },
+          {
+            "iface": "CloudflareWARP",
+            "address": "2606:4700:110:8301:5fc3:bd6f:cba2:363",
+            "family": "IPv6",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+            "cidr": "2606:4700:110:8301:5fc3:bd6f:cba2:363/128"
+          },
+          {
+            "iface": "CloudflareWARP",
+            "address": "fe80::9618:ebe1:cdfe:e306",
+            "family": "IPv6",
+            "mac": "00:00:00:00:00:00",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::9618:ebe1:cdfe:e306/64"
+          },
+          {
+            "iface": "vethc9387af",
+            "address": "fe80::6019:b3ff:fe15:8d49",
+            "family": "IPv6",
+            "mac": "62:19:b3:15:8d:49",
+            "netmask": "ffff:ffff:ffff:ffff::",
+            "cidr": "fe80::6019:b3ff:fe15:8d49/64"
+          }
+        ],
+        "publicIP": "104.28.214.73"
+      },
+      "type": {
+        "platform": "linux",
+        "arch": "x64",
+        "chassis": "laptop",
+        "virtualization": "none\nbare-metal",
+        "model": "Linux",
+        "release": "5.15.0-170-generic"
+      },
+      "hardware": {
+        "cpu": {
+          "model": "Intel(R) Core(TM) i7-10750H CPU @ 2.60GHz",
+          "cores": 12,
+          "physicalCores": 6,
+          "speed": 4153,
+          "maxSpeed": 5000,
+          "architecture": "x64",
+          "flags": [
+            "fpu",
+            "vme",
+            "de",
+            "pse",
+            "tsc",
+            "msr",
+            "pae",
+            "mce",
+            "cx8",
+            "apic",
+            "sep",
+            "mtrr",
+            "pge",
+            "mca",
+            "cmov",
+            "pat",
+            "pse36",
+            "clflush",
+            "dts",
+            "acpi",
+            "mmx",
+            "fxsr",
+            "sse",
+            "sse2",
+            "ss",
+            "ht",
+            "tm",
+            "pbe",
+            "syscall",
+            "nx"
+          ],
+          "temperature": "96.0°C"
+        },
+        "gpu": {
+          "count": 1,
+          "devices": [
+            {
+              "vendor": "NVIDIA",
+              "name": "NVIDIA GeForce GTX 1660 Ti",
+              "memoryMB": 6144,
+              "freeMemoryMB": 5430,
+              "temperature": "60°C",
+              "driver": "535.288.01",
+              "utilization": "0%"
+            }
+          ]
+        },
+        "memory": {
+          "totalGB": 15.38,
+          "freeGB": 1.02,
+          "usedGB": 14.36,
+          "usagePercent": 93.4,
+          "slots": [],
+          "swapTotalGB": 8,
+          "swapUsedGB": 8
+        },
+        "disk": {
+          "partitions": [
+            {
+              "device": "/dev/nvme0n1p2",
+              "sizeGB": 468,
+              "usedGB": 364,
+              "availGB": 81,
+              "usePercent": "82%",
+              "mountPoint": "/"
+            },
+            {
+              "device": "/dev/nvme0n1p1",
+              "sizeGB": 1,
+              "usedGB": 1,
+              "availGB": 1,
+              "usePercent": "2%",
+              "mountPoint": "/boot/efi"
+            }
+          ],
+          "physicalDisks": [
+            {
+              "name": "sda",
+              "size": "1.8T",
+              "type": "HDD",
+              "transport": "1",
+              "model": "BUP"
+            },
+            {
+              "name": "nvme0n1",
+              "size": "476.9G",
+              "type": "HDD",
+              "transport": "0",
+              "model": "KINGSTON"
+            }
+          ]
+        },
+        "motherboard": {
+          "manufacturer": "Micro-Star International Co., Ltd.",
+          "product": "MS-17E7",
+          "version": "REV:1.0"
+        },
+        "bios": {
+          "vendor": "American Megatrends Inc.",
+          "version": "E17E7IMS.10C",
+          "date": "11/17/2020"
+        }
+      },
+      "network": [
+        {
+          "name": "lo",
+          "addresses": [
+            {
+              "address": "127.0.0.1",
+              "family": "IPv4",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "255.0.0.0",
+              "internal": true
+            },
+            {
+              "address": "::1",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+              "internal": true
+            }
+          ],
+          "type": "loopback",
+          "speed": "unknown",
+          "state": "unknown",
+          "driver": "unknown"
+        },
+        {
+          "name": "wlo1",
+          "addresses": [
+            {
+              "address": "192.168.1.98",
+              "family": "IPv4",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "255.255.255.0",
+              "internal": false
+            },
+            {
+              "address": "2603:8001:3c06:6af7::1daa",
+              "family": "IPv6",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+              "internal": false
+            },
+            {
+              "address": "2603:8001:3c06:6af7:ab62:b997:b099:726b",
+              "family": "IPv6",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            },
+            {
+              "address": "2603:8001:3c06:6af7:2516:9ccb:c53e:a43a",
+              "family": "IPv6",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            },
+            {
+              "address": "fe80::105b:8bed:4719:3059",
+              "family": "IPv6",
+              "mac": "c8:b2:9b:61:2f:24",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "wifi",
+          "speed": "unknown",
+          "state": "up",
+          "driver": "iwlwifi"
+        },
+        {
+          "name": "ogstun",
+          "addresses": [
+            {
+              "address": "10.45.0.1",
+              "family": "IPv4",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "255.255.0.0",
+              "internal": false
+            },
+            {
+              "address": "2001:db8:cafe::1",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff::",
+              "internal": false
+            },
+            {
+              "address": "fe80::7ef9:a0c5:f8a1:34f1",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "vpn",
+          "speed": "10 Mbps",
+          "state": "up",
+          "driver": "unknown"
+        },
+        {
+          "name": "docker0",
+          "addresses": [
+            {
+              "address": "172.17.0.1",
+              "family": "IPv4",
+              "mac": "66:ca:d5:03:fb:3d",
+              "netmask": "255.255.0.0",
+              "internal": false
+            },
+            {
+              "address": "fe80::64ca:d5ff:fe03:fb3d",
+              "family": "IPv6",
+              "mac": "66:ca:d5:03:fb:3d",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "container",
+          "speed": "10000 Mbps",
+          "state": "up",
+          "driver": "unknown"
+        },
+        {
+          "name": "CloudflareWARP",
+          "addresses": [
+            {
+              "address": "172.16.0.2",
+              "family": "IPv4",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "255.255.255.255",
+              "internal": false
+            },
+            {
+              "address": "2606:4700:110:8301:5fc3:bd6f:cba2:363",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff",
+              "internal": false
+            },
+            {
+              "address": "fe80::9618:ebe1:cdfe:e306",
+              "family": "IPv6",
+              "mac": "00:00:00:00:00:00",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "other",
+          "speed": "10 Mbps",
+          "state": "unknown",
+          "driver": "unknown"
+        },
+        {
+          "name": "vethc9387af",
+          "addresses": [
+            {
+              "address": "fe80::6019:b3ff:fe15:8d49",
+              "family": "IPv6",
+              "mac": "62:19:b3:15:8d:49",
+              "netmask": "ffff:ffff:ffff:ffff::",
+              "internal": false
+            }
+          ],
+          "type": "container",
+          "speed": "10000 Mbps",
+          "state": "up",
+          "driver": "unknown"
+        }
+      ],
+      "os": {
+        "type": "Linux",
+        "platform": "linux",
+        "release": "5.15.0-170-generic",
+        "arch": "x64",
+        "hostname": "omar-GL75-Leopard-10SDK",
+        "distro": "Linux Mint 21.3",
+        "kernel": "5.15.0-170-generic"
+      },
+      "uptime": {
+        "seconds": 27210.98,
+        "human": "0d 7h 33m"
+      },
+      "performance": {
+        "loadAvg1m": 6.46,
+        "loadAvg5m": 5.47,
+        "loadAvg15m": 5.52,
+        "cpuUsagePercent": 26.9,
+        "processCount": 1036
+      }
+    }
+  ]
+}

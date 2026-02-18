@@ -71,16 +71,22 @@ jest.mock('../src/config/logger', () => ({
   warn: jest.fn(),
 }));
 
+// Mock User model
+jest.mock('../src/models/User', () => ({
+  findByIdAndUpdate: jest.fn().mockResolvedValue({}),
+  findOne: jest.fn().mockResolvedValue({
+    _id: 'user_test123',
+    save: jest.fn().mockResolvedValue({}),
+  }),
+  deleteMany: jest.fn().mockResolvedValue({}),
+}));
+
 describe('StripeService', () => {
   let mockStripe;
 
   beforeEach(() => {
     mockStripe = stripeService.stripe;
     jest.clearAllMocks();
-  });
-
-  afterAll(async () => {
-    await mongoose.connection.close();
   });
 
   describe('Customer Management', () => {
@@ -177,7 +183,7 @@ describe('StripeService', () => {
     });
 
     test('should cancel subscription', async () => {
-      const mockSubscription = { id: 'sub_test123', cancel_at_period_end: true };
+      const mockSubscription = { id: 'sub_test123', customer: 'cus_test123', cancel_at_period_end: true };
       mockStripe.subscriptions.update.mockResolvedValue(mockSubscription);
 
       const result = await stripeService.cancelSubscription('sub_test123');

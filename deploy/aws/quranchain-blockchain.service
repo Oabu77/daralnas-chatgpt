@@ -1,0 +1,30 @@
+[Unit]
+Description=QuranChain-OS Blockchain Server (Mainnet)
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/var/www/quranchain-os
+EnvironmentFile=/etc/quranchain/quranchain.env
+ExecStart=/usr/bin/node src/blockchain-server.js
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=quranchain-blockchain
+
+# Security
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+ReadWritePaths=/var/www/quranchain-os/logs
+
+# Resource limits
+MemoryLimit=4G
+CPUQuota=300%
+
+[Install]
+WantedBy=multi-user.target

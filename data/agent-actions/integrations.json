@@ -1,0 +1,16 @@
+[
+  {
+    "integrationId": "a6dc8079-84d0-4119-9ed8-a968718f6551",
+    "agentId": "43a42487-8cfc-4118-8978-1a9f64927017",
+    "type": "Stripe",
+    "displayName": "Stripe Live",
+    "auth": {
+      "method": "apiKeyRef",
+      "secretRef": {
+        "secretId": "test-ref"
+      }
+    },
+    "metadata": {},
+    "createdAt": "2026-02-16T23:59:29.852Z"
+  }
+]

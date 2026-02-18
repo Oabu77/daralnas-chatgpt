@@ -16,6 +16,7 @@ app = Flask(__name__)
 # Configuration - Load from environment
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET", "")
 FOUNDER_ROYALTY_PERCENT = Decimal(os.getenv("FOUNDER_ROYALTY_PERCENT", "0.30"))
 FOUNDER_WALLET = os.getenv("FOUNDER_WALLET", "0x4e90944C093f7727ff89a30AF96A556deB95cCB8")  # Kraken
 
@@ -121,16 +122,62 @@ def get_payment(payment_id):
 
 @app.route('/webhook', methods=['POST'])
 def stripe_webhook():
-    """Handle Stripe webhooks"""
+    """Handle Stripe webhooks - REQUIRES signature validation"""
     payload = request.data
     sig_header = request.headers.get('Stripe-Signature')
     
-    # Log webhook received
-    print(f"Webhook received at {datetime.utcnow().isoformat()}")
+    if not STRIPE_WEBHOOK_SECRET:
+        print("⚠️  STRIPE_WEBHOOK_SECRET not configured - webhook rejected")
+        return jsonify({"error": "Webhook secret not configured"}), 500
     
-    # In production, verify the signature
-    # For now, just acknowledge
-    return jsonify({"received": True})
+    if not sig_header:
+        print("❌ Webhook rejected: missing Stripe-Signature header")
+        return jsonify({"error": "Missing Stripe-Signature header"}), 400
+    
+    try:
+        import stripe
+        stripe.api_key = STRIPE_SECRET_KEY
+        
+        # Validate signature and construct event
+        event = stripe.Webhook.construct_event(payload, sig_header, STRIPE_WEBHOOK_SECRET)
+        
+        # Handle invoice.paid events
+        if event['type'] == 'invoice.paid':
+            invoice = event['data']['object']
+            print(f"✅ Invoice paid: {invoice['id']} (${invoice['amount_paid']/100:.2f})")
+            
+            # Extract metadata
+            metadata = invoice.get('metadata', {})
+            merchant_id = metadata.get('merchant_id', 'unknown')
+            
+            # Log payment completion
+            print(f"   Merchant: {merchant_id}")
+            print(f"   Customer: {invoice.get('customer', 'unknown')}")
+            
+            # In production, trigger:
+            # - CRM lead mark-won
+            # - Invoice Engine creation
+            # - Revenue ledger entry
+            # This is handled by blockchain-server.js webhook, not here
+        
+        elif event['type'] == 'charge.failed':
+            charge = event['data']['object']
+            print(f"❌ Charge failed: {charge['id']}")
+        
+        else:
+            print(f"⚠️  Unhandled event type: {event['type']}")
+        
+        # Success - Stripe expects 200 OK
+        return jsonify({"received": True, "event_id": event['id']})
+    
+    except ValueError as e:
+        # Invalid signature
+        print(f"❌ Invalid webhook signature: {str(e)}")
+        return jsonify({"error": "Invalid signature"}), 403
+    
+    except Exception as e:
+        print(f"❌ Webhook error: {str(e)}")
+        return jsonify({"error": str(e)}), 400
 
 @app.route('/config')
 def get_config():
@@ -152,6 +199,12 @@ if __name__ == '__main__':
     else:
         print("  ⚠️  Stripe API Key: NOT CONFIGURED")
         print("  → Set STRIPE_SECRET_KEY environment variable")
+    
+    if STRIPE_WEBHOOK_SECRET:
+        print("  ✅ Webhook Secret: Configured (signatures validated)")
+    else:
+        print("  ⚠️  Webhook Secret: NOT CONFIGURED (webhooks rejected)")
+        print("  → Set STRIPE_WEBHOOK_SECRET environment variable")
     
     print(f"  💰 Founder Royalty: {FOUNDER_ROYALTY_PERCENT * 100}%")
     print("  🚀 Starting on port 7200...")

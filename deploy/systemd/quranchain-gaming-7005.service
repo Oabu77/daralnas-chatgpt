@@ -1,0 +1,17 @@
+[Unit]
+Description=QuranChain Gaming Server Port 7005
+After=network.target quranchain-app.service
+
+[Service]
+Type=simple
+User=omar
+WorkingDirectory=/var/www/darcloud/quranchain-mesh
+ExecStart=/usr/bin/node /var/www/darcloud/quranchain-mesh/src/services/gamingServer.js --port=7005
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+Environment="NODE_ENV=production"
+
+[Install]
+WantedBy=multi-user.target

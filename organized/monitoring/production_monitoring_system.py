@@ -9,7 +9,7 @@ import time
 import requests
 import json
 import logging
-from blockchain_logging_handler import setup_blockchain_logging
+# from blockchain_logging_handler import setup_blockchain_logging  # FIXME: Module not found
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List

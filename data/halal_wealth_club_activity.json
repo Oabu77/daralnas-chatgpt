@@ -1,0 +1,29 @@
+[
+  {
+    "type": "member_registered",
+    "memberId": "HWC-MLQ4OXN1-842DB1",
+    "tier": "growth",
+    "country": "PK",
+    "region": "south_asia",
+    "referralCode": null,
+    "timestamp": "2026-02-17T04:54:01.550Z"
+  },
+  {
+    "type": "member_registered",
+    "memberId": "HWC-MLQ4OXND-8CA40B",
+    "tier": "growth",
+    "country": "SA",
+    "region": "middle_east",
+    "referralCode": null,
+    "timestamp": "2026-02-17T04:54:01.562Z"
+  },
+  {
+    "type": "member_registered",
+    "memberId": "HWC-MLQ4OXNW-819096",
+    "tier": "seed",
+    "country": "ID",
+    "region": "southeast_asia",
+    "referralCode": null,
+    "timestamp": "2026-02-17T04:54:01.580Z"
+  }
+]

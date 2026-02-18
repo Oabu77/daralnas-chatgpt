@@ -1,0 +1,86 @@
+{
+  "service": "dar_al_nas_realestate",
+  "deployed_at": "2026-02-17T06:54:54.416026+00:00",
+  "assistants": {
+    "Dar Al Nas Real Estate AI": {
+      "id": "asst_x0y2QCdoxJodRoclvpWGMoNG",
+      "model": "gpt-4o",
+      "tools": 16,
+      "key_type": "core"
+    },
+    "Real Estate Marketing Bot": {
+      "id": "asst_Qf3X9tGBxDY5FEj1ufVxajzc",
+      "model": "gpt-4o-mini",
+      "tools": 16,
+      "key_type": "mini"
+    },
+    "Real Estate Signup Bot": {
+      "id": "asst_KdGaC8AOLG2TVjmEejs9zIxa",
+      "model": "gpt-4o-mini",
+      "tools": 16,
+      "key_type": "mini"
+    },
+    "Real Estate Financing Bot": {
+      "id": "asst_qPhx11IVSZn8abSQZixmwRQX",
+      "model": "gpt-4o-mini",
+      "tools": 16,
+      "key_type": "mini"
+    },
+    "Deal Funding AI Agent": {
+      "id": "asst_YkLcbVokJKMaG6wpRCa3hbfT",
+      "model": "gpt-4o-mini",
+      "tools": 16,
+      "key_type": "mini"
+    }
+  },
+  "active_runs": [
+    {
+      "name": "Dar Al Nas Real Estate AI",
+      "assistant_id": "asst_x0y2QCdoxJodRoclvpWGMoNG",
+      "thread_id": "thread_MIWuwlwO2QySk8q2nt51lXfl",
+      "run_id": "run_u7r29MGDZFO1w4f9ggMfoPgy",
+      "status": "queued"
+    },
+    {
+      "name": "Real Estate Marketing Bot",
+      "assistant_id": "asst_Qf3X9tGBxDY5FEj1ufVxajzc",
+      "thread_id": "thread_vTr1rykrLhdi78i66xHhFJOL",
+      "run_id": "run_FCUQSluEtDB7y5ZJGueJCjTT",
+      "status": "queued"
+    },
+    {
+      "name": "Real Estate Signup Bot",
+      "assistant_id": "asst_KdGaC8AOLG2TVjmEejs9zIxa",
+      "thread_id": "thread_tRLfW7wAAjZuOkW0VyxSd4xi",
+      "run_id": "run_RrrTPNCsgENyxNek3ZPZZ9lZ",
+      "status": "queued"
+    },
+    {
+      "name": "Real Estate Financing Bot",
+      "assistant_id": "asst_qPhx11IVSZn8abSQZixmwRQX",
+      "thread_id": "thread_HJW250ZdKlhFDWDUSytjDp6b",
+      "run_id": "run_B8cQlZFtxI3HWpN8nr2vw9zS",
+      "status": "queued"
+    },
+    {
+      "name": "Deal Funding AI Agent",
+      "assistant_id": "asst_YkLcbVokJKMaG6wpRCa3hbfT",
+      "thread_id": "thread_fgqIPBsnHJ14p0PZ7d84ZxxN",
+      "run_id": "run_XdYxeXxbbJ8zGsuKA6KVjImk",
+      "status": "queued"
+    }
+  ],
+  "payment_links": {
+    "starter": "https://buy.stripe.com/28EfZgdjc53ldFX9eMcEw3F",
+    "standard": "https://buy.stripe.com/8x29AS0wqeDVatL8aIcEw3G",
+    "premium": "https://buy.stripe.com/7sYfZgengcvN1Xf3UscEw3H",
+    "commercial": "https://buy.stripe.com/7sY4gygvo3ZhcBTgHecEw3I"
+  },
+  "revenue_split": {
+    "founder": "30%",
+    "ai": "40%",
+    "hardware": "10%",
+    "ecosystem": "18%",
+    "zakat": "2%"
+  }
+}

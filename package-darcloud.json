@@ -1,0 +1,18 @@
+{
+  "name": "quranchain-darcloud-mesh",
+  "version": "1.0.0",
+  "description": "QuranChain FungiMesh Primary Server - DarCloud Hosted",
+  "main": "src/blockchain-server.js",
+  "scripts": {
+    "start": "NODE_ENV=production node src/blockchain-server.js",
+    "dev": "nodemon src/blockchain-server.js",
+    "test": "jest",
+    "health": "curl -s http://localhost:3001/health"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": ["quranchain", "fungimesh", "darcloud", "blockchain", "mesh"],
+  "author": "Omar Mohammad Abunadi™",
+  "license": "MIT"
+}

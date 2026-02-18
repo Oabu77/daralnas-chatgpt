@@ -1,0 +1,78 @@
+{
+  "assistants": {
+    "landing_page_orchestrator_ai": "asst_vm6arkW7u4HH7C2Bs7YHswCT",
+    "darcloud_brand_manager_bot": "asst_9Gl8W8Rl7OCRUzDmxvTt0wvc",
+    "landing_page_content_bot": "asst_GuTs8QS8S7CGkM8XQFrb6bNW",
+    "cf_worker_deploy_bot": "asst_CVK615L6Esrdc7Cy7AXiqJfR",
+    "analytics_&_seo_bot": "asst_rVITFUufbY0zbVbue6fYGXpg"
+  },
+  "workers": {
+    "darcloud-www": {
+      "domain": "darcloud.host",
+      "aliases": [
+        "www.darcloud.host"
+      ],
+      "brand": "DarCloud Platform",
+      "theme": "dark-space-cyan"
+    },
+    "darcloud-net": {
+      "domain": "darcloud.net",
+      "aliases": [
+        "www.darcloud.net"
+      ],
+      "brand": "DarCloud Corporate",
+      "theme": "white-navy-clean"
+    },
+    "darcloud-hwc": {
+      "domain": "halalwealthclub.darcloud.host",
+      "aliases": [
+        "hwc.darcloud.host"
+      ],
+      "brand": "Halal Wealth Club",
+      "theme": "dark-green-gold"
+    },
+    "darcloud-blockchain": {
+      "domain": "blockchain.darcloud.host",
+      "aliases": [
+        "chain.darcloud.host",
+        "explorer.darcloud.host"
+      ],
+      "brand": "QuranChain",
+      "theme": "dark-amber"
+    },
+    "darcloud-enterprise": {
+      "domain": "enterprise.darcloud.host",
+      "aliases": [],
+      "brand": "DarCloud Enterprise",
+      "theme": "navy-corporate"
+    },
+    "darcloud-realestate": {
+      "domain": "realestate.darcloud.host",
+      "aliases": [
+        "property.darcloud.host"
+      ],
+      "brand": "Dar Al Nas",
+      "theme": "dark-green-emerald"
+    },
+    "darcloud-mesh-status": {
+      "domain": "mesh.darcloud.host",
+      "aliases": [
+        "fungi.darcloud.host"
+      ],
+      "brand": "FungiMesh",
+      "theme": "purple-teal-bio"
+    },
+    "darcloud-ai-assistant": {
+      "domain": "ai.darcloud.host",
+      "aliases": [
+        "aiagents.darcloud.host"
+      ],
+      "brand": "AI Fleet",
+      "theme": "dark-electric-blue"
+    }
+  },
+  "deployed_at": "2026-02-17T07:25:54.225501+00:00",
+  "total_agents": 5,
+  "total_workers": 8,
+  "cf_account": "3bfc21f5baba642160ec706818e3a19f"
+}

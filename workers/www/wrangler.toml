@@ -1,0 +1,15 @@
+name = "darcloud-www"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+account_id = "3bfc21f5baba642160ec706818e3a19f"
+
+[vars]
+ENVIRONMENT = "production"
+
+[[routes]]
+pattern = "darcloud.host"
+zone_name = "darcloud.host"
+
+[[routes]]
+pattern = "www.darcloud.host"
+zone_name = "darcloud.host"

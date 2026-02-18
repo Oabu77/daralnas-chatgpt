@@ -113,31 +113,33 @@ app.get('*', (req, res, next) => {
 // Error handling middleware (must be last)
 app.use(errorHandler);
 
-// Handle unhandled promise rejections
-process.on('unhandledRejection', (err, promise) => {
-  winston.error('Unhandled Rejection:', err);
-  // Close server & exit process
-  server.close(() => {
-    process.exit(1);
-  });
-});
-
 // Handle uncaught exceptions
 process.on('uncaughtException', (err) => {
   winston.error('Uncaught Exception:', err);
   process.exit(1);
 });
 
-const server = app.listen(port, () => {
-  winston.info(`QuranChain-OS running on port ${port} in ${process.env.NODE_ENV} mode`);
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  winston.info('SIGTERM received, shutting down gracefully');
-  server.close(() => {
-    winston.info('Process terminated');
+// Only listen when run directly (not when imported by tests)
+if (require.main === module) {
+  const server = app.listen(port, () => {
+    winston.info(`QuranChain-OS running on port ${port} in ${process.env.NODE_ENV} mode`);
   });
-});
+
+  // Handle unhandled promise rejections
+  process.on('unhandledRejection', (err, promise) => {
+    winston.error('Unhandled Rejection:', err);
+    server.close(() => {
+      process.exit(1);
+    });
+  });
+
+  // Graceful shutdown
+  process.on('SIGTERM', () => {
+    winston.info('SIGTERM received, shutting down gracefully');
+    server.close(() => {
+      winston.info('Process terminated');
+    });
+  });
+}
 
 module.exports = app;

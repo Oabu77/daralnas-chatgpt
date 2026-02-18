@@ -3,11 +3,10 @@ kind: Service
 metadata:
   name: quranchain-service
 spec:
-  type: ClusterIP
+  type: LoadBalancer
   selector:
     app: quranchain
   ports:
   - port: 3000
     targetPort: 3000
     protocol: TCP
-  type: LoadBalancer

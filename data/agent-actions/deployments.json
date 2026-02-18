@@ -1,0 +1,14 @@
+[
+  {
+    "deploymentId": "a6ce04a2-7d30-4df8-afe0-61816befa2de",
+    "agentId": "43a42487-8cfc-4118-8978-1a9f64927017",
+    "title": "Deploy FungiMesh v2",
+    "target": "FungiMeshNetwork",
+    "integrationId": null,
+    "planOnly": true,
+    "desiredState": {},
+    "status": "queued",
+    "output": null,
+    "createdAt": "2026-02-16T23:59:29.957Z"
+  }
+]

@@ -1,0 +1,68 @@
+# QuranChain-OS AI Agent Scheduler
+# © QuranChain™ | Omar Mohammad Abunadi™
+# Updated: 2026-02-14
+#
+# This crontab schedules AI agents for:
+# - Lead generation (from real data sources)
+# - Sales outreach (to opted-in leads only)
+# - Follow-up campaigns
+# - Revenue optimization
+#
+# COMPLIANCE: All agents respect CAN-SPAM (opted_in=true only)
+
+# Environment
+SHELL=/bin/bash
+PATH=/usr/local/bin:/usr/bin:/bin
+API_BASE_URL=http://localhost:3000
+
+# Logs directory
+LOGDIR=/home/omar/Desktop/QuranChain-OS/logs/ai_agents
+
+# ═══════════════════════════════════════════════════════════
+# LEAD GENERATION - Every 2 hours
+# Fetches leads from website signups, abandoned checkouts, API trials
+# ═══════════════════════════════════════════════════════════
+0 */2 * * * cd /home/omar/Desktop/QuranChain-OS && /usr/bin/python3 organized/ai_agents/ai_daily_lead_generation.py >> $LOGDIR/lead_generation.log 2>&1
+
+# ═══════════════════════════════════════════════════════════
+# SALES OUTREACH - Every 4 hours during business hours (8am-8pm)
+# Sends personalized campaigns to new opted-in leads
+# Creates deals for high-score leads
+# ═══════════════════════════════════════════════════════════
+0 8,12,16,20 * * * cd /home/omar/Desktop/QuranChain-OS/organized/agents && /usr/bin/python3 sales_outreach_agent.py >> $LOGDIR/sales_outreach.log 2>&1
+
+# ═══════════════════════════════════════════════════════════
+# FOLLOW-UP CAMPAIGNS - Twice daily
+# Follows up with contacted leads who haven't responded
+# ═══════════════════════════════════════════════════════════
+0 10,15 * * * cd /home/omar/Desktop/QuranChain-OS/organized/agents && /usr/bin/python3 -c "from sales_outreach_agent import SalesOutreachAgent; SalesOutreachAgent().run_follow_up_cycle()" >> $LOGDIR/follow_ups.log 2>&1
+
+# ═══════════════════════════════════════════════════════════
+# LEAD SCORING UPDATE - Daily at 9am
+# Re-scores leads based on engagement and activity
+# ═══════════════════════════════════════════════════════════
+0 9 * * * cd /home/omar/Desktop/QuranChain-OS && /usr/bin/python3 organized/ai_agents/ai_lead_scoring_update.py >> $LOGDIR/lead_scoring.log 2>&1
+
+# ═══════════════════════════════════════════════════════════
+# REVENUE OPTIMIZATION - Daily at 5pm
+# Analyzes revenue and optimizes pricing/offerings
+# ═══════════════════════════════════════════════════════════
+0 17 * * * cd /home/omar/Desktop/QuranChain-OS && /usr/bin/python3 organized/ai_agents/ai_revenue_optimization.py >> $LOGDIR/revenue_optimization.log 2>&1
+
+# ═══════════════════════════════════════════════════════════
+# RESPONSE MONITOR - Every 30 minutes
+# Checks for customer responses and escalates
+# ═══════════════════════════════════════════════════════════
+*/30 * * * * cd /home/omar/Desktop/QuranChain-OS && /usr/bin/python3 organized/ai_agents/ai_response_monitor.py >> $LOGDIR/response_monitor.log 2>&1
+
+# ═══════════════════════════════════════════════════════════
+# CRM PIPELINE SUMMARY - Daily at 6pm
+# Generates daily pipeline and revenue summary
+# ═══════════════════════════════════════════════════════════
+0 18 * * * curl -s http://localhost:3000/api/crm/pipeline | jq . >> $LOGDIR/pipeline_daily.log 2>&1 && curl -s http://localhost:3000/api/crm/revenue?period=day | jq . >> $LOGDIR/revenue_daily.log 2>&1
+
+# ═══════════════════════════════════════════════════════════
+# CAMPAIGN REPORT - Weekly on Sunday at 8pm
+# Generates weekly email campaign performance report
+# ═══════════════════════════════════════════════════════════
+0 20 * * 0 curl -s http://localhost:3000/api/email/campaigns?limit=500 | jq . >> $LOGDIR/campaign_weekly.log 2>&1

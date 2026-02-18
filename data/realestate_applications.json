@@ -1,0 +1,193 @@
+[
+  {
+    "id": "app_c6c9d57adb1cdfc8",
+    "leadId": "ahmed@test.com",
+    "propertyId": "prop_3b4473a01180cf8d",
+    "applicant": {
+      "hwcMemberId": null,
+      "hwcTier": null
+    },
+    "property": {
+      "id": "prop_3b4473a01180cf8d",
+      "title": "Marina Heights 2BR",
+      "city": "Dubai",
+      "region": "UAE",
+      "price": 450000,
+      "type": "apartment",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "sqft": 1200,
+      "pricePerSqft": 375,
+      "marketAvgSqft": 420,
+      "roi": 9.5,
+      "rentalYield": 7.2,
+      "halalCertified": true,
+      "nearMosque": true,
+      "nearSchool": true,
+      "newConstruction": true,
+      "description": "Premium 2-bedroom in Dubai Marina with sea view. Islamic financing available.",
+      "dealScore": 100,
+      "status": "active",
+      "listedAt": "2026-02-17T06:14:48.921Z",
+      "views": 0,
+      "applications": 0,
+      "funded": false
+    },
+    "financing": {
+      "option": "murabaha_10yr",
+      "details": {
+        "term": 120,
+        "markup": 0.18,
+        "label": "10-Year Murabaha",
+        "description": "18% total markup, 120 monthly payments"
+      },
+      "downPaymentTier": "standard",
+      "downPaymentAmount": 15000
+    },
+    "status": "pending_downpayment",
+    "paymentLink": "https://buy.stripe.com/6oUfZgcf82Vd0TbcqYcEw3y",
+    "stripeSessionId": null,
+    "createdAt": "2026-02-17T06:24:16.204Z",
+    "updatedAt": "2026-02-17T06:24:16.204Z"
+  },
+  {
+    "id": "app_a15803b7328e4193",
+    "propertyId": "PROP-0002",
+    "applicant": {
+      "name": "Ahmed Ali",
+      "email": "ahmed@hwcmember.com",
+      "phone": "+13138885555",
+      "hwcMemberId": "HWC-00123",
+      "hwcTier": null
+    },
+    "property": null,
+    "financing": {
+      "option": "murabaha_30yr",
+      "details": {
+        "term": 360,
+        "markup": 0.18,
+        "label": "30-Year Murabaha (Home Loan)",
+        "description": "18% total markup, 360 monthly payments. First payment at closing."
+      },
+      "downPaymentTier": "standard",
+      "downPaymentAmount": 5000
+    },
+    "status": "pending_downpayment",
+    "paymentLink": "https://buy.stripe.com/6oU14mengbrJ6dvez6cEw3C",
+    "stripeSessionId": null,
+    "createdAt": "2026-02-17T06:47:58.570Z",
+    "updatedAt": "2026-02-17T06:47:58.570Z"
+  },
+  {
+    "id": "app_e57bd33d1947b588",
+    "propertyId": "PROP-0002",
+    "hwcMemberId": "HWC-00123",
+    "applicant": {
+      "name": "Ahmed Ali",
+      "email": "ahmed@hwcmember.com",
+      "phone": "+13138885555",
+      "hwcMemberId": "HWC-00123",
+      "hwcTier": "member"
+    },
+    "property": null,
+    "approval": {
+      "status": "AUTO_APPROVED",
+      "purchasePrice": 165000,
+      "downPayment": 5000,
+      "financedAmount": 160000,
+      "approvedAt": "2026-02-17T06:49:26.248Z",
+      "note": "$5,000 down — auto-approved for full purchase price"
+    },
+    "financing": {
+      "option": "murabaha_30yr",
+      "details": {
+        "term": 360,
+        "markup": 0.18,
+        "label": "30-Year Murabaha (Home Loan)",
+        "description": "18% total markup, 360 monthly payments. First payment at closing."
+      },
+      "term": "30 years",
+      "profitRate": 0.04,
+      "totalCost": 352000,
+      "closingDate": "2026-03-19T05:49:26.247Z",
+      "firstPaymentDate": "2026-03-19T05:49:26.247Z",
+      "firstPaymentNote": "First monthly payment due at closing"
+    },
+    "mortgage": {
+      "monthlyAmount": 978,
+      "totalPayments": 360,
+      "totalCost": 352000,
+      "paymentMethod": "Stripe auto-subscription",
+      "subscriptionStatus": "pending_downpayment"
+    },
+    "smartContract": {
+      "hash": "ec85fc2f4ec740dcf3e0ea28ba5bada9e1cc180da6dd33b0fb1a43a5c00fefd8",
+      "status": "created_awaiting_funding",
+      "escrow": true,
+      "fundingDeadline": "2026-03-19T05:49:26.247Z",
+      "autoCloseOnDeadline": true,
+      "terms": "$5000 escrow → 30yr murabaha_30yr → $978/mo"
+    },
+    "status": "auto_approved_pending_downpayment",
+    "paymentLink": "https://buy.stripe.com/8x29AS0wqeDVatL8aIcEw3G",
+    "stripeSessionId": null,
+    "createdAt": "2026-02-17T06:49:26.248Z",
+    "updatedAt": "2026-02-17T06:49:26.248Z"
+  },
+  {
+    "id": "app_628ce6b89a907ad0",
+    "propertyId": "PROP-0002",
+    "hwcMemberId": "HWC-00123",
+    "applicant": {
+      "name": "Ahmed Ali",
+      "email": "ahmed@hwcmember.com",
+      "phone": "+13138885555",
+      "hwcMemberId": "HWC-00123",
+      "hwcTier": "member"
+    },
+    "property": null,
+    "approval": {
+      "status": "AUTO_APPROVED",
+      "purchasePrice": 165000,
+      "downPayment": 5000,
+      "financedAmount": 160000,
+      "approvedAt": "2026-02-17T06:49:36.494Z",
+      "note": "$5,000 down — auto-approved for full purchase price"
+    },
+    "financing": {
+      "option": "murabaha_30yr",
+      "details": {
+        "term": 360,
+        "markup": 0.18,
+        "label": "30-Year Murabaha (Home Loan)",
+        "description": "18% total markup, 360 monthly payments. First payment at closing."
+      },
+      "term": "30 years",
+      "profitRate": 0.04,
+      "totalCost": 352000,
+      "closingDate": "2026-03-19T05:49:36.494Z",
+      "firstPaymentDate": "2026-03-19T05:49:36.494Z",
+      "firstPaymentNote": "First monthly payment due at closing"
+    },
+    "mortgage": {
+      "monthlyAmount": 978,
+      "totalPayments": 360,
+      "totalCost": 352000,
+      "paymentMethod": "Stripe auto-subscription",
+      "subscriptionStatus": "pending_downpayment"
+    },
+    "smartContract": {
+      "hash": "110c60f832d92ddeca79fa7e9b66b8357b2815fe96eafb787a22c94ae9983170",
+      "status": "created_awaiting_funding",
+      "escrow": true,
+      "fundingDeadline": "2026-03-19T05:49:36.494Z",
+      "autoCloseOnDeadline": true,
+      "terms": "$5000 escrow → 30yr murabaha_30yr → $978/mo"
+    },
+    "status": "auto_approved_pending_downpayment",
+    "paymentLink": "https://buy.stripe.com/8x29AS0wqeDVatL8aIcEw3G",
+    "stripeSessionId": null,
+    "createdAt": "2026-02-17T06:49:36.494Z",
+    "updatedAt": "2026-02-17T06:49:36.494Z"
+  }
+]

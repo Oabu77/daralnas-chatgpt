@@ -32,7 +32,7 @@ class CrossProjectBridge extends EventEmitter {
         };
         this.config = {
             // QuranChain-OS services (Node.js)
-            nodeBlockchainPort: parseInt(process.env.PORT || 3001),
+            nodeBlockchainPort: parseInt(process.env.BLOCKCHAIN_HTTP_PORT || process.env.BLOCKCHAIN_PORT || 3001),
             nodeMeshPort: 7001,
             nodeRevenuePort: 3000,
             // Project QuranChain services (Python/Go)
@@ -62,17 +62,20 @@ class CrossProjectBridge extends EventEmitter {
         // 1. Discover and catalog all Python services
         await this._catalogPythonServices();
 
-        // 2. Start critical Python services
-        await this._startPythonServices();
-
-        // 3. Bridge blockchain layers
-        await this._bridgeBlockchains();
-
-        // 4. Bridge FungiMesh networks
-        await this._bridgeMeshNetworks();
-
-        // 5. Link revenue streams
-        await this._linkRevenueStreams();
+        // 2-5: Non-blocking — fire-and-forget with error logging, retried in sync cycles
+        // CrossProjectBridge should NEVER block startup
+        this._startPythonServices().catch(err => {
+            console.log(`[CrossProjectBridge] Python services init (non-fatal): ${err.message}`);
+        });
+        this._bridgeBlockchains().catch(err => {
+            console.log(`[CrossProjectBridge] Blockchain bridge deferred (non-fatal): ${err.message}`);
+        });
+        this._bridgeMeshNetworks().catch(err => {
+            console.log(`[CrossProjectBridge] Mesh bridge deferred (non-fatal): ${err.message}`);
+        });
+        this._linkRevenueStreams().catch(err => {
+            console.log(`[CrossProjectBridge] Revenue link deferred (non-fatal): ${err.message}`);
+        });
 
         // 6. Start sync intervals
         this._startSyncCycles();
@@ -115,64 +118,90 @@ class CrossProjectBridge extends EventEmitter {
     async _startPythonServices() {
         // Start key Python services that need to run alongside Node.js
         const criticalServices = [
-            { category: 'blockchain', file: 'fungi_mesh_production.py', port: 5006, name: 'FungiMesh Production (Python)' },
+            // fungi_mesh_production.py disabled — uses 2.3GB RAM, Node.js FungiMesh handles mesh networking
+            // { category: 'blockchain', file: 'fungi_mesh_production.py', port: 5006, name: 'FungiMesh Production (Python)' },
             { category: 'fungi_mesh', file: 'mesh_orchestrator.py', port: 7500, name: 'Mesh Orchestrator' },
             { category: 'monitoring', file: 'production_monitoring_system.py', port: null, name: 'Production Monitor' },
             { category: 'revenue', file: 'stripe_payment_catalog.py', port: null, name: 'Stripe Catalog' }
         ];
 
+        // Fire-and-forget: start all services asynchronously without blocking
         for (const service of criticalServices) {
-            try {
-                const svc = this.services.get(service.category);
-                if (!svc || !svc.files.includes(service.file)) {
-                    console.log(`[CrossProjectBridge] Skipping ${service.name} - file not found`);
-                    continue;
-                }
-
-                // Check if port already in use
-                if (service.port) {
-                    const inUse = await this._isPortInUse(service.port);
-                    if (inUse) {
-                        console.log(`[CrossProjectBridge] ${service.name} already running on port ${service.port}`);
-                        this.stats.pythonServicesActive++;
-                        continue;
-                    }
-                }
-
-                const filePath = path.join(svc.dir, service.file);
-                const proc = spawn('python3', [filePath], {
-                    cwd: svc.dir,
-                    env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' },
-                    stdio: ['pipe', 'pipe', 'pipe'],
-                    detached: false
-                });
-
-                proc.stdout.on('data', (data) => {
-                    const msg = data.toString().trim();
-                    if (msg) console.log(`[Py:${service.name}] ${msg.substring(0, 200)}`);
-                });
-
-                proc.stderr.on('data', (data) => {
-                    const msg = data.toString().trim();
-                    if (msg && !msg.includes('DeprecationWarning')) {
-                        console.log(`[Py:${service.name}:err] ${msg.substring(0, 200)}`);
-                    }
-                });
-
-                proc.on('exit', (code) => {
-                    console.log(`[CrossProjectBridge] ${service.name} exited (code ${code})`);
-                    this.pythonProcesses.delete(service.name);
-                    this.stats.pythonServicesActive = Math.max(0, this.stats.pythonServicesActive - 1);
-                });
-
-                this.pythonProcesses.set(service.name, { proc, port: service.port, file: service.file });
-                this.stats.pythonServicesActive++;
-                console.log(`[CrossProjectBridge] Started ${service.name} (PID: ${proc.pid})`);
-
-            } catch (err) {
+            this._startSingleService(service).catch(err => {
                 console.log(`[CrossProjectBridge] Failed to start ${service.name}: ${err.message}`);
-                this.stats.errors.push({ service: service.name, error: err.message, time: new Date() });
+            });
+        }
+
+        return Promise.resolve(); // Return immediately
+    }
+
+    async _startSingleService(service) {
+        try {
+            const svc = this.services.get(service.category);
+            if (!svc || !svc.files.includes(service.file)) {
+                console.log(`[CrossProjectBridge] Skipping ${service.name} - file not found`);
+                return;
             }
+
+            // Check if port already in use (with timeout)
+            if (service.port) {
+                const inUse = await Promise.race([
+                    this._isPortInUse(service.port),
+                    new Promise(resolve => setTimeout(() => resolve(false), 1000))
+                ]);
+                if (inUse) {
+                    console.log(`[CrossProjectBridge] ${service.name} already running on port ${service.port}`);
+                    this.stats.pythonServicesActive++;
+                    return;
+                }
+            }
+
+            const filePath = path.join(svc.dir, service.file);
+            const proc = spawn('python3', [filePath], {
+                cwd: svc.dir,
+                env: { ...process.env, PYTHONDONTWRITEBYTECODE: '1' },
+                stdio: ['ignore', 'pipe', 'pipe'],
+                detached: true
+            });
+            proc.unref();
+
+            // Catch spawn-level errors (e.g. python3 not found, ENOENT)
+            proc.on('error', (err) => {
+                console.log(`[CrossProjectBridge] Spawn error for ${service.name}: ${err.message}`);
+                this.pythonProcesses.delete(service.name);
+                this.stats.pythonServicesActive = Math.max(0, this.stats.pythonServicesActive - 1);
+            });
+
+            proc.stdout.on('data', (data) => {
+                const msg = data.toString().trim();
+                if (msg) console.log(`[Py:${service.name}] ${msg.substring(0, 200)}`);
+            });
+
+            proc.stderr.on('data', (data) => {
+                const msg = data.toString().trim();
+                if (msg && !msg.includes('DeprecationWarning')) {
+                    console.log(`[Py:${service.name}:err] ${msg.substring(0, 200)}`);
+                }
+                // Catch Python-level import/module errors and stop waiting
+                if (msg.includes('ModuleNotFoundError') || msg.includes('ImportError') || msg.includes('SyntaxError')) {
+                    console.log(`[CrossProjectBridge] ${service.name} has fatal Python error — skipping`);
+                    try { proc.kill('SIGTERM'); } catch (_) {}
+                }
+            });
+
+            proc.on('exit', (code) => {
+                console.log(`[CrossProjectBridge] ${service.name} exited (code ${code})`);
+                this.pythonProcesses.delete(service.name);
+                this.stats.pythonServicesActive = Math.max(0, this.stats.pythonServicesActive - 1);
+            });
+
+            this.pythonProcesses.set(service.name, { proc, port: service.port, file: service.file });
+            this.stats.pythonServicesActive++;
+            console.log(`[CrossProjectBridge] Started ${service.name} (PID: ${proc.pid})`);
+
+        } catch (err) {
+            console.log(`[CrossProjectBridge] Failed to start ${service.name}: ${err.message}`);
+            this.stats.errors.push({ service: service.name, error: err.message, time: new Date() });
         }
     }
 
@@ -181,8 +210,11 @@ class CrossProjectBridge extends EventEmitter {
         
         // Bridge 1: Node.js PoW chain ↔ Cosmos SDK chain state sync
         try {
-            // Check if Cosmos SDK chain is accessible
-            const cosmosAlive = await this._httpGet(`http://localhost:${this.config.cosmosBlockchainPort}/cosmos/base/tendermint/v1beta1/blocks/latest`);
+            // Check if Cosmos SDK chain is accessible (3s timeout)
+            const cosmosAlive = await Promise.race([
+                this._httpGet(`http://localhost:${this.config.cosmosBlockchainPort}/cosmos/base/tendermint/v1beta1/blocks/latest`),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Cosmos bridge timeout')), 3000))
+            ]);
             if (cosmosAlive) {
                 console.log('[CrossProjectBridge] Cosmos SDK chain detected - bridging state');
                 this.stats.cosmosBlocksSynced++;
@@ -220,7 +252,10 @@ class CrossProjectBridge extends EventEmitter {
         
         // Bridge Node.js WebSocket mesh (port 7001) ↔ Python HTTP mesh (port 5006)
         try {
-            const pythonMeshAlive = await this._httpGet(`http://localhost:${this.config.pythonMeshPort}/status`);
+            const pythonMeshAlive = await Promise.race([
+                this._httpGet(`http://localhost:${this.config.pythonMeshPort}/status`),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Python mesh timeout')), 3000))
+            ]);
             if (pythonMeshAlive) {
                 console.log('[CrossProjectBridge] Python FungiMesh production detected');
                 this.stats.meshNodesBridged += 10; // Python mesh manages 340K+ simulated nodes
@@ -231,7 +266,10 @@ class CrossProjectBridge extends EventEmitter {
 
         // Bridge mesh orchestrator (port 7500)
         try {
-            const orchestratorAlive = await this._httpGet(`http://localhost:${this.config.meshOrchestratorPort}/status`);
+            const orchestratorAlive = await Promise.race([
+                this._httpGet(`http://localhost:${this.config.meshOrchestratorPort}/status`),
+                new Promise((_, reject) => setTimeout(() => reject(new Error('Orchestrator timeout')), 3000))
+            ]);
             if (orchestratorAlive) {
                 console.log('[CrossProjectBridge] Mesh Orchestrator detected');
                 this.stats.meshNodesBridged += 8; // Orchestrator manages 8 direct nodes
@@ -378,7 +416,7 @@ class CrossProjectBridge extends EventEmitter {
     }
 
     _isPortInUse(port) {
-        return new Promise((resolve) => {
+        const checkPromise = new Promise((resolve) => {
             const req = http.get(`http://localhost:${port}/`, (res) => {
                 resolve(true);
                 res.resume();
@@ -389,21 +427,33 @@ class CrossProjectBridge extends EventEmitter {
                 resolve(false);
             });
         });
+        // Absolute 2-second timeout via Promise.race to prevent DNS/socket hangs
+        return Promise.race([
+            checkPromise,
+            new Promise((resolve) => setTimeout(() => resolve(false), 2000))
+        ]);
     }
 
-    _httpGet(url) {
-        return new Promise((resolve, reject) => {
+    _httpGet(url, timeoutMs = 3000) {
+        const httpPromise = new Promise((resolve, reject) => {
             const req = http.get(url, (res) => {
                 let data = '';
                 res.on('data', (chunk) => data += chunk);
                 res.on('end', () => resolve(data));
             });
             req.on('error', reject);
-            req.setTimeout(3000, () => {
+            req.setTimeout(timeoutMs, () => {
                 req.destroy();
                 reject(new Error('Timeout'));
             });
         });
+        // Absolute timeout via Promise.race — prevents DNS/socket-level hangs
+        return Promise.race([
+            httpPromise,
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error(`_httpGet ${url} timed out after ${timeoutMs}ms`)), timeoutMs)
+            )
+        ]);
     }
 
     getStatus() {

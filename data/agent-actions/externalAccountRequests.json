@@ -1,0 +1,15 @@
+[
+  {
+    "requestId": "3369da7b-87a7-41e9-b4dc-5ebf31352f82",
+    "agentId": "43a42487-8cfc-4118-8978-1a9f64927017",
+    "provider": "Cloudflare",
+    "purpose": "DNS management for quranchain.com",
+    "method": "oauth",
+    "connectionId": null,
+    "requestedScopes": [],
+    "metadata": {},
+    "status": "awaiting_approval",
+    "accountRef": null,
+    "createdAt": "2026-02-16T23:59:29.977Z"
+  }
+]

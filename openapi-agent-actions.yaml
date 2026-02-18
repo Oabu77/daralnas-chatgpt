@@ -1,0 +1,1227 @@
+openapi: 3.1.0
+info:
+  title: QuranChain Omar Autonomous Agent Actions API
+  version: 1.3.0
+  description: >
+    Granular (single-action) endpoints for an autonomous agent persona ("QuranChain AI" + "Omar AI")
+    that can run tasks, create sub-agents, manage integrations, and manage secrets safely.
+
+    Safety model:
+    - No password harvesting or "creating credentials" by guessing/inventing logins.
+    - External account provisioning is only via approved API/OAuth flows and always requires approval.
+    - Secrets can be stored only in a vault; values are never returned.
+
+servers:
+  - url: https://api.fullagent.com/v1
+    description: Production
+  - url: http://localhost:6200/v1
+    description: Local Development
+
+tags:
+  - name: Agent
+  - name: Personas
+  - name: Specializations
+  - name: Autonomy
+  - name: SubAgents
+  - name: Tasks
+  - name: Approvals
+  - name: Integrations
+  - name: OAuth
+  - name: Secrets
+  - name: Webhooks
+  - name: Deployments
+  - name: ExternalAccounts
+
+paths:
+  /agents:
+    post:
+      operationId: createAgent
+      tags: [Agent]
+      summary: Create agent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateAgentRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Agent"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+  /agents/{agentId}:
+    get:
+      operationId: getAgent
+      tags: [Agent]
+      summary: Get agent
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Agent" }
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Error" }
+
+    patch:
+      operationId: updateAgent
+      tags: [Agent]
+      summary: Update agent (name/description/instructions)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UpdateAgentRequest" }
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Agent" }
+
+  /agents/{agentId}/personas:
+    put:
+      operationId: setPersonas
+      tags: [Personas]
+      summary: Set personas (QuranChain AI, Omar AI)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SetPersonasRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Agent" }
+
+  /agents/{agentId}/specializations:
+    put:
+      operationId: setSpecializations
+      tags: [Specializations]
+      summary: Set specializations (QuranChain, DarCloud, Fungi Mesh, Cloudflare, Stripe)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SetSpecializationsRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Agent" }
+
+  /agents/{agentId}/autonomy:
+    put:
+      operationId: setAutonomy
+      tags: [Autonomy]
+      summary: Set autonomy policy (approvals, limits)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SetAutonomyRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Agent" }
+
+  /agents/{agentId}/messages:
+    post:
+      operationId: sendMessage
+      tags: [Agent]
+      summary: Send message (non-task)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/SendMessageRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SendMessageResponse" }
+
+  /agents/{agentId}/subagents:
+    post:
+      operationId: createSubAgent
+      tags: [SubAgents]
+      summary: Create sub-agent
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateSubAgentRequest" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SubAgent" }
+
+    get:
+      operationId: listSubAgents
+      tags: [SubAgents]
+      summary: List sub-agents
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/SubAgent" }
+
+  /agents/{agentId}/subagents/{subAgentId}:
+    get:
+      operationId: getSubAgent
+      tags: [SubAgents]
+      summary: Get sub-agent
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/subAgentId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SubAgent" }
+
+    patch:
+      operationId: updateSubAgent
+      tags: [SubAgents]
+      summary: Update sub-agent
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/subAgentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/UpdateSubAgentRequest" }
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SubAgent" }
+
+    delete:
+      operationId: deleteSubAgent
+      tags: [SubAgents]
+      summary: Delete sub-agent
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/subAgentId"
+      responses:
+        "204":
+          description: Deleted
+
+  /agents/{agentId}/tasks:
+    post:
+      operationId: createTask
+      tags: [Tasks]
+      summary: Create autonomous task (goal)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateTaskRequest" }
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Task" }
+
+    get:
+      operationId: listTasks
+      tags: [Tasks]
+      summary: List tasks
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - name: status
+          in: query
+          required: false
+          schema: { $ref: "#/components/schemas/TaskStatus" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Task" }
+
+  /agents/{agentId}/tasks/{taskId}:
+    get:
+      operationId: getTask
+      tags: [Tasks]
+      summary: Get task
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/taskId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Task" }
+
+    post:
+      operationId: controlTask
+      tags: [Tasks]
+      summary: Control task (pause/resume/cancel)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/taskId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ControlTaskRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Task" }
+
+  /agents/{agentId}/tasks/{taskId}/steps:
+    get:
+      operationId: listTaskSteps
+      tags: [Tasks]
+      summary: List task steps
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/taskId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/TaskStep" }
+
+  /agents/{agentId}/tasks/{taskId}/approvals:
+    get:
+      operationId: getApprovals
+      tags: [Approvals]
+      summary: Get pending approvals for task
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/taskId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/ApprovalRequest" }
+
+  /agents/{agentId}/tasks/{taskId}/approvals/{approvalId}/approve:
+    post:
+      operationId: approveAction
+      tags: [Approvals]
+      summary: Approve a pending action
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/taskId"
+        - $ref: "#/components/parameters/approvalId"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ApprovalDecisionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Task" }
+
+  /agents/{agentId}/tasks/{taskId}/approvals/{approvalId}/reject:
+    post:
+      operationId: rejectAction
+      tags: [Approvals]
+      summary: Reject a pending action
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/taskId"
+        - $ref: "#/components/parameters/approvalId"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ApprovalDecisionRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Task" }
+
+  /agents/{agentId}/integrations:
+    post:
+      operationId: createIntegration
+      tags: [Integrations]
+      summary: Create integration (Cloudflare/Stripe/custom)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateIntegrationRequest" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Integration" }
+
+    get:
+      operationId: listIntegrations
+      tags: [Integrations]
+      summary: List integrations
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Integration" }
+
+  /agents/{agentId}/integrations/{integrationId}:
+    get:
+      operationId: getIntegration
+      tags: [Integrations]
+      summary: Get integration
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/integrationId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Integration" }
+
+    delete:
+      operationId: deleteIntegration
+      tags: [Integrations]
+      summary: Delete integration
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/integrationId"
+      responses:
+        "204":
+          description: Deleted
+
+  /agents/{agentId}/oauth/providers:
+    get:
+      operationId: listOauthProviders
+      tags: [OAuth]
+      summary: List OAuth providers
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/OAuthProvider" }
+
+  /agents/{agentId}/oauth/authorize:
+    post:
+      operationId: startOauth
+      tags: [OAuth]
+      summary: Start OAuth (returns authorization URL)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/StartOAuthRequest" }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/StartOAuthResponse" }
+
+  /agents/{agentId}/oauth/exchange:
+    post:
+      operationId: exchangeOauth
+      tags: [OAuth]
+      summary: Exchange OAuth code (returns connection reference)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ExchangeOAuthRequest" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/OAuthConnection" }
+
+  /agents/{agentId}/secrets:
+    post:
+      operationId: createSecret
+      tags: [Secrets]
+      summary: Store secret (returns secretRef; never returns value)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateSecretRequest" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/SecretRef" }
+
+    get:
+      operationId: listSecrets
+      tags: [Secrets]
+      summary: List secret references (metadata only)
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/SecretRef" }
+
+  /agents/{agentId}/secrets/{secretId}:
+    delete:
+      operationId: deleteSecret
+      tags: [Secrets]
+      summary: Delete secret reference
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+        - $ref: "#/components/parameters/secretId"
+      responses:
+        "204":
+          description: Deleted
+
+  /agents/{agentId}/deployments:
+    post:
+      operationId: createDeployment
+      tags: [Deployments]
+      summary: Create a deployment plan/run
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateDeploymentRequest" }
+      responses:
+        "202":
+          description: Accepted
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Deployment" }
+
+  /agents/{agentId}/external-accounts:
+    post:
+      operationId: requestExternalAccount
+      tags: [ExternalAccounts]
+      summary: Request external account provisioning
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/ExternalAccountProvisionRequest" }
+      responses:
+        "202":
+          description: Accepted (awaiting approval)
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ExternalAccountProvisionResult" }
+
+  /agents/{agentId}/webhooks:
+    post:
+      operationId: createWebhook
+      tags: [Webhooks]
+      summary: Create webhook
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/CreateWebhookRequest" }
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/Webhook" }
+
+    get:
+      operationId: listWebhooks
+      tags: [Webhooks]
+      summary: List webhooks
+      parameters:
+        - $ref: "#/components/parameters/agentId"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/Webhook" }
+
+components:
+  parameters:
+    agentId:
+      name: agentId
+      in: path
+      required: true
+      schema: { type: string }
+    subAgentId:
+      name: subAgentId
+      in: path
+      required: true
+      schema: { type: string }
+    taskId:
+      name: taskId
+      in: path
+      required: true
+      schema: { type: string }
+    approvalId:
+      name: approvalId
+      in: path
+      required: true
+      schema: { type: string }
+    integrationId:
+      name: integrationId
+      in: path
+      required: true
+      schema: { type: string }
+    secretId:
+      name: secretId
+      in: path
+      required: true
+      schema: { type: string }
+
+  schemas:
+    CreateAgentRequest:
+      type: object
+      additionalProperties: false
+      required: [name, instructions]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        instructions:
+          type: string
+          description: Include your "QuranChain AI + Omar AI" behavior here if you want it fixed at creation time.
+
+    UpdateAgentRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name: { type: string }
+        description: { type: string }
+        instructions: { type: string }
+
+    Agent:
+      type: object
+      additionalProperties: false
+      required: [agentId, name]
+      properties:
+        agentId: { type: string }
+        name: { type: string }
+        description: { type: string }
+        instructions: { type: string }
+        personas:
+          type: array
+          items: { $ref: "#/components/schemas/Persona" }
+        specializations:
+          type: array
+          items: { $ref: "#/components/schemas/Specialization" }
+        autonomy:
+          $ref: "#/components/schemas/AutonomyPolicy"
+
+    Persona:
+      type: object
+      additionalProperties: false
+      required: [name]
+      properties:
+        name:
+          type: string
+          enum: ["QuranChain AI", "Omar AI"]
+        style: { type: string }
+        purpose: { type: string }
+
+    SetPersonasRequest:
+      type: object
+      additionalProperties: false
+      required: [personas]
+      properties:
+        personas:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/Persona" }
+
+    Specialization:
+      type: string
+      enum: [QuranChain, DarCloud, FungiMeshNetwork, Cloudflare, Stripe]
+
+    SetSpecializationsRequest:
+      type: object
+      additionalProperties: false
+      required: [specializations]
+      properties:
+        specializations:
+          type: array
+          minItems: 1
+          items: { $ref: "#/components/schemas/Specialization" }
+
+    AutonomyPolicy:
+      type: object
+      additionalProperties: false
+      properties:
+        mode:
+          type: string
+          enum: [manual, assisted, autonomous]
+        maxStepsPerTask:
+          type: integer
+          minimum: 1
+          maximum: 500
+          default: 50
+        allowToolUse:
+          type: boolean
+          default: true
+        approvalsRequiredFor:
+          type: array
+          items:
+            type: string
+            enum:
+              - external_account_create
+              - credential_rotate
+              - stripe_money_movement
+              - destructive_infra_change
+              - dns_change
+          default: [external_account_create, credential_rotate, stripe_money_movement]
+      required: [mode]
+
+    SetAutonomyRequest:
+      type: object
+      additionalProperties: false
+      required: [autonomy]
+      properties:
+        autonomy: { $ref: "#/components/schemas/AutonomyPolicy" }
+
+    SendMessageRequest:
+      type: object
+      additionalProperties: false
+      required: [message]
+      properties:
+        message: { type: string }
+        persona:
+          type: string
+          enum: ["QuranChain AI", "Omar AI"]
+
+    SendMessageResponse:
+      type: object
+      additionalProperties: false
+      required: [response]
+      properties:
+        response: { type: string }
+        conversationId: { type: string }
+
+    CreateSubAgentRequest:
+      type: object
+      additionalProperties: false
+      required: [name, role]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        role:
+          type: string
+          description: e.g., "Cloudflare Deployments", "Stripe Billing", "Fungi Mesh Ops"
+        instructions: { type: string }
+        policy: { $ref: "#/components/schemas/SubAgentPolicy" }
+
+    UpdateSubAgentRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        name: { type: string }
+        description: { type: string }
+        role: { type: string }
+        instructions: { type: string }
+        policy: { $ref: "#/components/schemas/SubAgentPolicy" }
+
+    SubAgentPolicy:
+      type: object
+      additionalProperties: false
+      properties:
+        allowedIntegrations:
+          type: array
+          items:
+            type: string
+            enum: [Cloudflare, Stripe, Custom]
+        canCreateIntegrations:
+          type: boolean
+          default: false
+        canRequestExternalAccounts:
+          type: boolean
+          default: false
+        canStoreSecrets:
+          type: boolean
+          default: false
+        maxStepsPerTask:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 30
+
+    SubAgent:
+      type: object
+      additionalProperties: false
+      required: [subAgentId, parentAgentId, name, role]
+      properties:
+        subAgentId: { type: string }
+        parentAgentId: { type: string }
+        name: { type: string }
+        description: { type: string }
+        role: { type: string }
+        instructions: { type: string }
+        policy: { $ref: "#/components/schemas/SubAgentPolicy" }
+
+    CreateTaskRequest:
+      type: object
+      additionalProperties: false
+      required: [goal]
+      properties:
+        title: { type: string }
+        goal: { type: string }
+        delegateToSubAgentId: { type: string }
+        persona:
+          type: string
+          enum: ["QuranChain AI", "Omar AI"]
+        context:
+          type: object
+          additionalProperties: true
+        constraints:
+          type: object
+          additionalProperties: false
+          properties:
+            maxRuntimeSeconds:
+              type: integer
+              minimum: 1
+              maximum: 86400
+              default: 900
+            maxSteps:
+              type: integer
+              minimum: 1
+              maximum: 500
+              default: 50
+
+    TaskStatus:
+      type: string
+      enum: [queued, running, paused, awaiting_approval, succeeded, failed, canceled]
+
+    Task:
+      type: object
+      additionalProperties: false
+      required: [taskId, agentId, goal, status, createdAt]
+      properties:
+        taskId: { type: string }
+        agentId: { type: string }
+        subAgentId: { type: string }
+        title: { type: string }
+        goal: { type: string }
+        status: { $ref: "#/components/schemas/TaskStatus" }
+        createdAt: { type: string, format: date-time }
+        updatedAt: { type: string, format: date-time }
+        latestOutput: { type: string }
+        result:
+          type: object
+          additionalProperties: true
+        error: { type: string }
+
+    TaskStep:
+      type: object
+      additionalProperties: false
+      required: [stepId, taskId, index, type, status]
+      properties:
+        stepId: { type: string }
+        taskId: { type: string }
+        index: { type: integer, minimum: 0 }
+        type: { type: string }
+        status:
+          type: string
+          enum: [pending, running, succeeded, failed, skipped]
+        startedAt: { type: string, format: date-time }
+        endedAt: { type: string, format: date-time }
+        content: { type: string }
+        metadata:
+          type: object
+          additionalProperties: true
+
+    ControlTaskRequest:
+      type: object
+      additionalProperties: false
+      required: [action]
+      properties:
+        action:
+          type: string
+          enum: [pause, resume, cancel]
+
+    ApprovalRequest:
+      type: object
+      additionalProperties: false
+      required: [approvalId, category, summary]
+      properties:
+        approvalId: { type: string }
+        category:
+          type: string
+          enum:
+            - external_account_create
+            - credential_rotate
+            - stripe_money_movement
+            - destructive_infra_change
+            - dns_change
+        summary: { type: string }
+        details:
+          type: object
+          additionalProperties: true
+
+    ApprovalDecisionRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        notes: { type: string }
+
+    Integration:
+      type: object
+      additionalProperties: false
+      required: [integrationId, agentId, type, auth, createdAt]
+      properties:
+        integrationId: { type: string }
+        agentId: { type: string }
+        type:
+          type: string
+          enum: [Cloudflare, Stripe, Custom]
+        displayName: { type: string }
+        auth: { $ref: "#/components/schemas/IntegrationAuth" }
+        createdAt: { type: string, format: date-time }
+
+    CreateIntegrationRequest:
+      type: object
+      additionalProperties: false
+      required: [type, auth]
+      properties:
+        type:
+          type: string
+          enum: [Cloudflare, Stripe, Custom]
+        displayName: { type: string }
+        auth: { $ref: "#/components/schemas/IntegrationAuthInput" }
+        metadata:
+          type: object
+          additionalProperties: true
+
+    IntegrationAuth:
+      type: object
+      additionalProperties: false
+      required: [method]
+      properties:
+        method:
+          type: string
+          enum: [oauth, apiKeyRef, serviceAccountRef]
+        connectionId:
+          type: string
+          description: Present when method=oauth
+        secretRef:
+          $ref: "#/components/schemas/SecretRef"
+
+    IntegrationAuthInput:
+      type: object
+      additionalProperties: false
+      required: [method]
+      properties:
+        method:
+          type: string
+          enum: [oauth, apiKeyRef, serviceAccountRef]
+        connectionId:
+          type: string
+          description: Use when method=oauth
+        secretId:
+          type: string
+          description: Use when method=apiKeyRef or serviceAccountRef (references /secrets)
+
+    OAuthProvider:
+      type: object
+      additionalProperties: false
+      required: [providerId, name, scopes]
+      properties:
+        providerId:
+          type: string
+          enum: [cloudflare, stripe]
+        name: { type: string }
+        scopes:
+          type: array
+          items: { type: string }
+
+    StartOAuthRequest:
+      type: object
+      additionalProperties: false
+      required: [providerId, redirectUri]
+      properties:
+        providerId:
+          type: string
+          enum: [cloudflare, stripe]
+        redirectUri: { type: string, format: uri }
+        scopes:
+          type: array
+          items: { type: string }
+        state: { type: string }
+
+    StartOAuthResponse:
+      type: object
+      additionalProperties: false
+      required: [authorizationUrl]
+      properties:
+        authorizationUrl: { type: string, format: uri }
+
+    ExchangeOAuthRequest:
+      type: object
+      additionalProperties: false
+      required: [providerId, code, redirectUri]
+      properties:
+        providerId:
+          type: string
+          enum: [cloudflare, stripe]
+        code: { type: string }
+        redirectUri: { type: string, format: uri }
+
+    OAuthConnection:
+      type: object
+      additionalProperties: false
+      required: [connectionId, providerId, createdAt]
+      properties:
+        connectionId: { type: string }
+        providerId:
+          type: string
+          enum: [cloudflare, stripe]
+        createdAt: { type: string, format: date-time }
+
+    CreateSecretRequest:
+      type: object
+      additionalProperties: false
+      required: [name, value, type]
+      properties:
+        name: { type: string }
+        value:
+          type: string
+          description: Secret value to store. Never returned.
+        type:
+          type: string
+          enum: [apiKey, webhookSecret, privateKey, token]
+        rotateAfterDays:
+          type: integer
+          minimum: 1
+          maximum: 3650
+
+    SecretRef:
+      type: object
+      additionalProperties: false
+      required: [secretId, name, type]
+      properties:
+        secretId: { type: string }
+        name: { type: string }
+        type: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    CreateDeploymentRequest:
+      type: object
+      additionalProperties: false
+      required: [title, target]
+      properties:
+        title: { type: string }
+        target:
+          type: string
+          enum: [Cloudflare, Stripe, DarCloud, QuranChain, FungiMeshNetwork, Custom]
+        integrationId:
+          type: string
+          description: Optional integration to use
+        planOnly:
+          type: boolean
+          default: true
+        desiredState:
+          type: object
+          additionalProperties: true
+
+    Deployment:
+      type: object
+      additionalProperties: false
+      required: [deploymentId, agentId, title, target, status, createdAt]
+      properties:
+        deploymentId: { type: string }
+        agentId: { type: string }
+        title: { type: string }
+        target: { type: string }
+        status:
+          type: string
+          enum: [queued, running, awaiting_approval, succeeded, failed, canceled]
+        createdAt: { type: string, format: date-time }
+        output: { type: string }
+
+    ExternalAccountProvisionRequest:
+      type: object
+      additionalProperties: false
+      required: [provider, purpose]
+      properties:
+        provider:
+          type: string
+          description: External system name (e.g., Cloudflare, Stripe, GitHub, etc.)
+        purpose:
+          type: string
+          description: Why the account is needed
+        method:
+          type: string
+          enum: [oauth, apiProvisioning]
+          default: oauth
+        connectionId:
+          type: string
+          description: If method=oauth, reference an OAuth connection
+        requestedScopes:
+          type: array
+          items: { type: string }
+        metadata:
+          type: object
+          additionalProperties: true
+
+    ExternalAccountProvisionResult:
+      type: object
+      additionalProperties: false
+      required: [requestId, status]
+      properties:
+        requestId: { type: string }
+        status:
+          type: string
+          enum: [awaiting_approval, running, succeeded, failed]
+        approval:
+          $ref: "#/components/schemas/ApprovalRequest"
+        accountRef:
+          type: string
+          description: Reference to provisioned account (no passwords)
+
+    CreateWebhookRequest:
+      type: object
+      additionalProperties: false
+      required: [url, events]
+      properties:
+        url: { type: string, format: uri }
+        secretId:
+          type: string
+          description: Optional secretId for signing webhook payloads
+        events:
+          type: array
+          items:
+            type: string
+            enum:
+              - task.queued
+              - task.started
+              - task.step
+              - task.awaiting_approval
+              - task.succeeded
+              - task.failed
+              - task.canceled
+              - integration.created
+              - integration.deleted
+              - subagent.created
+              - subagent.deleted
+              - secret.created
+              - secret.deleted
+              - deployment.queued
+              - deployment.awaiting_approval
+              - deployment.succeeded
+              - deployment.failed
+              - externalAccount.awaiting_approval
+              - externalAccount.succeeded
+              - externalAccount.failed
+
+    Webhook:
+      type: object
+      additionalProperties: false
+      required: [webhookId, agentId, url, events, createdAt]
+      properties:
+        webhookId: { type: string }
+        agentId: { type: string }
+        url: { type: string, format: uri }
+        events:
+          type: array
+          items: { type: string }
+        createdAt: { type: string, format: date-time }
+
+    Error:
+      type: object
+      additionalProperties: false
+      required: [error, message]
+      properties:
+        error: { type: string }
+        message: { type: string }
+        details:
+          type: object
+          additionalProperties: true

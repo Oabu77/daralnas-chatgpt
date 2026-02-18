@@ -1,0 +1,30 @@
+[Unit]
+Description=QuranChain-OS Revenue Server (API)
+After=network.target
+Wants=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+WorkingDirectory=/var/www/quranchain-os
+EnvironmentFile=/etc/quranchain/quranchain.env
+ExecStart=/usr/bin/node revenue-server.js
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=quranchain-revenue
+
+# Security
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+ReadWritePaths=/var/www/quranchain-os/logs
+
+# Resource limits
+MemoryLimit=2G
+CPUQuota=200%
+
+[Install]
+WantedBy=multi-user.target

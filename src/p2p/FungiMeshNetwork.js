@@ -34,6 +34,9 @@ const net = require('net');
 const dgram = require('dgram');
 const { execSync } = require('child_process');
 const EventEmitter = require('events');
+const { BLOCKCHAIN_SEED_NODES, NETWORK_CONFIG, GAMING_SERVER_ENDPOINTS, HEALING_CONFIG } = require('../config/meshConfig');
+const { ValidatorHardwareCollector } = require('../services/validatorHardwareCollector');
+const { MeshExpander } = require('../services/meshExpander');
 
 const PEERS_FILE = path.join(__dirname, '..', '..', 'data', 'mesh-peers.json');
 const DISCOVERY_PORT = 7777; // UDP broadcast for LAN discovery
@@ -47,8 +50,26 @@ const MSG_TYPES = {
   RESOURCE_RESPONSE: 'RESOURCE_RESPONSE',
   LOAD_BALANCE: 'LOAD_BALANCE',
   NETWORK_SCALE: 'NETWORK_SCALE',
+  PEER_REQUEST: 'PEER_REQUEST',
+  PEER_RECRUITMENT: 'PEER_RECRUITMENT',
+  GROWTH_ANNOUNCE: 'GROWTH_ANNOUNCE',
   PING: 'PING',
   PONG: 'PONG',
+  // Auto-healing message types
+  NETWORK_HEAL: 'NETWORK_HEAL',
+  HEALING_REQUEST: 'HEALING_REQUEST',
+  HEALING_RESPONSE: 'HEALING_RESPONSE',
+  BACKUP_NODE_ACTIVATE: 'BACKUP_NODE_ACTIVATE',
+  FAILOVER_INITIATE: 'FAILOVER_INITIATE',
+  // Gaming server integration
+  GAMING_SERVER_CONNECT: 'GAMING_SERVER_CONNECT',
+  GAMING_SERVER_HEARTBEAT: 'GAMING_SERVER_HEARTBEAT',
+  GAMING_SERVER_BACKUP: 'GAMING_SERVER_BACKUP',
+  // Validator node + hardware collection
+  VALIDATOR_HANDSHAKE: 'VALIDATOR_HANDSHAKE',
+  HARDWARE_REQUEST: 'HARDWARE_REQUEST',
+  HARDWARE_REPORT: 'HARDWARE_REPORT',
+  VALIDATOR_HEARTBEAT: 'VALIDATOR_HEARTBEAT',
 };
 
 class FungiMeshNetwork extends EventEmitter {
@@ -90,6 +111,37 @@ class FungiMeshNetwork extends EventEmitter {
     this.minPeers = options.minPeers || 5;
     this.scaleThreshold = options.scaleThreshold || 0.8; // Scale when 80% capacity
 
+    // Growth acceleration
+    this.growthEnabled = options.growthEnabled || false;
+    this.recruitmentInterval = null;
+    this.growthAnnounceInterval = null;
+    this.peerRequests = new Map(); // Track peer requests
+
+    // Auto-healing system
+    this.healingEnabled = options.healingEnabled || HEALING_CONFIG.enabled;
+    this.healingInterval = null;
+    this.backupNodes = new Map(); // backupNodeId → backup info
+    this.networkHealth = 100; // Overall network health percentage
+    this.failoverActive = false;
+    this.healingHistory = []; // Track healing events
+
+    // Gaming server integration
+    this.gamingServers = new Map(); // serverId → server info
+    this.gamingServerEndpoints = options.gamingServerEndpoints || GAMING_SERVER_ENDPOINTS;
+    this.gamingServerConnections = new Map(); // serverId → WebSocket connection
+    this.gamingServerHeartbeat = null;
+    this.growthStats = {
+      peersRecruited: 0,
+      networksExpanded: 0,
+      growthEvents: 0,
+    };
+
+    // Validator hardware registry
+    this.validatorRegistry = new Map(); // nodeId → hardware snapshot
+    this._hwCollector = new ValidatorHardwareCollector();
+    this._hwCollector.nodeId = this.nodeId;
+    this.localHardware = this._hwCollector.collect();
+
     // Security
     this.encryptionKey = crypto.randomBytes(32);
     this.authTokens = new Map();
@@ -102,6 +154,13 @@ class FungiMeshNetwork extends EventEmitter {
     this.bluetoothScanInterval = null;
     this.previousPeers = this._loadPreviousPeers(); // persisted peers
     this.discoveredHosts = new Set();
+
+    // Aggressive external device expander
+    this.meshExpander = new MeshExpander({
+      nodeId: this.nodeId,
+      meshPort: this.port,
+      maxDevices: options.maxDevices || 50,
+    });
 
     // Radio interface inventory
     this.radioInterfaces = {
@@ -142,55 +201,458 @@ class FungiMeshNetwork extends EventEmitter {
    * Start FungiMesh network
    */
   async start() {
-    return new Promise((resolve) => {
-      this.server = new WebSocket.Server({ port: this.port }, () => {
-        console.log(`🍄 FungiMesh Network active on port ${this.port}`);
-        console.log(`   Node ID: ${this.nodeId.substring(0, 8)}...`);
-        console.log(`   CPU Cores: ${this.capabilities.cpuCores}`);
-        console.log(`   Memory: ${(this.capabilities.totalMemory / 1024 / 1024 / 1024).toFixed(1)}GB`);
-        console.log(`   GPU: ${this.capabilities.hasGPU ? 'Available' : 'Not detected'}`);
-        resolve();
+    const maxRetries = 10;
+    let retries = 0;
+
+    const tryListen = () => {
+      return new Promise((resolve) => {
+        this.server = new WebSocket.Server({ port: this.port }, () => {
+          console.log(`🍄 FungiMesh Network active on port ${this.port}`);
+          console.log(`   Node ID: ${this.nodeId.substring(0, 8)}...`);
+          console.log(`   CPU Cores: ${this.capabilities.cpuCores}`);
+          console.log(`   Memory: ${(this.capabilities.totalMemory / 1024 / 1024 / 1024).toFixed(1)}GB`);
+          console.log(`   GPU: ${this.capabilities.hasGPU ? 'Available' : 'Not detected'}`);
+          resolve();
+        });
+
+        this.server.on('connection', (ws, req) => {
+          const address = req.socket.remoteAddress;
+          console.log(`🍄 Incoming mesh connection from ${address}`);
+          // AUTO-ACCEPT: never refuse any connection, no auth gate
+          this._handleConnection(ws, address, 'incoming');
+        });
+
+        // Disable connection limits for auto-accept mode
+        this.server.on('headers', (headers) => {
+          headers.push('X-FungiMesh-AutoAccept: true');
+          headers.push('X-No-Refuse: true');
+        });
+
+        this.server.on('error', (err) => {
+          if (err.code === 'EADDRINUSE') {
+            retries++;
+            if (retries >= maxRetries) {
+              console.log(`🍄 Mesh: exhausted ${maxRetries} port retries`);
+              resolve();
+              return;
+            }
+            const oldPort = this.port;
+            this.port++;
+            console.log(`🍄 Mesh port ${oldPort} in use, trying ${this.port}`);
+            try { this.server.close(); } catch (_) {}
+            tryListen().then(resolve);
+          } else {
+            console.error('🍄 Mesh server error:', err.message);
+            resolve(); // resolve so we don't hang
+          }
+        });
+      });
+    };
+
+    await tryListen();
+
+    // Connect to seed nodes
+    for (const seed of this.seedNodes) {
+      this.connectToPeer(seed);
+    }
+
+    // Reconnect to previously known peers
+    this._reconnectPreviousPeers();
+
+    // Detect all radio interfaces
+    this._inventoryRadioInterfaces();
+
+    // Start auto-discovery systems
+    this._startLANDiscovery();
+    this._startNetworkScanner();
+    this._startCellularScanner();
+    this._startBluetoothScanner();
+
+    // Start heartbeat
+    this.heartbeatInterval = setInterval(() => this._heartbeat(), 30000);
+
+    // Start auto-scaling
+    this.scalingInterval = setInterval(() => this._autoScale(), 60000);
+
+    // Start growth acceleration if enabled
+    if (this.growthEnabled) {
+      this._startGrowthAcceleration();
+    }
+
+    // Start auto-healing system
+    if (this.healingEnabled) {
+      this._startAutoHealing();
+    }
+
+    // Connect to gaming servers for backup and healing
+    this._connectToGamingServers();
+
+    // Store our own hardware in the validator registry
+    this.validatorRegistry.set(this.nodeId, this.localHardware);
+    this._hwCollector.save(this.localHardware);
+
+    // Start MeshExpander (disabled to conserve memory — was scanning 500+ devices)
+    // this.meshExpander.attach(this);
+    // this.meshExpander.start().then(() => {
+    //   console.log('🕸️  MeshExpander started — scanning all networks for external devices');
+    // }).catch(err => {
+    //   console.error('🕸️  MeshExpander start error:', err.message);
+    // });
+    console.log('🕸️  MeshExpander skipped — conserving memory for revenue operations');
+  }
+
+  /**
+   * Start auto-healing system
+   */
+  _startAutoHealing() {
+    console.log('🩹 Auto-healing system enabled');
+
+    // Monitor network health every 30 seconds
+    this.healingInterval = setInterval(() => this._monitorNetworkHealth(), 30000);
+
+    // Initialize backup nodes
+    this._initializeBackupNodes();
+  }
+
+  /**
+   * Connect to gaming servers for network healing and backup
+   */
+  _connectToGamingServers() {
+    console.log('🎮 Connecting to gaming servers for mesh healing...');
+
+    for (const endpoint of this.gamingServerEndpoints) {
+      this._connectToGamingServer(endpoint);
+    }
+
+    // Start gaming server heartbeat
+    this.gamingServerHeartbeat = setInterval(() => this._gamingServerHeartbeat(), 45000);
+  }
+
+  /**
+   * Connect to a specific gaming server
+   */
+  _connectToGamingServer(endpoint) {
+    try {
+      const serverId = crypto.createHash('md5').update(endpoint).digest('hex').substring(0, 8);
+      const ws = new WebSocket(endpoint);
+
+      ws.on('open', () => {
+        console.log(`🎮 Connected to gaming server: ${endpoint}`);
+        this.gamingServerConnections.set(serverId, ws);
+
+        // Register as mesh healing node
+        this._send(ws, {
+          type: MSG_TYPES.GAMING_SERVER_CONNECT,
+          data: {
+            nodeId: this.nodeId,
+            capabilities: this.capabilities,
+            purpose: 'mesh_healing_backup'
+          }
+        });
       });
 
-      this.server.on('connection', (ws, req) => {
-        const address = req.socket.remoteAddress;
-        console.log(`🍄 Incoming mesh connection from ${address}`);
-        this._handleConnection(ws, address, 'incoming');
-      });
-
-      this.server.on('error', (err) => {
-        if (err.code === 'EADDRINUSE') {
-          console.log(`🍄 Mesh port ${this.port} in use, trying ${this.port + 1}`);
-          this.port++;
-          this.server.close();
-          this.start().then(resolve);
-        } else {
-          console.error('🍄 Mesh server error:', err.message);
+      ws.on('message', (data) => {
+        try {
+          const message = JSON.parse(data.toString());
+          this._handleGamingServerMessage(serverId, message);
+        } catch (err) {
+          console.error('🎮 Invalid gaming server message:', err.message);
         }
       });
 
-      // Connect to seed nodes
-      for (const seed of this.seedNodes) {
-        this.connectToPeer(seed);
+      ws.on('close', () => {
+        console.log(`🎮 Disconnected from gaming server: ${endpoint}`);
+        this.gamingServerConnections.delete(serverId);
+      });
+
+      ws.on('error', (err) => {
+        console.error(`🎮 Gaming server connection error (${endpoint}):`, err.message);
+      });
+
+    } catch (err) {
+      console.error(`🎮 Failed to connect to gaming server ${endpoint}:`, err.message);
+    }
+  }
+
+  /**
+   * Handle messages from gaming servers
+   */
+  _handleGamingServerMessage(serverId, message) {
+    switch (message.type) {
+      case MSG_TYPES.GAMING_SERVER_HEARTBEAT:
+        // Update server status
+        this.gamingServers.set(serverId, {
+          ...this.gamingServers.get(serverId),
+          lastSeen: Date.now(),
+          status: 'active'
+        });
+        break;
+
+      case MSG_TYPES.GAMING_SERVER_BACKUP:
+        // Gaming server offering backup services
+        this._registerBackupNode(serverId, message.data);
+        break;
+
+      case MSG_TYPES.NETWORK_HEAL:
+        // Gaming server initiating healing
+        this._processHealingRequest(message.data);
+        break;
+    }
+  }
+
+  /**
+   * Send heartbeat to gaming servers
+   */
+  _gamingServerHeartbeat() {
+    const heartbeat = {
+      type: MSG_TYPES.GAMING_SERVER_HEARTBEAT,
+      data: {
+        nodeId: this.nodeId,
+        peerCount: this.peers.size,
+        networkHealth: this.networkHealth,
+        timestamp: Date.now()
       }
+    };
 
-      // Reconnect to previously known peers
-      this._reconnectPreviousPeers();
+    for (const [serverId, ws] of this.gamingServerConnections) {
+      if (ws.readyState === WebSocket.OPEN) {
+        this._send(ws, heartbeat);
+      }
+    }
+  }
 
-      // Detect all radio interfaces
-      this._inventoryRadioInterfaces();
+  /**
+   * Monitor overall network health
+   */
+  _monitorNetworkHealth() {
+    const totalPeers = this.peers.size;
+    const healthyPeers = Array.from(this.peers.values()).filter(peer =>
+      Date.now() - peer.lastSeen < 60000
+    ).length;
 
-      // Start auto-discovery systems
-      this._startLANDiscovery();
-      this._startNetworkScanner();
-      this._startCellularScanner();
-      this._startBluetoothScanner();
+    // Calculate network health (0-100)
+    this.networkHealth = totalPeers > 0 ? (healthyPeers / totalPeers) * 100 : 0;
 
-      // Start heartbeat
-      this.heartbeatInterval = setInterval(() => this._heartbeat(), 30000);
+    // Trigger healing if health drops below threshold
+    if (this.networkHealth < HEALING_CONFIG.criticalHealthThreshold && !this.failoverActive) {
+      console.log(`🩹 Network health critical: ${this.networkHealth.toFixed(1)}% - Initiating auto-healing`);
+      this._initiateNetworkHealing();
+    }
 
-      // Start auto-scaling
-      this.scalingInterval = setInterval(() => this._autoScale(), 60000);
+    // Log health status
+    if (this.networkHealth < 75) {
+      console.log(`⚠️  Network health: ${this.networkHealth.toFixed(1)}% (${healthyPeers}/${totalPeers} healthy peers)`);
+    }
+  }
+
+  /**
+   * Initiate network healing process
+   */
+  _initiateNetworkHealing() {
+    if (this.failoverActive) return;
+
+    console.log('🩹 Initiating network healing protocol...');
+    this.failoverActive = true;
+
+    // Record healing event
+    this.healingHistory.push({
+      timestamp: Date.now(),
+      type: 'network_healing_initiated',
+      networkHealth: this.networkHealth,
+      peerCount: this.peers.size
+    });
+
+    // Broadcast healing request to gaming servers
+    const healingRequest = {
+      type: MSG_TYPES.HEALING_REQUEST,
+      data: {
+        requestingNode: this.nodeId,
+        networkHealth: this.networkHealth,
+        currentPeers: Array.from(this.peers.keys()),
+        capabilities: this.capabilities
+      }
+    };
+
+    for (const [serverId, ws] of this.gamingServerConnections) {
+      if (ws.readyState === WebSocket.OPEN) {
+        this._send(ws, healingRequest);
+      }
+    }
+
+    // Activate backup nodes
+    this._activateBackupNodes();
+
+    // Reset failover flag after timeout
+    setTimeout(() => {
+      this.failoverActive = false;
+      console.log('🩹 Healing protocol completed');
+    }, HEALING_CONFIG.healingTimeout);
+  }
+
+  /**
+   * Process healing request from gaming server
+   */
+  _processHealingRequest(healingData) {
+    console.log(`🩹 Processing healing request from gaming server`);
+
+    // Add healing peers to network
+    if (healingData.backupPeers) {
+      for (const peerAddress of healingData.backupPeers) {
+        this.connectToPeer(peerAddress);
+      }
+    }
+
+    // Update network health
+    this.networkHealth = Math.min(100, this.networkHealth + 20);
+  }
+
+  /**
+   * Initialize backup nodes from gaming servers
+   */
+  _initializeBackupNodes() {
+    // Create virtual backup nodes that can be activated during healing
+    for (let i = 0; i < HEALING_CONFIG.maxBackupNodes; i++) {
+      const backupId = `backup-node-${i}`;
+      this.backupNodes.set(backupId, {
+        id: backupId,
+        status: 'standby',
+        capabilities: {
+          cpuCores: 4,
+          totalMemory: 8 * 1024 * 1024 * 1024, // 8GB
+          platform: 'gaming-server',
+          hasGPU: true
+        },
+        activated: false
+      });
+    }
+  }
+
+  /**
+   * Register a backup node from gaming server
+   */
+  _registerBackupNode(serverId, backupData) {
+    this.backupNodes.set(`gaming-backup-${serverId}`, {
+      id: `gaming-backup-${serverId}`,
+      serverId: serverId,
+      status: 'available',
+      capabilities: backupData.capabilities,
+      activated: false,
+      address: backupData.address
+    });
+
+    console.log(`🩹 Registered gaming server backup: ${serverId}`);
+  }
+
+  /**
+   * Activate backup nodes during healing
+   */
+  _activateBackupNodes() {
+    let activated = 0;
+
+    for (const [backupId, backup] of this.backupNodes) {
+      if (!backup.activated && backup.status === 'available') {
+        backup.activated = true;
+        backup.status = 'active';
+
+        // Connect to backup node
+        if (backup.address) {
+          this.connectToPeer(backup.address);
+        }
+
+        activated++;
+        if (activated >= 3) break; // Activate max 3 backup nodes
+      }
+    }
+
+    if (activated > 0) {
+      console.log(`🩹 Activated ${activated} backup nodes for healing`);
+    }
+  }
+
+  /**
+   * Start growth acceleration features
+   */
+  _startGrowthAcceleration() {
+    console.log('🚀 Growth acceleration enabled');
+
+    // More aggressive auto-scaling for growth
+    this.scalingInterval = setInterval(() => this._enhancedAutoScale(), 30000);
+
+    // Peer recruitment
+    this.recruitmentInterval = setInterval(() => this._recruitPeers(), 45000);
+
+    // Growth announcements
+    this.growthAnnounceInterval = setInterval(() => this._announceGrowth(), 60000);
+  }
+
+  /**
+   * Enhanced auto-scaling for network growth
+   */
+  _enhancedAutoScale() {
+    const currentPeers = this.peers.size;
+    const workload = this._calculateWorkload();
+
+    // More aggressive scaling thresholds
+    if (workload > 0.6 && currentPeers < this.maxPeers) {
+      this.broadcast({
+        type: MSG_TYPES.NETWORK_SCALE,
+        data: { action: 'expand', reason: 'high_workload', priority: 'high' },
+      });
+      console.log(`🍄 Growth: Expanding network (workload: ${(workload * 100).toFixed(1)}%)`);
+      this.growthStats.growthEvents++;
+    } else if (workload < 0.3 && currentPeers > this.minPeers) {
+      console.log(`🍄 Growth: Network can contract (workload: ${(workload * 100).toFixed(1)}%)`);
+    }
+
+    // Scale based on peer count
+    if (currentPeers < this.minPeers) {
+      console.log(`🍄 Growth: Need more peers (${currentPeers}/${this.minPeers})`);
+      this.broadcast({
+        type: MSG_TYPES.PEER_REQUEST,
+        data: { requested: this.minPeers - currentPeers }
+      });
+    }
+  }
+
+  /**
+   * Recruit additional peers
+   */
+  _recruitPeers() {
+    // Broadcast recruitment message
+    this.broadcast({
+      type: MSG_TYPES.PEER_RECRUITMENT,
+      data: {
+        nodeId: this.nodeId,
+        capabilities: this.capabilities,
+        availableSlots: this.maxPeers - this.peers.size,
+        timestamp: Date.now()
+      }
+    });
+
+    // Try to reconnect to known peers
+    for (const peerAddr of this.knownPeers) {
+      if (!this.peers.has(peerAddr) && !this.discoveredHosts.has(peerAddr)) {
+        console.log(`🍄 Recruiting peer: ${peerAddr}`);
+        this.connectToPeer(peerAddr);
+      }
+    }
+
+    this.growthStats.peersRecruited++;
+  }
+
+  /**
+   * Announce network growth capabilities
+   */
+  _announceGrowth() {
+    this.broadcast({
+      type: MSG_TYPES.GROWTH_ANNOUNCE,
+      data: {
+        nodeId: this.nodeId,
+        networkSize: this.peers.size,
+        capabilities: this.capabilities,
+        growthStats: this.growthStats,
+        timestamp: Date.now()
+      }
     });
   }
 
@@ -198,7 +660,8 @@ class FungiMeshNetwork extends EventEmitter {
    * Connect to a peer
    */
   connectToPeer(address) {
-    if (this.peers.size >= this.maxPeers) return;
+    // AUTO-CONNECT: removed peer limit — accept unlimited peers
+    // if (this.peers.size >= this.maxPeers) return;
 
     // Don't connect to self
     if (address.includes(`localhost:${this.port}`) || address.includes(`127.0.0.1:${this.port}`)) return;
@@ -306,8 +769,20 @@ class FungiMeshNetwork extends EventEmitter {
         this._handleResourceResponse(peerId, msg.data);
         break;
 
-      case MSG_TYPES.LOAD_BALANCE:
-        this._handleLoadBalance(peerId, msg.data);
+      case MSG_TYPES.NETWORK_SCALE:
+        this._handleNetworkScale(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.PEER_REQUEST:
+        this._handlePeerRequest(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.PEER_RECRUITMENT:
+        this._handlePeerRecruitment(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.GROWTH_ANNOUNCE:
+        this._handleGrowthAnnounce(peerId, msg.data);
         break;
 
       case MSG_TYPES.PING:
@@ -316,6 +791,55 @@ class FungiMeshNetwork extends EventEmitter {
 
       case MSG_TYPES.PONG:
         // Liveness confirmed
+        break;
+
+      case MSG_TYPES.NETWORK_HEAL:
+        this._handleNetworkHeal(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.HEALING_REQUEST:
+        this._handleHealingRequest(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.HEALING_RESPONSE:
+        this._handleHealingResponse(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.BACKUP_NODE_ACTIVATE:
+        this._handleBackupNodeActivate(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.FAILOVER_INITIATE:
+        this._handleFailoverInitiate(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.GAMING_SERVER_CONNECT:
+        this._handleGamingServerConnect(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.GAMING_SERVER_HEARTBEAT:
+        this._handleGamingServerHeartbeat(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.GAMING_SERVER_BACKUP:
+        this._handleGamingServerBackup(peerId, msg.data);
+        break;
+
+      // ── Validator / Hardware messages ──
+      case MSG_TYPES.VALIDATOR_HANDSHAKE:
+        this._handleValidatorHandshake(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.HARDWARE_REQUEST:
+        this._handleHardwareRequest(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.HARDWARE_REPORT:
+        this._handleHardwareReport(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.VALIDATOR_HEARTBEAT:
+        // liveness update — lastSeen already set above
         break;
     }
   }
@@ -498,6 +1022,56 @@ class FungiMeshNetwork extends EventEmitter {
     }
   }
 
+  _handleNetworkScale(peerId, data) {
+    if (data.action === 'expand' && data.priority === 'high') {
+      console.log(`🍄 Growth: Received expansion signal from ${peerId.substring(0, 8)}`);
+      // Increase discovery frequency temporarily
+      this._startLANDiscovery();
+      this._startNetworkScanner();
+      this.growthStats.networksExpanded++;
+    }
+  }
+
+  _handlePeerRequest(peerId, data) {
+    const requestingPeer = this.peers.get(peerId);
+    if (!requestingPeer) return;
+
+    const availableSlots = this.maxPeers - this.peers.size;
+    if (availableSlots > 0 && data.requested > 0) {
+      console.log(`🍄 Growth: ${peerId.substring(0, 8)} requested ${data.requested} peers, we have ${availableSlots} slots`);
+
+      // Send our capabilities to help them connect
+      this._send(requestingPeer.ws, {
+        type: MSG_TYPES.PEER_RECRUITMENT,
+        data: {
+          nodeId: this.nodeId,
+          capabilities: this.capabilities,
+          availableSlots: availableSlots,
+          canAcceptPeers: true
+        }
+      });
+    }
+  }
+
+  _handlePeerRecruitment(peerId, data) {
+    // Another peer is announcing availability
+    if (data.canAcceptPeers && this.peers.size < this.maxPeers) {
+      const peerAddr = `ws://${data.nodeId}:${data.port || 7001}`;
+      if (!this.knownPeers.has(peerAddr)) {
+        console.log(`🍄 Growth: Discovered recruiting peer: ${peerAddr}`);
+        this.knownPeers.add(peerAddr);
+        this.connectToPeer(peerAddr);
+        this._savePeers();
+      }
+    }
+  }
+
+  _handleGrowthAnnounce(peerId, data) {
+    // Update our knowledge of network growth
+    console.log(`🍄 Growth: ${peerId.substring(0, 8)} reports network size: ${data.networkSize}`);
+    this.growthStats.growthEvents++;
+  }
+
   _calculateWorkload() {
     const totalTasks = this.activeTasks.size;
     const maxConcurrent = this.capabilities.cpuCores * 2; // Rough estimate
@@ -585,6 +1159,158 @@ class FungiMeshNetwork extends EventEmitter {
     }
   }
 
+  // ===== AUTO-HEALING MESSAGE HANDLERS =====
+
+  _handleNetworkHeal(peerId, data) {
+    console.log(`🩹 Network healing initiated by ${peerId.substring(0, 8)}`);
+    this._processHealingRequest(data);
+  }
+
+  _handleHealingRequest(peerId, data) {
+    console.log(`🩹 Healing request from ${peerId.substring(0, 8)} (health: ${data.networkHealth}%)`);
+
+    // Respond with healing support
+    this._send(this.peers.get(peerId).ws, {
+      type: MSG_TYPES.HEALING_RESPONSE,
+      data: {
+        healerNode: this.nodeId,
+        capabilities: this.capabilities,
+        availablePeers: Array.from(this.peers.keys()),
+        backupNodes: Array.from(this.backupNodes.keys())
+      }
+    });
+  }
+
+  _handleHealingResponse(peerId, data) {
+    console.log(`🩹 Healing response from ${peerId.substring(0, 8)}`);
+
+    // Connect to any offered backup peers
+    if (data.availablePeers) {
+      for (const peerAddr of data.availablePeers.slice(0, 3)) { // Limit to 3
+        if (!this.knownPeers.has(peerAddr)) {
+          this.connectToPeer(peerAddr);
+        }
+      }
+    }
+
+    // Update network health
+    this.networkHealth = Math.min(100, this.networkHealth + 15);
+  }
+
+  _handleBackupNodeActivate(peerId, data) {
+    console.log(`🩹 Backup node activation from ${peerId.substring(0, 8)}`);
+    this._activateBackupNodes();
+  }
+
+  _handleFailoverInitiate(peerId, data) {
+    console.log(`🩹 Failover initiated by ${peerId.substring(0, 8)}`);
+    this.failoverActive = true;
+
+    // Implement failover logic
+    setTimeout(() => {
+      this.failoverActive = false;
+      console.log('🩹 Failover completed');
+    }, HEALING_CONFIG.failoverTimeout); // Configurable timeout
+  }
+
+  // ===== GAMING SERVER MESSAGE HANDLERS =====
+
+  _handleGamingServerConnect(peerId, data) {
+    console.log(`🎮 Gaming server ${peerId.substring(0, 8)} connected for mesh healing`);
+
+    this.gamingServers.set(peerId, {
+      id: peerId,
+      capabilities: data.capabilities,
+      purpose: data.purpose,
+      status: 'connected',
+      lastSeen: Date.now()
+    });
+  }
+
+  _handleGamingServerHeartbeat(peerId, data) {
+    // Update gaming server status
+    const server = this.gamingServers.get(peerId);
+    if (server) {
+      server.lastSeen = Date.now();
+      server.status = 'active';
+      server.peerCount = data.peerCount;
+      server.networkHealth = data.networkHealth;
+    }
+  }
+
+  _handleGamingServerBackup(peerId, data) {
+    console.log(`🎮 Gaming server ${peerId.substring(0, 8)} offering backup services`);
+    this._registerBackupNode(peerId, data);
+  }
+
+  // ===== VALIDATOR NODE + HARDWARE HANDLERS =====
+
+  _handleValidatorHandshake(peerId, data) {
+    const peer = this.peers.get(peerId);
+    if (!peer) return;
+    peer.remoteNodeId = data.nodeId;
+    peer.role = data.role || 'validator';
+
+    if (data.hardware) {
+      this.validatorRegistry.set(data.nodeId, data.hardware);
+      this._hwCollector.save(data.hardware);
+      console.log(`⚡ Validator registered: ${data.nodeId.substring(0, 12)} | ${data.hardware.name || 'unknown'} | IP: ${data.hardware.ip?.primary || '?'} | CPU: ${data.hardware.hardware?.cpu?.model || '?'} (${data.hardware.hardware?.cpu?.cores || '?'} cores) | MEM: ${data.hardware.hardware?.memory?.totalGB || '?'}GB | GPU: ${data.hardware.hardware?.gpu?.count || 0}`);
+    }
+
+    // Respond with OUR hardware
+    this._send(peer.ws, {
+      type: MSG_TYPES.VALIDATOR_HANDSHAKE,
+      data: {
+        nodeId: this.nodeId,
+        role: 'mesh-node',
+        hardware: this.localHardware,
+      },
+    });
+  }
+
+  _handleHardwareRequest(peerId, data) {
+    const peer = this.peers.get(peerId);
+    if (!peer) return;
+    // Send our hardware report
+    this._send(peer.ws, {
+      type: MSG_TYPES.HARDWARE_REPORT,
+      data: { nodeId: this.nodeId, hardware: this.localHardware },
+    });
+  }
+
+  _handleHardwareReport(peerId, data) {
+    if (!data.nodeId || !data.hardware) return;
+    this.validatorRegistry.set(data.nodeId, data.hardware);
+    this._hwCollector.save(data.hardware);
+    console.log(`⚡ Hardware collected: ${data.nodeId.substring(0, 12)} | ${data.hardware.name || 'unknown'} | IP: ${data.hardware.ip?.primary || '?'} | Type: ${data.hardware.type?.chassis || '?'}`);
+  }
+
+  /**
+   * Return the full validator hardware registry
+   */
+  getValidatorRegistry() {
+    const entries = [];
+    for (const [nid, hw] of this.validatorRegistry) {
+      entries.push({
+        nodeId: nid.substring(0, 12),
+        name: hw.name || 'unknown',
+        ip: hw.ip?.primary || 'unknown',
+        publicIP: hw.ip?.publicIP || null,
+        type: hw.type || {},
+        cpu: hw.hardware?.cpu || {},
+        gpu: hw.hardware?.gpu || {},
+        memory: hw.hardware?.memory || {},
+        disk: hw.hardware?.disk || {},
+        network: hw.network || [],
+        os: hw.os || {},
+        uptime: hw.uptime || {},
+        performance: hw.performance || {},
+        collectedAt: hw.collectedAt || null,
+      });
+    }
+    return { validatorCount: entries.length, validators: entries };
+  }
+
   /**
    * Distribute a computational task across the mesh
    */
@@ -638,6 +1364,22 @@ class FungiMeshNetwork extends EventEmitter {
       workload: this._calculateWorkload(),
       capabilities: this.capabilities,
       stats: this.workloadStats,
+      growthStats: this.growthStats,
+      growthEnabled: this.growthEnabled,
+      // Auto-healing statistics
+      networkHealth: this.networkHealth,
+      healingEnabled: this.healingEnabled,
+      failoverActive: this.failoverActive,
+      backupNodes: this.backupNodes.size,
+      healingEvents: this.healingHistory.length,
+      // Gaming server statistics
+      gamingServers: this.gamingServers.size,
+      gamingConnections: this.gamingServerConnections.size,
+      // Validator hardware registry
+      validatorRegistry: this.getValidatorRegistry(),
+      // Mesh Expander (external device discovery)
+      meshExpander: this.meshExpander ? this.meshExpander.getStats() : null,
+      discoveredDevices: this.meshExpander ? this.meshExpander.getDevices() : null,
       peerList: Array.from(this.peers.values()).map(p => ({
         id: p.ws ? 'connected' : 'disconnected',
         address: p.address,
@@ -1301,12 +2043,33 @@ class FungiMeshNetwork extends EventEmitter {
     // Save peers before shutdown for future reconnection
     this._savePeers();
 
+    // Stop MeshExpander
+    if (this.meshExpander) {
+      await this.meshExpander.stop();
+    }
+
     if (this.heartbeatInterval) clearInterval(this.heartbeatInterval);
     if (this.scalingInterval) clearInterval(this.scalingInterval);
     if (this.discoveryInterval) clearInterval(this.discoveryInterval);
     if (this.networkScanInterval) clearInterval(this.networkScanInterval);
     if (this.cellularScanInterval) clearInterval(this.cellularScanInterval);
     if (this.bluetoothScanInterval) clearInterval(this.bluetoothScanInterval);
+
+    // Auto-healing intervals
+    if (this.healingInterval) clearInterval(this.healingInterval);
+
+    // Growth acceleration intervals
+    if (this.recruitmentInterval) clearInterval(this.recruitmentInterval);
+    if (this.growthAnnounceInterval) clearInterval(this.growthAnnounceInterval);
+
+    // Gaming server intervals
+    if (this.gamingServerHeartbeat) clearInterval(this.gamingServerHeartbeat);
+
+    // Close gaming server connections
+    for (const [serverId, ws] of this.gamingServerConnections) {
+      try { ws.close(); } catch {}
+    }
+    this.gamingServerConnections.clear();
 
     // Close LAN discovery socket
     if (this.discoverySocket) {

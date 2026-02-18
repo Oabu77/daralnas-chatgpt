@@ -1,0 +1,18 @@
+[
+  {
+    "stepId": "04718d9f-2031-4e53-af08-1ecf5ea8d128",
+    "taskId": "05d05b27-2516-46e1-a917-b326a86b25fe",
+    "index": 0,
+    "type": "stripe_action",
+    "status": "failed",
+    "content": "Create Stripe invoice for billing",
+    "metadata": {
+      "service": "stripe",
+      "error": "You did not provide an API key. You need to provide your API key in the Authorization header, using Bearer auth (e.g. 'Authorization: Bearer YOUR_SECRET_KEY'). See https://stripe.com/docs/api#authentication for details, or we can help at https://support.stripe.com/."
+    },
+    "startedAt": "2026-02-16T23:59:06.225Z",
+    "endedAt": "2026-02-16T23:59:06.818Z",
+    "createdAt": "2026-02-16T23:59:06.225Z",
+    "updatedAt": "2026-02-16T23:59:06.818Z"
+  }
+]

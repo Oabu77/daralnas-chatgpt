@@ -125,6 +125,33 @@ class StripeService {
     }
   }
 
+  async getProducts(options = {}) {
+    try {
+      const products = await this.stripe.products.list({ active: true, ...options });
+      const prices = await this.stripe.prices.list({ active: true, limit: 100 });
+
+      return products.data.map((product) => ({
+        id: product.id,
+        name: product.name,
+        description: product.description,
+        active: product.active,
+        metadata: product.metadata,
+        prices: prices.data
+          .filter((p) => p.product === product.id)
+          .map((p) => ({
+            id: p.id,
+            amount: p.unit_amount / 100,
+            currency: p.currency,
+            interval: p.recurring ? p.recurring.interval : null,
+            type: p.type,
+          })),
+      }));
+    } catch (error) {
+      winston.error('Error fetching products:', error);
+      throw error;
+    }
+  }
+
   // Subscription Management
   async createSubscription(customerId, priceId, options = {}) {
     try {
@@ -243,16 +270,31 @@ class StripeService {
   }
 
   // Invoice Management
-  async createInvoice(customerId, subscriptionId = null, items = []) {
+  async createInvoice(customerIdOrOpts, subscriptionId = null, items = []) {
     try {
-      const invoiceData = {
-        customer: customerId,
-      };
+      let invoiceData;
 
-      if (subscriptionId) {
-        invoiceData.subscription = subscriptionId;
-      } else if (items.length > 0) {
-        invoiceData.items = items;
+      // Support object-style call: createInvoice({ customerId, autoAdvance, ... })
+      if (typeof customerIdOrOpts === 'object' && customerIdOrOpts !== null) {
+        const opts = customerIdOrOpts;
+        invoiceData = {
+          customer: opts.customerId || opts.customer,
+          ...(opts.autoAdvance !== undefined && { auto_advance: opts.autoAdvance }),
+          ...(opts.collectionMethod && { collection_method: opts.collectionMethod }),
+          ...(opts.daysUntilDue && { days_until_due: parseInt(opts.daysUntilDue) }),
+          ...(opts.description && { description: opts.description }),
+          ...(opts.metadata && { metadata: opts.metadata }),
+        };
+      } else {
+        // Legacy positional-style call: createInvoice(customerId, subscriptionId, items)
+        invoiceData = {
+          customer: customerIdOrOpts,
+        };
+        if (subscriptionId) {
+          invoiceData.subscription = subscriptionId;
+        } else if (items.length > 0) {
+          invoiceData.items = items;
+        }
       }
 
       const invoice = await this.stripe.invoices.create(invoiceData);
@@ -345,6 +387,9 @@ class StripeService {
         case 'customer.deleted':
           await this.handleCustomerDeleted(data.object);
           break;
+        case 'checkout.session.completed':
+          await this.handleCheckoutSessionCompleted(data.object);
+          break;
         default:
           winston.info(`Unhandled event type: ${type}`);
       }
@@ -429,15 +474,15 @@ class StripeService {
         totalRevenue: balanceTransactions.data
           .filter(tx => tx.type === 'charge')
           .reduce((sum, tx) => sum + tx.amount, 0) / 100,
-        totalRefunds: balanceTransactions.data
+        totalRefunds: Math.abs(balanceTransactions.data
           .filter(tx => tx.type === 'refund')
-          .reduce((sum, tx) => sum + tx.amount, 0) / 100,
+          .reduce((sum, tx) => sum + tx.amount, 0)) / 100,
         netRevenue: balanceTransactions.data
           .filter(tx => tx.type === 'charge')
           .reduce((sum, tx) => sum + tx.amount, 0) / 100 -
-          balanceTransactions.data
+          Math.abs(balanceTransactions.data
             .filter(tx => tx.type === 'refund')
-            .reduce((sum, tx) => sum + tx.amount, 0) / 100,
+            .reduce((sum, tx) => sum + tx.amount, 0)) / 100,
       };
     } catch (error) {
       winston.error('Error getting revenue analytics:', error);
@@ -470,6 +515,91 @@ class StripeService {
   async handlePaymentIntentCanceled(paymentIntent) {
     winston.info(`Payment intent canceled: ${paymentIntent.id}`);
     // Handle canceled payment intent
+  }
+
+  /**
+   * Handle checkout.session.completed - connect to CRM for deal closure
+   * This fires when a customer completes a Stripe Checkout session (payment link)
+   */
+  async handleCheckoutSessionCompleted(session) {
+    const email = session.customer_email || session.customer_details?.email;
+    const amountTotal = session.amount_total / 100; // Convert from cents
+    const currency = session.currency?.toUpperCase() || 'USD';
+    const productName = session.line_items?.data?.[0]?.description || 'QuranChain Service';
+    
+    winston.info(`Checkout completed: ${email} - $${amountTotal} ${currency}`);
+    
+    // Connect to CRM to close any matching deals
+    try {
+      const crmBase = process.env.CRM_BASE_URL || process.env.API_BASE_URL || 'http://localhost:3000';
+      const crmUrl = new URL(crmBase);
+      const crmClient = crmUrl.protocol === 'https:' ? require('https') : require('http');
+
+      const requestCrm = (method, path, body, onResponse) => {
+        const options = {
+          hostname: crmUrl.hostname,
+          port: crmUrl.port || (crmUrl.protocol === 'https:' ? 443 : 80),
+          path,
+          method,
+          headers: { 'Content-Type': 'application/json' },
+        };
+        const req = crmClient.request(options, (res) => {
+          let data = '';
+          res.on('data', chunk => data += chunk);
+          res.on('end', () => onResponse(res, data));
+        });
+        if (body) req.write(JSON.stringify(body));
+        req.end();
+      };
+
+      // Find lead by email and close their deal
+      const leadPath = encodeURI(`/api/crm/leads?email=${email}`);
+      requestCrm('GET', leadPath, null, (leadRes, data) => {
+        if (!leadRes) return;
+        try {
+          const leadData = JSON.parse(data);
+          const leads = leadData.leads || [];
+          const lead = leads.find(l => l.email === email);
+
+          if (lead) {
+            requestCrm('PUT', `/api/crm/leads/${lead.id}/status`, {
+              status: 'won',
+              notes: `Checkout completed: ${productName} - $${amountTotal} (${session.id})`
+            }, () => {});
+
+            winston.info(`CRM: Lead ${lead.id} marked as won via checkout`);
+          } else {
+            requestCrm('POST', '/api/crm/leads', {
+              name: session.customer_details?.name || email.split('@')[0],
+              email: email,
+              source: 'stripe_checkout',
+              score: 100,
+              opted_in: true,
+              notes: `Direct checkout customer: ${productName} - $${amountTotal}`
+            }, (createRes, createData) => {
+              try {
+                const created = JSON.parse(createData);
+                if (created.lead_id) {
+                  requestCrm('POST', '/api/crm/deals', {
+                    lead_id: created.lead_id,
+                    name: `Direct Sale: ${productName}`,
+                    deal_value: amountTotal,
+                    product: productName,
+                    probability: 100
+                  }, () => {});
+                  winston.info(`CRM: New customer lead ${created.lead_id} created from checkout`);
+                }
+              } catch (e) { /* ignore parse errors */ }
+            });
+          }
+        } catch (e) {
+          winston.error('CRM integration error:', e);
+        }
+      });
+      
+    } catch (error) {
+      winston.error('Error connecting to CRM:', error);
+    }
   }
 
   async handleChargeDisputeCreated(dispute) {
@@ -737,6 +867,134 @@ class StripeService {
       return issuingBalance;
     } catch (error) {
       winston.error(`Error retrieving issuing balance: ${error.message}`);
+      throw error;
+    }
+  }
+
+  // ═══════════════════════════════════════════════════════════
+  // 🤖 AI AGENT METERED BILLING
+  // Usage-based billing for AI agent API calls
+  // ═══════════════════════════════════════════════════════════
+
+  /**
+   * Create a metered product + price for an AI agent tier
+   * @param {string} agentTier - e.g. 'basic', 'pro', 'enterprise'
+   * @param {number} unitAmountCents - price per API call in cents
+   */
+  async createMeteredAgentProduct(agentTier, unitAmountCents = 1) {
+    try {
+      const product = await this.stripe.products.create({
+        name: `QuranChain AI Agent - ${agentTier}`,
+        description: `Metered usage for ${agentTier} AI agent API calls`,
+        metadata: {
+          platform: 'quranchain',
+          type: 'ai_agent_metered',
+          tier: agentTier,
+        },
+      });
+
+      const price = await this.stripe.prices.create({
+        product: product.id,
+        unit_amount: unitAmountCents,
+        currency: 'usd',
+        recurring: {
+          interval: 'month',
+          usage_type: 'metered',
+          aggregate_usage: 'sum',
+        },
+        metadata: { tier: agentTier, type: 'ai_agent_metered' },
+      });
+
+      winston.info(`Metered product created: ${product.id} / price: ${price.id} for ${agentTier}`);
+      return { product, price };
+    } catch (error) {
+      winston.error(`Error creating metered agent product: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Create a metered subscription for a customer (AI agent usage)
+   * @param {string} customerId - Stripe customer ID
+   * @param {string} meteredPriceId - Price ID from createMeteredAgentProduct
+   */
+  async createMeteredSubscription(customerId, meteredPriceId) {
+    try {
+      const subscription = await this.stripe.subscriptions.create({
+        customer: customerId,
+        items: [{ price: meteredPriceId }],
+        metadata: {
+          platform: 'quranchain',
+          type: 'ai_agent_metered',
+        },
+      });
+
+      winston.info(`Metered subscription created: ${subscription.id} for customer ${customerId}`);
+      return subscription;
+    } catch (error) {
+      winston.error(`Error creating metered subscription: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Report AI agent usage (API calls) to Stripe
+   * @param {string} subscriptionItemId - The subscription item ID  
+   * @param {number} quantity - Number of API calls to report
+   * @param {object} metadata - Optional metadata (agent_id, model, etc.)
+   */
+  async reportAgentUsage(subscriptionItemId, quantity, metadata = {}) {
+    try {
+      const usageRecord = await this.stripe.subscriptionItems.createUsageRecord(
+        subscriptionItemId,
+        {
+          quantity,
+          timestamp: Math.floor(Date.now() / 1000),
+          action: 'increment',
+        }
+      );
+
+      winston.info(`Usage reported: ${quantity} calls on ${subscriptionItemId}`);
+      return usageRecord;
+    } catch (error) {
+      winston.error(`Error reporting agent usage: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * Get usage summary for a subscription item
+   */
+  async getAgentUsageSummary(subscriptionItemId) {
+    try {
+      const summary = await this.stripe.subscriptionItems.listUsageRecordSummaries(
+        subscriptionItemId,
+        { limit: 10 }
+      );
+      return summary;
+    } catch (error) {
+      winston.error(`Error getting usage summary: ${error.message}`);
+      throw error;
+    }
+  }
+
+  /**
+   * List all metered subscriptions (AI agents)
+   */
+  async listMeteredSubscriptions(limit = 100) {
+    try {
+      const subscriptions = await this.stripe.subscriptions.list({
+        limit,
+        status: 'active',
+      });
+      // Filter to metered ones
+      const metered = subscriptions.data.filter(sub =>
+        sub.metadata?.type === 'ai_agent_metered' ||
+        sub.items?.data?.some(item => item.price?.recurring?.usage_type === 'metered')
+      );
+      return metered;
+    } catch (error) {
+      winston.error(`Error listing metered subscriptions: ${error.message}`);
       throw error;
     }
   }

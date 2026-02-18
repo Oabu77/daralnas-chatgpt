@@ -1,0 +1,18 @@
+[
+  {
+    "approvalId": "5f4acf95-bc0a-464b-95a8-a0a45906bc99",
+    "taskId": null,
+    "agentId": "43a42487-8cfc-4118-8978-1a9f64927017",
+    "category": "external_account_create",
+    "summary": "Provision Cloudflare account: DNS management for quranchain.com",
+    "details": {
+      "requestId": "3369da7b-87a7-41e9-b4dc-5ebf31352f82",
+      "provider": "Cloudflare",
+      "purpose": "DNS management for quranchain.com"
+    },
+    "status": "pending",
+    "decidedAt": null,
+    "notes": null,
+    "createdAt": "2026-02-16T23:59:29.977Z"
+  }
+]

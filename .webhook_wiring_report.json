@@ -1,0 +1,53 @@
+{
+  "timestamp": "2026-02-17T03:43:14.462701+00:00",
+  "webhook_endpoints": {
+    "edge_primary": "https://webhook.darcloud.host/openai",
+    "edge_alt": "https://hooks.darcloud.host/openai",
+    "local": "http://localhost:8787/webhook"
+  },
+  "domains": {
+    "api": "https://api.darcloud.host",
+    "ai": "https://ai.darcloud.host",
+    "mesh": "https://mesh.darcloud.host",
+    "revenue": "https://revenue.darcloud.host",
+    "webhook": "https://webhook.darcloud.host",
+    "dashboard": "https://darcloud-dashboard.pages.dev"
+  },
+  "projects": {
+    "QuranChain": "proj_tJOraIJydBPrCrNhwFGLNJs8",
+    "DarCloud": "proj_MIj9BUv9DXH6zdvKDrsQiMNP",
+    "AI-Workforce-Bots": "proj_DxJU86t0pC6i7dAPTDp7ZSvC",
+    "AI-Expert-Agents": "proj_DMQPcnLvQmDFrpXyDNa0JrRz",
+    "AI-Specialized-Agents": "proj_xL0UYYza3uWNuYnGxjWZzXiG",
+    "Gas-Toll-Agents": "proj_nS6hAm5juR6Gxpwbhu3Qz9X5",
+    "Platform-Agents": "proj_G2z3fxpMwfRISeEc4dccNNNc",
+    "Gtp Code": "proj_FlB7ZFeQDiU7CzEl47GZ1m6S",
+    "lead": "proj_tie7uSezanniuqZjJ4zguLik",
+    "helpbot": "proj_LhKmbDVeLC4Y3zHAZYvt6VDw"
+  },
+  "assistants_total": 66,
+  "assistants_alive": 66,
+  "agent_keys_total": 63,
+  "background_test": {
+    "success": true,
+    "response_id": "resp_02e33cd31237e130006993e3d207f88197aba8eda73994ab66",
+    "status": "queued"
+  },
+  "webhook_events": [
+    "response.completed",
+    "response.failed",
+    "response.cancelled",
+    "response.incomplete",
+    "batch.completed",
+    "batch.failed",
+    "batch.cancelled",
+    "batch.expired",
+    "eval_run.succeeded",
+    "eval_run.failed",
+    "eval_run.canceled",
+    "fine_tuning.job.succeeded",
+    "fine_tuning.job.failed",
+    "fine_tuning.job.cancelled"
+  ],
+  "webhook_secret_configured": false
+}

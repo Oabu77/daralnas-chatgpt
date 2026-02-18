@@ -1,0 +1,20 @@
+[
+  {
+    "subAgentId": "f570d834-363f-4573-a60b-ff5f6fc4be9d",
+    "parentAgentId": "43a42487-8cfc-4118-8978-1a9f64927017",
+    "name": "Stripe Billing Agent",
+    "description": "Handles all Stripe invoicing and subscriptions",
+    "role": "Stripe Billing",
+    "instructions": "Process all billing tasks via Stripe API",
+    "policy": {
+      "allowedIntegrations": [
+        "Stripe"
+      ],
+      "canCreateIntegrations": false,
+      "canRequestExternalAccounts": false,
+      "canStoreSecrets": true,
+      "maxStepsPerTask": 30
+    },
+    "createdAt": "2026-02-16T23:59:06.151Z"
+  }
+]

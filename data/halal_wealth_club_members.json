@@ -1,0 +1,79 @@
+{
+  "members": {
+    "HWC-MLQ4OXN1-842DB1": {
+      "id": "HWC-MLQ4OXN1-842DB1",
+      "name": "Ahmad Khan",
+      "email": "ahmad@test.pk",
+      "country": "PK",
+      "region": "south_asia",
+      "tier": "growth",
+      "language": "ur",
+      "referral_code": null,
+      "personal_referral_code": "HWC-CADC82CF",
+      "status": "pending_payment",
+      "stripe_customer_id": null,
+      "stripe_subscription_id": null,
+      "portfolio_scans_today": 0,
+      "joined_at": "2026-02-17T04:54:01.549Z",
+      "updated_at": "2026-02-17T04:54:01.549Z",
+      "features_used": [],
+      "webinars_attended": 0,
+      "courses_completed": 0,
+      "zakat_calculated_total": 0
+    },
+    "HWC-MLQ4OXND-8CA40B": {
+      "id": "HWC-MLQ4OXND-8CA40B",
+      "name": "Fatima",
+      "email": "fatima@test.sa",
+      "country": "SA",
+      "region": "middle_east",
+      "tier": "growth",
+      "language": "ar",
+      "referral_code": null,
+      "personal_referral_code": "HWC-D080E676",
+      "status": "pending_payment",
+      "stripe_customer_id": null,
+      "stripe_subscription_id": null,
+      "portfolio_scans_today": 0,
+      "joined_at": "2026-02-17T04:54:01.561Z",
+      "updated_at": "2026-02-17T04:54:01.561Z",
+      "features_used": [],
+      "webinars_attended": 0,
+      "courses_completed": 0,
+      "zakat_calculated_total": 0
+    },
+    "HWC-MLQ4OXNW-819096": {
+      "id": "HWC-MLQ4OXNW-819096",
+      "name": "Budi",
+      "email": "budi@test.id",
+      "country": "ID",
+      "region": "southeast_asia",
+      "tier": "seed",
+      "language": "id",
+      "referral_code": null,
+      "personal_referral_code": "HWC-10745B63",
+      "status": "pending_payment",
+      "stripe_customer_id": null,
+      "stripe_subscription_id": null,
+      "portfolio_scans_today": 0,
+      "joined_at": "2026-02-17T04:54:01.580Z",
+      "updated_at": "2026-02-17T04:54:01.580Z",
+      "features_used": [],
+      "webinars_attended": 0,
+      "courses_completed": 0,
+      "zakat_calculated_total": 0
+    }
+  },
+  "stats": {
+    "total": 3,
+    "by_tier": {
+      "growth": 2,
+      "seed": 1
+    },
+    "by_region": {
+      "south_asia": 1,
+      "middle_east": 1,
+      "southeast_asia": 1
+    }
+  }
+}

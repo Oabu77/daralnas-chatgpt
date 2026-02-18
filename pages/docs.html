@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DarCloud API Documentation</title>
+    <style>
+        :root { --bg:#0a0e17; --surface:#111827; --border:#1f2937; --primary:#10b981; --accent:#3b82f6; --text:#e5e7eb; --muted:#9ca3af; }
+        *{margin:0;padding:0;box-sizing:border-box;}
+        body{font-family:system-ui,sans-serif;background:var(--bg);color:var(--text);padding:2rem;max-width:1000px;margin:0 auto;}
+        h1{font-size:2rem;margin-bottom:0.5rem;color:var(--primary);}
+        h2{font-size:1.5rem;margin:2rem 0 1rem;border-bottom:1px solid var(--border);padding-bottom:0.5rem;}
+        h3{margin:1.5rem 0 0.5rem;color:var(--accent);}
+        p{color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+        code{background:var(--surface);padding:0.2rem 0.5rem;border-radius:4px;font-size:0.875rem;color:var(--primary);}
+        pre{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1rem;overflow-x:auto;margin:1rem 0;}
+        pre code{background:none;padding:0;}
+        .endpoint{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin:1rem 0;}
+        .method{display:inline-block;padding:0.25rem 0.75rem;border-radius:6px;font-weight:700;font-size:0.8rem;margin-right:0.5rem;}
+        .get{background:rgba(16,185,129,0.2);color:var(--primary);}
+        .post{background:rgba(59,130,246,0.2);color:var(--accent);}
+        .url{font-family:monospace;color:var(--text);}
+        a{color:var(--primary);text-decoration:none;}
+        a:hover{text-decoration:underline;}
+        table{width:100%;border-collapse:collapse;margin:1rem 0;}
+        th,td{padding:0.5rem;text-align:left;border-bottom:1px solid var(--border);}
+        th{color:var(--muted);font-size:0.8rem;text-transform:uppercase;}
+    </style>
+</head>
+<body>
+    <h1>DarCloud API Documentation</h1>
+    <p>Complete API reference for the DarCloud ecosystem — QuranChain blockchain, FungiMesh network, AI agents, and revenue services.</p>
+
+    <h2>Base URLs</h2>
+    <table>
+        <tr><th>Service</th><th>URL</th><th>Description</th></tr>
+        <tr><td>API Gateway</td><td><code>https://api.darcloud.host</code></td><td>Main API gateway (Cloudflare Worker)</td></tr>
+        <tr><td>MCP Server</td><td><code>https://mcp.darcloud.host</code></td><td>Model Context Protocol endpoint</td></tr>
+        <tr><td>Blockchain</td><td><code>https://blockchain.darcloud.host</code></td><td>Blockchain explorer & node API</td></tr>
+        <tr><td>AI Agents</td><td><code>https://ai.darcloud.host</code></td><td>AI assistant gateway (Cloudflare Worker)</td></tr>
+        <tr><td>FungiMesh</td><td><code>https://mesh.darcloud.host</code></td><td>Mesh network status</td></tr>
+        <tr><td>Revenue</td><td><code>https://revenue.darcloud.host</code></td><td>Revenue tracking & billing</td></tr>
+    </table>
+
+    <h2>Blockchain API</h2>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/health</span>
+        <p>Returns complete blockchain health including chain height, mesh peers, bridge status, compute pool, gas tolls, quantum status, and Data Ocean metrics.</p>
+        <pre><code>curl https://blockchain.darcloud.host/health</code></pre>
+    </div>
+
+    <h2>FungiMesh API</h2>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/fungimesh/status</span>
+        <p>Combined mesh status from both layers (Node.js WebSocket + Python mesh). Returns peers, compute pool, quantum status, and Data Ocean bridging.</p>
+        <pre><code>curl https://mcp.darcloud.host/api/fungimesh/status</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/status</span>
+        <p>Python FungiMesh status — 340,000 nodes across 6 continents.</p>
+        <pre><code>curl https://mesh.darcloud.host/status</code></pre>
+    </div>
+
+    <h2>AI Agent Fleet</h2>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/fleet</span>
+        <p>List all 63 AI agents with status and tier information.</p>
+        <pre><code>curl https://ai.darcloud.host/api/fleet</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/assistants</span>
+        <p>List core AI assistants with their models and endpoints.</p>
+        <pre><code>curl https://ai.darcloud.host/api/assistants</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="url">/api/chat</span>
+        <p>Chat with an AI agent. Specify agent by name.</p>
+        <pre><code>curl -X POST https://ai.darcloud.host/api/chat \
+  -H "Content-Type: application/json" \
+  -d '{"agent":"quranchain","message":"What is QuranChain?"}'</code></pre>
+    </div>
+
+    <h2>MCP (Model Context Protocol)</h2>
+
+    <div class="endpoint">
+        <span class="method post">POST</span>
+        <span class="url">/mcp</span>
+        <p>MCP endpoint with 10 tools. Supports StreamableHTTP and SSE transports.</p>
+        <p>Tools: <code>get_blockchain_status</code>, <code>get_fungi_mesh_status</code>, <code>get_data_ocean_status</code>, <code>get_ai_fleet_status</code>, <code>get_revenue_status</code>, <code>get_quran_verse</code>, <code>get_network_health</code>, <code>get_gas_toll_status</code>, <code>get_compute_pool</code>, <code>get_system_diagnostics</code></p>
+        <pre><code>curl https://mcp.darcloud.host/.well-known/openapi.json</code></pre>
+    </div>
+
+    <h2>Revenue API</h2>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/revenue</span>
+        <p>Revenue dashboard — gas tolls, fiat payments, subscriptions, enterprise billing.</p>
+        <pre><code>curl https://revenue.darcloud.host/api/revenue</code></pre>
+    </div>
+
+    <div class="endpoint">
+        <span class="method get">GET</span>
+        <span class="url">/api/gas-toll</span>
+        <p>Gas Toll Highway status — 47+ monitored blockchain networks.</p>
+        <pre><code>curl https://revenue.darcloud.host/api/gas-toll</code></pre>
+    </div>
+
+    <h2>Authentication</h2>
+    <p>Public endpoints do not require authentication. For protected endpoints, include your API key:</p>
+    <pre><code>curl -H "Authorization: Bearer YOUR_API_KEY" https://api.darcloud.host/api/...</code></pre>
+
+    <h2>Revenue Distribution</h2>
+    <table>
+        <tr><th>Recipient</th><th>Share</th></tr>
+        <tr><td>Founder Royalty</td><td><strong>30% (immutable)</strong></td></tr>
+        <tr><td>AI Validators (Omar AI™ + QuranChain AI™)</td><td>40%</td></tr>
+        <tr><td>Hardware Hosts</td><td>10%</td></tr>
+        <tr><td>Ecosystem</td><td>18%</td></tr>
+        <tr><td>Zakat</td><td>2%</td></tr>
+    </table>
+
+    <footer style="margin-top:3rem;padding-top:1rem;border-top:1px solid var(--border);text-align:center;">
+        <p style="font-size:0.8rem;">© 2026 DarCloud — QuranChain Ecosystem</p>
+    </footer>
+</body>
+</html>

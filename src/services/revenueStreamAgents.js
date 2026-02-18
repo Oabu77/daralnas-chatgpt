@@ -79,6 +79,25 @@ class RevenueStreamAgents {
       tools: ['security_scanners', 'compliance_frameworks', 'audit_logs']
     });
 
+    // Halal Wealth Club Membership Agent
+    this.agents.halalWealthClub = await runSubagent({
+      name: 'HalalWealthClubAgent',
+      description: 'AI membership sign-up bot for the Halal Wealth Club — recruits Muslims globally, qualifies leads, auto-enrolls members, runs campaigns',
+      capabilities: [
+        'capture_leads',
+        'qualify_leads',
+        'auto_signup_members',
+        'generate_onboarding',
+        'run_campaigns',
+        'halal_stock_screening',
+        'zakat_calculation',
+        'referral_tracking',
+        'multi_language_support',
+        'regional_targeting',
+      ],
+      tools: ['stripe_subscriptions', 'email_notifications', 'halal_screener', 'zakat_calculator', 'campaign_engine', 'crm_database']
+    });
+
     console.log('Revenue Stream Agents initialized successfully');
     return this.agents;
   }

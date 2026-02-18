@@ -1,0 +1,13 @@
+{
+  "patched": true,
+  "version": "2.0.0-fungi-scaled",
+  "timestamp": "2026-02-14T12:29:24.873Z",
+  "pendingReload": true,
+  "features": [
+    "External device capacity contribution",
+    "MeshExpander → DataOcean event bridge",
+    "Connected=100%, Discovered=50% contribution",
+    "Auto-recalc on deviceFound/peerConnected",
+    "POST /api/ocean/recalculate endpoint"
+  ]
+}

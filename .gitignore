@@ -117,3 +117,18 @@ stripe-setup-output.log
 
 # Cyber Razor reports
 cyberrazor-reports/
+# Agent API Keys
+.agent_api_keys.json
+
+# Sensitive env files
+.env.production
+.env.darcloud
+__pycache__/
+*.pyc
+*.pid
+
+
+# Large binaries
+minikube-linux-amd64
+awscliv2.zip
+
