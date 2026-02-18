@@ -72,6 +72,28 @@ npm run predeploy
 npm run deploy
 ```
 
+## Client Services Portal
+
+Unified portal for clients to sign in and access all DarCloud™ services:
+
+**Access the Portal:**
+- Sign In: https://darcloud.host/signin.html
+- Portal: https://darcloud.host/portal.html (requires authentication)
+- Demo Access: Available on sign-in page (no account needed)
+
+**Available Services:**
+- 🚛 OliveExpress™ Logistics
+- ⛓️ QuranChain™ Blockchain
+- 🤖 AI Assistant
+- 🍄 Fungi Mesh Network
+- 🔧 Network Management
+- 👥 AI Agents Dashboard
+- 💬 MeshTalk OS™
+- 💰 Revenue Analytics
+- 📊 Operations Dashboard
+
+See [CLIENT_PORTAL.md](./docs/CLIENT_PORTAL.md) for detailed documentation.
+
 ## Network Auto-Connect
 
 Automatically discover and connect all network devices to the DarCloud™ platform:

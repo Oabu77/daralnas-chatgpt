@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Services Portal - DarCloud™</title>
+    <meta name="description" content="Access all DarCloud™ services from one unified portal">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2a5298;
+            --primary-dark: #1e3c72;
+            --secondary: #2ecc71;
+            --accent: #f39c12;
+            --text: #2c3e50;
+            --light: #ecf0f1;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            color: var(--text);
+        }
+        
+        /* Header */
+        .header {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .welcome-text {
+            font-size: 1.1rem;
+            color: var(--text);
+        }
+        
+        .user-email {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .btn-logout {
+            background: var(--error);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-logout:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+        
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .page-title {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        
+        .page-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 3rem;
+            font-size: 1.2rem;
+        }
+        
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .service-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .service-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .service-description {
+            color: #666;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+        
+        .service-status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        
+        .status-live {
+            background: #e8f8f5;
+            color: var(--secondary);
+        }
+        
+        .status-beta {
+            background: #fef5e7;
+            color: var(--accent);
+        }
+        
+        .service-features {
+            list-style: none;
+            margin-top: 1rem;
+            padding-left: 0;
+        }
+        
+        .service-features li {
+            padding: 0.25rem 0;
+            color: #555;
+            font-size: 0.9rem;
+        }
+        
+        .service-features li::before {
+            content: '✓ ';
+            color: var(--secondary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        /* Quick Actions */
+        .quick-actions {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .quick-actions h2 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .action-btn {
+            padding: 1rem;
+            background: var(--light);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: var(--text);
+            text-decoration: none;
+            display: block;
+        }
+        
+        .action-btn:hover {
+            border-color: var(--primary);
+            background: var(--white);
+            transform: translateY(-2px);
+        }
+        
+        .action-btn .icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Error handling */
+        .error {
+            background: #fee;
+            color: #e74c3c;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .header-left,
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="logo">🌐 DarCloud™</div>
+            <div class="welcome-text">
+                Welcome, <span class="user-email" id="user-email">User</span>
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="btn-logout" id="logout-btn">Sign Out</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <h1 class="page-title">Services Portal</h1>
+        <p class="page-subtitle">Access all your DarCloud™ services in one place</p>
+        
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h2>🚀 Quick Actions</h2>
+            <div class="actions-grid">
+                <a href="#" class="action-btn" id="auto-connect-btn">
+                    <span class="icon">🔌</span>
+                    Auto-Connect Devices
+                </a>
+                <a href="/profile.html" class="action-btn">
+                    <span class="icon">👤</span>
+                    My Profile
+                </a>
+                <a href="/checkout.html" class="action-btn">
+                    <span class="icon">💳</span>
+                    Billing & Plans
+                </a>
+                <a href="#" class="action-btn" id="docs-btn">
+                    <span class="icon">📖</span>
+                    API Documentation
+                </a>
+            </div>
+        </div>
+        
+        <!-- Services Grid -->
+        <div class="services-grid">
+            <!-- OliveExpress Logistics -->
+            <a href="/oliveexpress.html" class="service-card">
+                <div class="service-icon">🚛</div>
+                <div class="service-name">OliveExpress™ Logistics</div>
+                <span class="service-status status-live">🟢 LIVE</span>
+                <p class="service-description">
+                    Multi-regional logistics platform with QuranChain integration, AI dispatch, and humanitarian corridors.
+                </p>
+                <ul class="service-features">
+                    <li>18 Active Ports (USA, Mexico, Jordan)</li>
+                    <li>Omar AI / AMĀN Control</li>
+                    <li>Real-time Tracking</li>
+                    <li>30% Founder Royalty</li>
+                </ul>
+            </a>
+            
+            <!-- QuranChain Blockchain -->
+            <a href="/quranchain.html" class="service-card">
+                <div class="service-icon">⛓️</div>
+                <div class="service-name">QuranChain™ Blockchain</div>
+                <span class="service-status status-live">🟢 LIVE</span>
+                <p class="service-description">
+                    Halal blockchain for ethical transactions, smart contracts, and decentralized finance.
+                </p>
+                <ul class="service-features">
+                    <li>Smart Contract Deployment</li>
+                    <li>Automated Escrow</li>
+                    <li>Dispute Resolution</li>
+                    <li>Zero Traditional Banking</li>
+                </ul>
+            </a>
+            
+            <!-- AI Assistant -->
+            <a href="/assistant.html" class="service-card">
+                <div class="service-icon">🤖</div>
+                <div class="service-name">AI Assistant</div>
+                <span class="service-status status-live">🟢 LIVE</span>
+                <p class="service-description">
+                    AI-powered assistant for halal finance guidance, logistics optimization, and technical support.
+                </p>
+                <ul class="service-features">
+                    <li>24/7 Availability</li>
+                    <li>Multi-language Support</li>
+                    <li>Context-aware Responses</li>
+                    <li>Ethical AI Guidelines</li>
+                </ul>
+            </a>
+            
+            <!-- Fungi Mesh Network -->
+            <a href="/fungi.html" class="service-card">
+                <div class="service-icon">🍄</div>
+                <div class="service-name">Fungi Mesh Network</div>
+                <span class="service-status status-live">🟢 LIVE</span>
+                <p class="service-description">
+                    Decentralized mesh network infrastructure for resilient, peer-to-peer connectivity.
+                </p>
+                <ul class="service-features">
+                    <li>Infrastructure Monitoring</li>
+                    <li>Tunnel Management</li>
+                    <li>Network Health Status</li>
+                    <li>Automatic Failover</li>
+                </ul>
+            </a>
+            
+            <!-- Network Management -->
+            <a href="/network.html" class="service-card">
+                <div class="service-icon">🔧</div>
+                <div class="service-name">Network Management</div>
+                <span class="service-status status-live">🟢 LIVE</span>
+                <p class="service-description">
+                    AI-powered network device management with auto-discovery, optimization, and maintenance.
+                </p>
+                <ul class="service-features">
+                    <li>Auto Device Discovery</li>
+                    <li>Performance Monitoring</li>
+                    <li>Auto-Optimization</li>
+                    <li>Memory Management</li>
+                </ul>
+            </a>
+            
+            <!-- Agent Dashboard -->
+            <a href="/agents-dashboard.html" class="service-card">
+                <div class="service-icon">👥</div>
+                <div class="service-name">AI Agents Dashboard</div>
+                <span class="service-status status-beta">🟡 BETA</span>
+                <p class="service-description">
+                    Monitor and manage 180+ AI agents running continuous testing and network expansion.
+                </p>
+                <ul class="service-features">
+                    <li>180 Active Agents</li>
+                    <li>Real-time Monitoring</li>
+                    <li>Auto-scaling</li>
+                    <li>Performance Analytics</li>
+                </ul>
+            </a>
+            
+            <!-- MeshTalk Communication -->
+            <a href="/meshtalk.html" class="service-card">
+                <div class="service-icon">💬</div>
+                <div class="service-name">MeshTalk OS™</div>
+                <span class="service-status status-live">🟢 LIVE</span>
+                <p class="service-description">
+                    Secure, offline-capable communication system for mesh network participants.
+                </p>
+                <ul class="service-features">
+                    <li>Offline Messaging</li>
+                    <li>End-to-End Encryption</li>
+                    <li>Mesh Network Integration</li>
+                    <li>Multi-device Sync</li>
+                </ul>
+            </a>
+            
+            <!-- Revenue Analytics -->
+            <a href="/revenue.html" class="service-card">
+                <div class="service-icon">💰</div>
+                <div class="service-name">Revenue Analytics</div>
+                <span class="service-status status-live">🟢 LIVE</span>
+                <p class="service-description">
+                    Transparent revenue tracking, founder royalties, and financial analytics dashboard.
+                </p>
+                <ul class="service-features">
+                    <li>Real-time Revenue</li>
+                    <li>Founder Royalty Tracking</li>
+                    <li>Transaction Analytics</li>
+                    <li>Zakat Compliance</li>
+                </ul>
+            </a>
+            
+            <!-- Operations Dashboard -->
+            <a href="/dashboard.html" class="service-card">
+                <div class="service-icon">📊</div>
+                <div class="service-name">Operations Dashboard</div>
+                <span class="service-status status-live">🟢 LIVE</span>
+                <p class="service-description">
+                    Comprehensive operations dashboard for monitoring all platform activities and metrics.
+                </p>
+                <ul class="service-features">
+                    <li>Live Metrics</li>
+                    <li>System Health</li>
+                    <li>Active Shipments</li>
+                    <li>User Analytics</li>
+                </ul>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        
+        // Check authentication
+        function checkAuth() {
+            const session = localStorage.getItem('darcloud_session') || sessionStorage.getItem('darcloud_session');
+            
+            if (!session) {
+                // Not logged in, redirect to sign in page
+                window.location.href = '/signin.html';
+                return null;
+            }
+            
+            try {
+                return JSON.parse(session);
+            } catch (e) {
+                console.error('Invalid session data');
+                window.location.href = '/signin.html';
+                return null;
+            }
+        }
+        
+        // Initialize page
+        const sessionData = checkAuth();
+        if (sessionData) {
+            document.getElementById('user-email').textContent = sessionData.email;
+            
+            if (sessionData.demo) {
+                document.querySelector('.welcome-text').innerHTML += ' <span style="background: #fef5e7; color: #f39c12; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.8rem;">DEMO</span>';
+            }
+        }
+        
+        // Logout functionality
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            localStorage.removeItem('darcloud_session');
+            sessionStorage.removeItem('darcloud_session');
+            window.location.href = '/signin.html';
+        });
+        
+        // Auto-connect quick action
+        document.getElementById('auto-connect-btn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            if (confirm('Start auto-connect to discover and connect all network devices?')) {
+                alert('🔌 Auto-connect initiated!\n\nDiscovering devices on your network...\n\nCheck the Network Management page for results.');
+                window.location.href = '/network.html';
+            }
+        });
+        
+        // API Documentation
+        document.getElementById('docs-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.location.href = '/';
+        });
+        
+        // Track page view
+        console.log('Portal loaded for user:', sessionData?.email);
+    </script>
+</body>
+</html>

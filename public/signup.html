@@ -395,7 +395,7 @@
         
         <!-- Already Have Account -->
         <div class="signin-link">
-            Already have an account? <a href="/login.html">Sign In</a>
+            Already have an account? <a href="/signin.html">Sign In</a>
         </div>
         
         <!-- Features -->
@@ -505,16 +505,25 @@
                 if (response.ok) {
                     const data = await response.json();
                     
-                    // Store auth token
-                    localStorage.setItem('darcloud_token', data.token);
-                    localStorage.setItem('darcloud_user', JSON.stringify(data.user));
+                    // Store session for portal access
+                    const session = {
+                        email: formData.email,
+                        loggedIn: true,
+                        plan: formData.plan,
+                        timestamp: new Date().toISOString()
+                    };
+                    localStorage.setItem('darcloud_session', JSON.stringify(session));
                     
-                    // Redirect based on plan
-                    if (formData.plan === 'starter') {
-                        window.location.href = '/dashboard.html';
-                    } else {
-                        window.location.href = '/checkout.html?plan=' + formData.plan;
+                    // Store auth token
+                    if (data.token) {
+                        localStorage.setItem('darcloud_token', data.token);
                     }
+                    if (data.user) {
+                        localStorage.setItem('darcloud_user', JSON.stringify(data.user));
+                    }
+                    
+                    // Redirect to portal for all plans
+                    window.location.href = '/portal.html';
                 } else {
                     const error = await response.json();
                     alert('Sign up failed: ' + (error.message || 'Unknown error'));
@@ -533,11 +542,11 @@
         
         // Social sign up functions
         function signUpWithGoogle() {
-            window.location.href = '/api/auth/google?redirect=/dashboard.html&plan=' + document.getElementById('plan').value;
+            window.location.href = '/api/auth/google?redirect=/portal.html&plan=' + document.getElementById('plan').value;
         }
         
         function signUpWithGitHub() {
-            window.location.href = '/api/auth/github?redirect=/dashboard.html&plan=' + document.getElementById('plan').value;
+            window.location.href = '/api/auth/github?redirect=/portal.html&plan=' + document.getElementById('plan').value;
         }
         
         // Real-time password validation
