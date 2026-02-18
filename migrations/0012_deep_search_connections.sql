@@ -20,7 +20,7 @@ CREATE INDEX IF NOT EXISTS idx_device_connections_status ON device_connections(s
 -- Deep Search History
 CREATE TABLE IF NOT EXISTS deep_search_scans (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    scan_type TEXT NOT NULL CHECK(scan_type IN ('quick', 'deep', 'cloudflare', 'relay')),
+    scan_type TEXT NOT NULL CHECK(scan_type IN ('quick', 'deep', 'cloudflare', 'relay', 'all')),
     ip_range TEXT,
     devices_found INTEGER DEFAULT 0,
     connections_established INTEGER DEFAULT 0,

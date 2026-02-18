@@ -557,7 +557,7 @@ export class ConnectionStatusEndpoint extends OpenAPIRoute {
 			total_connections: connections.results?.length || 0,
 			...counts,
 			connections: connections.results || [],
-			cloudflare_apps: cloudflare_apps.results || [],
+			cloudflare_apps: cloudflareApps.results || [],
 		});
 	}
 }
