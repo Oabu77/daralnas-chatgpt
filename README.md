@@ -72,6 +72,32 @@ npm run predeploy
 npm run deploy
 ```
 
+## Network Auto-Connect
+
+Automatically discover and connect all network devices to the DarCloud™ platform:
+
+```bash
+# Run auto-connect
+npm run auto-connect
+
+# Or use TypeScript version
+npm run auto-connect:ts
+```
+
+**Features:**
+- 🔍 Automatic network scanning
+- 🔌 Device auto-connection to Fungi Mesh
+- 🤖 Automatic maintenance and optimization
+- 📊 Real-time performance monitoring
+
+**Configuration:**
+```bash
+# Custom API and scan range
+API_URL=http://localhost:8787 SCAN_RANGE=192.168.1.0/24 npm run auto-connect
+```
+
+See [AUTO_CONNECT.md](./docs/AUTO_CONNECT.md) for detailed documentation.
+
 ## API Endpoints (60+)
 
 ### Shipment Management

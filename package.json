@@ -30,6 +30,8 @@
 	},
 	"private": true,
 	"scripts": {
+		"auto-connect": "bash scripts/auto-connect.sh",
+		"auto-connect:ts": "npx tsx scripts/auto-connect.ts",
 		"cf-typegen": "wrangler types",
 		"deploy": "wrangler deploy",
 		"deploy:darcloud": "bash scripts/deploy-darcloud.sh",
