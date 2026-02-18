@@ -245,6 +245,12 @@
         </div>
 
         <div class="action-buttons" style="margin-top: 20px;">
+            <button class="btn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white;" onclick="deepSearch()">🔎 Deep Search & Connect</button>
+            <button class="btn" style="background: linear-gradient(135deg, #10b981, #059669); color: white;" onclick="reconnectAll()">🔄 Reconnect All</button>
+            <button class="btn" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;" onclick="showConnectionStatus()">📊 Connection Status</button>
+        </div>
+
+        <div class="action-buttons" style="margin-top: 20px;">
             <button class="btn" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white;" onclick="discoverDevices()">🔍 Discover All Devices</button>
             <button class="btn" style="background: linear-gradient(135deg, #06b6d4, #0891b2); color: white;" onclick="optimizeMemory()">💾 Optimize Memory</button>
             <button class="btn" style="background: linear-gradient(135deg, #f43f5e, #e11d48); color: white;" onclick="scaleNodes()">🚀 Launch Nodes</button>
@@ -463,6 +469,110 @@
             });
             const data = await response.json();
             alert(`✅ Auto-Growth Enabled!\n\nCurrent nodes: ${data.current_nodes}\nMax nodes: ${data.max_nodes}\nGrowth rate: ${data.growth_rate}\n\n${data.message}`);
+        }
+
+        // Deep Search and Reconnect Functions
+        async function deepSearch() {
+            // Show loading state
+            const origText = event.target.textContent;
+            event.target.textContent = '🔎 Searching...';
+            event.target.disabled = true;
+
+            try {
+                const response = await fetch(`${API_BASE}/network/deep-search`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        scan_type: 'all',
+                        scan_cloudflare: true,
+                        scan_relay: true,
+                        auto_connect: true,
+                        timeout_ms: 5000
+                    })
+                });
+                const data = await response.json();
+                
+                let message = `✅ Deep Search Complete!\n\n`;
+                message += `📊 Scan Results:\n`;
+                message += `• Network devices found: ${data.devices_found}\n`;
+                message += `• Cloudflare apps found: ${data.cloudflare_apps_found}\n`;
+                message += `• Connections established: ${data.connections_established}\n`;
+                message += `• Scan duration: ${data.scan_duration_ms}ms\n\n`;
+                
+                if (data.cloudflare_apps.length > 0) {
+                    message += `☁️ Cloudflare Apps:\n`;
+                    data.cloudflare_apps.forEach(app => {
+                        message += `  • ${app.app_name} (${app.app_type}) - ${app.health_status}\n`;
+                    });
+                    message += `\n`;
+                }
+                
+                if (data.devices.length > 0) {
+                    message += `🖥️ Top Devices:\n`;
+                    data.devices.slice(0, 5).forEach(device => {
+                        message += `  • ${device.name} (${device.ip}) - ${device.status}\n`;
+                    });
+                }
+                
+                alert(message);
+                await scanDevices(); // Refresh display
+            } finally {
+                event.target.textContent = origText;
+                event.target.disabled = false;
+            }
+        }
+
+        async function reconnectAll() {
+            const response = await fetch(`${API_BASE}/network/reconnect`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    retry_failed: true,
+                    max_retries: 3,
+                    backoff_ms: 1000
+                })
+            });
+            const data = await response.json();
+            
+            let message = `🔄 Reconnection Complete!\n\n`;
+            message += `✅ Reconnected: ${data.reconnected}\n`;
+            message += `❌ Failed: ${data.failed}\n`;
+            message += `📊 Total attempts: ${data.total_attempts}\n\n`;
+            
+            if (data.results.length > 0) {
+                message += `Results:\n`;
+                data.results.forEach(result => {
+                    const icon = result.status === 'reconnected' ? '✅' : '❌';
+                    message += `  ${icon} ${result.device_id}: ${result.status}\n`;
+                });
+            }
+            
+            alert(message);
+            await scanDevices(); // Refresh display
+        }
+
+        async function showConnectionStatus() {
+            const response = await fetch(`${API_BASE}/network/connections/status`);
+            const data = await response.json();
+            
+            let message = `📊 Connection Status Overview\n\n`;
+            message += `Total connections: ${data.total_connections}\n`;
+            message += `✅ Active: ${data.active}\n`;
+            message += `🔄 Reconnecting: ${data.reconnecting}\n`;
+            message += `❌ Disconnected: ${data.disconnected}\n`;
+            message += `⚠️ Failed: ${data.failed}\n\n`;
+            
+            if (data.cloudflare_apps.length > 0) {
+                message += `☁️ Cloudflare Apps (${data.cloudflare_apps.length}):\n`;
+                data.cloudflare_apps.forEach(app => {
+                    const statusIcon = app.health_status === 'healthy' ? '✅' : 
+                                     app.health_status === 'degraded' ? '⚠️' : '❌';
+                    message += `  ${statusIcon} ${app.app_name} - ${app.health_status}\n`;
+                });
+            }
+            
+            alert(message);
+        }
         }
     </script>
 </body>
