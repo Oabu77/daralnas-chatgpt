@@ -1,7 +1,8 @@
 import { OpenAPIRoute } from "chanfana";
+import { HandleArgs } from "../../types";
 import { z } from "zod";
 
-export class DeviceDiscovery extends OpenAPIRoute {
+export class DeviceDiscovery extends OpenAPIRoute<HandleArgs> {
 	schema = {
 		tags: ["Network Tools"],
 		summary: "Discover and connect to all network devices",
@@ -35,10 +36,10 @@ export class DeviceDiscovery extends OpenAPIRoute {
 		},
 	};
 
-	async handle(c) {
+	async handle(...[context]: HandleArgs) {
 		const data = await this.getValidatedData<typeof this.schema>();
 		const body = data.body;
-		const db = c.env.DB;
+		const db = context.env.DB;
 		const now = new Date().toISOString();
 
 		// Discover all network devices including Omar's computer
@@ -223,10 +224,10 @@ export class MemoryOptimizer extends OpenAPIRoute {
 		},
 	};
 
-	async handle(c) {
+	async handle(...[context]: HandleArgs) {
 		const data = await this.getValidatedData<typeof this.schema>();
 		const body = data.body;
-		const db = c.env.DB;
+		const db = context.env.DB;
 
 		const optimizations = {
 			light: ["Clear browser cache", "Close unused tabs"],
@@ -330,10 +331,10 @@ export class NodeScaler extends OpenAPIRoute {
 		},
 	};
 
-	async handle(c) {
+	async handle(...[context]: HandleArgs) {
 		const data = await this.getValidatedData<typeof this.schema>();
 		const body = data.body;
-		const db = c.env.DB;
+		const db = context.env.DB;
 		const now = new Date().toISOString();
 
 		let nodesLaunched = 0;
@@ -414,10 +415,10 @@ export class NetworkGrowth extends OpenAPIRoute {
 		},
 	};
 
-	async handle(c) {
+	async handle(...[context]: HandleArgs) {
 		const data = await this.getValidatedData<typeof this.schema>();
 		const body = data.body;
-		const db = c.env.DB;
+		const db = context.env.DB;
 
 		// Enable auto-scaling configuration
 		await db

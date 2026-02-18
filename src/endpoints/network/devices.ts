@@ -1,7 +1,8 @@
 import { OpenAPIRoute } from "chanfana";
+import { HandleArgs } from "../../types";
 import { z } from "zod";
 
-export class DeviceMonitor extends OpenAPIRoute {
+export class DeviceMonitor extends OpenAPIRoute<HandleArgs> {
 	schema = {
 		tags: ["Network Management"],
 		summary: "Monitor and optimize all network devices",
@@ -34,10 +35,10 @@ export class DeviceMonitor extends OpenAPIRoute {
 		},
 	};
 
-	async handle(c) {
+	async handle(...[context]: HandleArgs) {
 		const data = await this.getValidatedData<typeof this.schema>();
 		const body = data.body;
-		const db = c.env.DB;
+		const db = context.env.DB;
 
 		const now = new Date().toISOString();
 
@@ -157,7 +158,7 @@ export class DeviceMonitor extends OpenAPIRoute {
 	}
 }
 
-export class AutoMaintenance extends OpenAPIRoute {
+export class AutoMaintenance extends OpenAPIRoute<HandleArgs> {
 	schema = {
 		tags: ["Network Management"],
 		summary: "Enable automatic device maintenance",
@@ -191,10 +192,10 @@ export class AutoMaintenance extends OpenAPIRoute {
 		},
 	};
 
-	async handle(c) {
+	async handle(...[context]: HandleArgs) {
 		const data = await this.getValidatedData<typeof this.schema>();
 		const body = data.body;
-		const db = c.env.DB;
+		const db = context.env.DB;
 
 		const now = new Date();
 		const next_check = new Date(now.getTime() + body.interval_minutes * 60 * 1000);
@@ -219,7 +220,7 @@ export class AutoMaintenance extends OpenAPIRoute {
 	}
 }
 
-export class PerformanceReport extends OpenAPIRoute {
+export class PerformanceReport extends OpenAPIRoute<HandleArgs> {
 	schema = {
 		tags: ["Network Management"],
 		summary: "Get network performance report",
@@ -241,8 +242,8 @@ export class PerformanceReport extends OpenAPIRoute {
 		},
 	};
 
-	async handle(c) {
-		const db = c.env.DB;
+	async handle(...[context]: HandleArgs) {
+		const db = context.env.DB;
 
 		const devices = await db.prepare("SELECT COUNT(*) as count FROM network_devices").first();
 
