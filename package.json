@@ -32,10 +32,13 @@
 	"scripts": {
 		"cf-typegen": "wrangler types",
 		"deploy": "wrangler deploy",
+		"deploy:darcloud": "bash scripts/deploy-darcloud.sh",
+		"deploy:pages": "wrangler pages deploy public --project-name=darcloud-pages",
 		"dev": "pnpm seedLocalDb && wrangler dev",
 		"predeploy": "wrangler d1 migrations apply DB --remote",
 		"schema": "npx chanfana",
 		"seedLocalDb": "wrangler d1 migrations apply DB --local",
+		"setup:domain": "bash scripts/setup-domain.sh",
 		"test": "wrangler deploy --dry-run && npx vitest run --config tests/vitest.config.mts"
 	}
 }

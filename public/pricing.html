@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - DarCloud™</title>
+    <meta name="description" content="Transparent, halal pricing for DarCloud™ services. No hidden fees, no riba, pay only for what you use.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2a5298;
+            --primary-dark: #1e3c72;
+            --secondary: #2ecc71;
+            --accent: #f39c12;
+            --text: #2c3e50;
+            --light: #ecf0f1;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+        }
+        
+        nav {
+            background: var(--white);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        nav .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+        
+        .cta-button {
+            background: var(--primary);
+            color: var(--white);
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .cta-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .hero {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            color: var(--white);
+            padding: 8rem 2rem 4rem;
+            margin-top: 70px;
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        
+        .billing-toggle {
+            display: inline-flex;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50px;
+            padding: 0.3rem;
+            margin: 0 auto;
+        }
+        
+        .billing-toggle button {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            background: transparent;
+            color: var(--white);
+            cursor: pointer;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .billing-toggle button.active {
+            background: var(--white);
+            color: var(--primary);
+        }
+        
+        .section {
+            padding: 5rem 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .pricing-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            text-align: center;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+        
+        .pricing-card.featured {
+            border: 3px solid var(--secondary);
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.featured::before {
+            content: "MOST POPULAR";
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--secondary);
+            color: var(--white);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+        
+        .plan-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .pricing-card h3 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+        
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+        
+        .price span {
+            font-size: 1.2rem;
+            color: #666;
+        }
+        
+        .annual-price {
+            display: none;
+        }
+        
+        .billing-toggle-active .annual-price {
+            display: inline;
+        }
+        
+        .billing-toggle-active .monthly-price {
+            display: none;
+        }
+        
+        .save-badge {
+            background: var(--accent);
+            color: var(--white);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-left: 0.5rem;
+        }
+        
+        .pricing-features {
+            list-style: none;
+            margin: 2rem 0;
+            text-align: left;
+        }
+        
+        .pricing-features li {
+            padding: 0.75rem 0;
+            color: #666;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--secondary);
+            font-weight: bold;
+            margin-right: 0.75rem;
+            font-size: 1.2rem;
+        }
+        
+        .select-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .select-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .featured .select-button {
+            background: var(--secondary);
+        }
+        
+        .featured .select-button:hover {
+            background: #27ae60;
+        }
+        
+        .comparison-table {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            padding: 1rem;
+            background: var(--light);
+            font-weight: 600;
+            text-align: left;
+            color: var(--primary-dark);
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--light);
+        }
+        
+        .check {
+            color: var(--secondary);
+            font-size: 1.5rem;
+        }
+        
+        .faq-section {
+            background: var(--light);
+        }
+        
+        .faq-item {
+            background: var(--white);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+        
+        .faq-item h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .faq-item p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        footer {
+            background: var(--primary-dark);
+            color: var(--white);
+            padding: 3rem 2rem 1rem;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-section h4 {
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            display: block;
+            padding: 0.3rem 0;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: var(--white);
+        }
+        
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            opacity: 0.7;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+            
+            .comparison-table {
+                overflow-x: scroll;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="container">
+            <a href="/" class="logo">☁️ DarCloud™</a>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/#features">Features</a></li>
+                <li><a href="/pricing.html">Pricing</a></li>
+                <li><a href="/about.html">About</a></li>
+            </ul>
+            <a href="/signup.html" class="cta-button">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Simple, Transparent Pricing</h1>
+        <p>No hidden fees. No riba. Pay only for what you use with halal, ethical pricing.</p>
+        <div class="billing-toggle">
+            <button class="active" onclick="toggleBilling('monthly')">Monthly</button>
+            <button onclick="toggleBilling('annual')">Annual <span class="save-badge">Save 20%</span></button>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="container">
+            <div class="pricing-grid">
+                <!-- Starter Plan -->
+                <div class="pricing-card">
+                    <div class="plan-icon">🌱</div>
+                    <h3>Starter</h3>
+                    <div class="price">
+                        <span class="monthly-price">Free</span>
+                        <span class="annual-price">Free</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 2rem;">Perfect for trying out our platform</p>
+                    <ul class="pricing-features">
+                        <li>1,000 API requests/month</li>
+                        <li>Basic AI features</li>
+                        <li>Community support</li>
+                        <li>Dashboard access</li>
+                        <li>Single region (USA)</li>
+                        <li>1 GB storage</li>
+                        <li>Basic analytics</li>
+                    </ul>
+                    <button class="select-button" onclick="selectPlan('starter')">Start Free</button>
+                </div>
+
+                <!-- Professional Plan -->
+                <div class="pricing-card featured">
+                    <div class="plan-icon">💼</div>
+                    <h3>Professional</h3>
+                    <div class="price">
+                        <span class="monthly-price">$99<span>/mo</span></span>
+                        <span class="annual-price">$79<span>/mo</span></span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 2rem;">For growing businesses</p>
+                    <ul class="pricing-features">
+                        <li>Unlimited API requests</li>
+                        <li>All AI models (Llama, Mistral, SD XL)</li>
+                        <li>OliveExpress™ logistics access</li>
+                        <li>QuranChain™ integration</li>
+                        <li>Multi-region support (3 regions)</li>
+                        <li>50 GB storage</li>
+                        <li>Real-time analytics</li>
+                        <li>Priority support (24-48h)</li>
+                        <li>99.99% uptime SLA</li>
+                    </ul>
+                    <button class="select-button" onclick="selectPlan('professional')">Get Started</button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <div class="plan-icon">🏢</div>
+                    <h3>Enterprise</h3>
+                    <div class="price">
+                        <span>Custom</span>
+                    </div>
+                    <p style="color: #666; margin-bottom: 2rem;">For large-scale operations</p>
+                    <ul class="pricing-features">
+                        <li>Everything in Professional</li>
+                        <li>Dedicated infrastructure</li>
+                        <li>Custom AI model training</li>
+                        <li>White-label options</li>
+                        <li>Custom SLA guarantees</li>
+                        <li>Unlimited storage</li>
+                        <li>24/7 phone support</li>
+                        <li>Dedicated account manager</li>
+                        <li>Custom integrations</li>
+                        <li>Volume discounts</li>
+                    </ul>
+                    <button class="select-button" onclick="selectPlan('enterprise')">Contact Sales</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section class="section" style="background: var(--light);">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: var(--primary-dark);">Compare Plans</h2>
+            <div class="comparison-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th>Starter</th>
+                            <th>Professional</th>
+                            <th>Enterprise</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>API Requests</strong></td>
+                            <td>1,000/month</td>
+                            <td>Unlimited</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI Models</strong></td>
+                            <td>Basic</td>
+                            <td>All models</td>
+                            <td>All + Custom</td>
+                        </tr>
+                        <tr>
+                            <td><strong>OliveExpress™</strong></td>
+                            <td>-</td>
+                            <td><span class="check">✓</span></td>
+                            <td><span class="check">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>QuranChain™</strong></td>
+                            <td>-</td>
+                            <td><span class="check">✓</span></td>
+                            <td><span class="check">✓</span></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Regions</strong></td>
+                            <td>1 (USA)</td>
+                            <td>3 (USA, MX, JO)</td>
+                            <td>Custom</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Storage</strong></td>
+                            <td>1 GB</td>
+                            <td>50 GB</td>
+                            <td>Unlimited</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Support</strong></td>
+                            <td>Community</td>
+                            <td>Priority (24-48h)</td>
+                            <td>24/7 Dedicated</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SLA</strong></td>
+                            <td>99.9%</td>
+                            <td>99.99%</td>
+                            <td>Custom</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Analytics</strong></td>
+                            <td>Basic</td>
+                            <td>Real-time</td>
+                            <td>Custom dashboards</td>
+                        </tr>
+                        <tr>
+                            <td><strong>White-label</strong></td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td><span class="check">✓</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section faq-section">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 2.5rem; margin-bottom: 3rem; color: var(--primary-dark);">Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <h3>Is this really Sharia-compliant?</h3>
+                <p>Yes. DarCloud™ operates on transparent, fixed-fee pricing with no interest (riba), no speculative investments, and no hidden charges. All our financial operations have been reviewed by Islamic scholars.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Can I switch plans anytime?</h3>
+                <p>Absolutely! You can upgrade, downgrade, or cancel your plan at any time. There are no lock-in periods or cancellation fees.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>What payment methods do you accept?</h3>
+                <p>We accept credit cards, debit cards, and cryptocurrency (BTC, ETH, USDC, DAI). All transactions are processed securely with 256-bit SSL encryption.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>What happens if I exceed my limits?</h3>
+                <p>For the Starter plan, requests beyond 1,000/month will be throttled. We'll notify you via email and dashboard when you're approaching your limit. Professional plans have no limits.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Do you offer refunds?</h3>
+                <p>Yes! We offer a 30-day money-back guarantee on all paid plans. If you're not satisfied, contact us for a full refund within 30 days of purchase.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>What's included in the 99.99% uptime SLA?</h3>
+                <p>Our Professional and Enterprise plans guarantee 99.99% uptime (less than 5 minutes downtime per month). If we fail to meet this, you receive service credits automatically.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>How does the 30% founder royalty work?</h3>
+                <p>For OliveExpress™ transactions, 30% of revenue goes to the platform founder as halal profit-sharing. This is transparently documented in every transaction on QuranChain™.</p>
+            </div>
+            
+            <div class="faq-item">
+                <h3>Can I get a custom quote for Enterprise?</h3>
+                <p>Yes! Contact our sales team at contact@darcloud.host or click "Contact Sales" above. We'll create a custom plan based on your specific needs.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Platform</h4>
+                <ul>
+                    <li><a href="/oliveexpress.html">OliveExpress™</a></li>
+                    <li><a href="/quranchain.html">QuranChain™</a></li>
+                    <li><a href="/assistant.html">AI Assistant</a></li>
+                    <li><a href="/fungi.html">Fungi Mesh</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <ul>
+                    <li><a href="/about.html">About Us</a></li>
+                    <li><a href="/pricing.html">Pricing</a></li>
+                    <li><a href="/revenue.html">Revenue Model</a></li>
+                    <li><a href="mailto:contact@darcloud.host">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Developers</h4>
+                <ul>
+                    <li><a href="/">API Docs</a></li>
+                    <li><a href="/dashboard.html">Dashboard</a></li>
+                    <li><a href="/network.html">Status</a></li>
+                    <li><a href="https://github.com/Oabu77/daralnas-chatgpt">GitHub</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Legal</h4>
+                <ul>
+                    <li><a href="#">Terms</a></li>
+                    <li><a href="#">Privacy</a></li>
+                    <li><a href="#">Sharia Compliance</a></li>
+                    <li><a href="#">Security</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Dar Al-Nas. DarCloud™, OliveExpress™, and QuranChain™ are trademarks of Dar Al-Nas.</p>
+        </div>
+    </footer>
+
+    <script>
+        let currentBilling = 'monthly';
+        
+        function toggleBilling(type) {
+            currentBilling = type;
+            document.querySelectorAll('.billing-toggle button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.currentTarget.classList.add('active');
+            
+            if (type === 'annual') {
+                document.body.classList.add('billing-toggle-active');
+            } else {
+                document.body.classList.remove('billing-toggle-active');
+            }
+        }
+        
+        function selectPlan(plan) {
+            const billingParam = currentBilling === 'annual' ? '&billing=annual' : '';
+            window.location.href = `/signup.html?plan=${plan}${billingParam}`;
+        }
+        
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js');
+        }
+    </script>
+</body>
+</html>

@@ -220,6 +220,19 @@ export class LaptopBridgeClient {
   }
 
   /**
+   * Deploy to laptop via Bluetooth
+   */
+  async bluetoothDeploy(): Promise<{ success: boolean; stdout: string; stderr: string }> {
+    const result = await this.request<ExecuteCommandResponse>('/bluetooth_deploy', {});
+
+    return {
+      success: result.success || false,
+      stdout: result.stdout || '',
+      stderr: result.stderr || '',
+    };
+  }
+
+  /**
    * Get full file path inventory from laptop
    */
   async getFileInventory(rootPath: string): Promise<string[]> {

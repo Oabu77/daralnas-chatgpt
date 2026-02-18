@@ -1,4 +1,5 @@
-import { OpenAPIRoute, OpenAPIRouter } from "chanfana";
+import { OpenAPIRoute, fromHono } from "chanfana";
+import { Hono } from "hono";
 import { IranReliefAgent } from "../../agents/iran-relief-agent";
 
 export class IranReliefAgentEndpoint extends OpenAPIRoute {
@@ -52,8 +53,6 @@ export class IranReliefAgentEndpoint extends OpenAPIRoute {
 	}
 }
 
-const router = new OpenAPIRouter();
+export const agentsRouter = fromHono(new Hono());
 
-router.post("/iran-relief-agent", IranReliefAgentEndpoint);
-
-export { router as agentsRouter };
+agentsRouter.post("/iran-relief-agent", IranReliefAgentEndpoint);

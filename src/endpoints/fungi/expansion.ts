@@ -185,8 +185,9 @@ export const expansionRouter = fromHono(expansionApp);
 
 // Initialize on module load
 initializeCountries();
-performExpansion();
-performMaintenance();
-optimizeNetwork();
+// Note: Background processes disabled - call /expansion/start endpoint to begin
+// performExpansion();
+// performMaintenance();
+// optimizeNetwork();
 
 export { expansionRouter as default };

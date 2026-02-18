@@ -7,6 +7,20 @@
 		"enabled": true,
 		"head_sampling_rate": 1
 	},
+	"routes": [
+		{
+			"pattern": "darcloud.host/*",
+			"custom_domain": true
+		},
+		{
+			"pattern": "www.darcloud.host/*",
+			"custom_domain": true
+		},
+		{
+			"pattern": "api.darcloud.host/*",
+			"custom_domain": true
+		}
+	],
 	"d1_databases": [
 		{
 			"binding": "DB",
@@ -14,11 +28,29 @@
 			"database_id": "26b921d0-3226-485d-a105-dc820a9abdbc"
 		}
 	],
+	"ai": {
+		"binding": "AI"
+	},
+	"vectorize": [
+		{
+			"binding": "VECTORIZE",
+			"index_name": "darcloud-vectors"
+		}
+	],
+	"kv_namespaces": [
+		{
+			"binding": "KV",
+			"id": "preview_id",
+			"preview_id": "preview_id"
+		}
+	],
 	"vars": {
 		"ENVIRONMENT": "production",
 		"AUTO_REPAIR_ENABLED": "true",
 		"FUNGI_MESH_ENABLED": "true",
-		"DARCLOUD_ENABLED": "true"
+		"DARCLOUD_ENABLED": "true",
+		"DOMAIN": "darcloud.host",
+		"API_URL": "https://api.darcloud.host"
 	},
 	"assets": {
 		"directory": "./public",

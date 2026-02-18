@@ -242,6 +242,30 @@ def search():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
+@app.route('/bluetooth_deploy', methods=['POST'])
+def bluetooth_deploy():
+    """Deploy via Bluetooth to nearby devices"""
+    if not verify_auth(request):
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        # Run bluetooth deployment script
+        proc = subprocess.run(
+            ['python3', os.path.join(os.path.dirname(__file__), 'bluetooth-deploy.py')],
+            capture_output=True,
+            text=True,
+            timeout=60
+        )
+        
+        return jsonify({
+            'success': proc.returncode == 0,
+            'stdout': proc.stdout,
+            'stderr': proc.stderr,
+            'returncode': proc.returncode
+        })
+    except Exception as e:
+        return jsonify({'success': False, 'error': str(e)}), 500
+
 @app.route('/execute_command', methods=['POST'])
 def execute_command():
     """Execute a shell command (restricted)"""
@@ -254,7 +278,7 @@ def execute_command():
     timeout = data.get('timeout', 30)
     
     # Whitelist of allowed commands
-    ALLOWED_COMMANDS = ['ls', 'pwd', 'whoami', 'uname', 'df', 'du', 'find', 'grep', 'cat', 'head', 'tail']
+    ALLOWED_COMMANDS = ['ls', 'pwd', 'whoami', 'uname', 'df', 'du', 'find', 'grep', 'cat', 'head', 'tail', 'bluetoothctl', 'rfcomm']
     
     if not command:
         return jsonify({'success': False, 'error': 'Command required'}), 400

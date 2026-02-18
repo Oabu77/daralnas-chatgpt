@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - DarCloud™</title>
+    <meta name="description" content="Complete your DarCloud™ subscription">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2a5298;
+            --primary-dark: #1e3c72;
+            --secondary: #2ecc71;
+            --accent: #f39c12;
+            --text: #2c3e50;
+            --light: #ecf0f1;
+            --white: #ffffff;
+            --error: #e74c3c;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--light);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+        
+        .checkout-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        h1 {
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: #666;
+        }
+        
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        .card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .card h2 {
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .plan-summary {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .plan-summary h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+        
+        .plan-details {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.75rem;
+            color: #666;
+        }
+        
+        .plan-details strong {
+            color: var(--text);
+        }
+        
+        .price-breakdown {
+            border-top: 2px solid #ddd;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .total-row {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            border-top: 2px solid var(--primary);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .features-included {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+        
+        .features-included li {
+            padding: 0.5rem 0;
+            color: #666;
+        }
+        
+        .features-included li::before {
+            content: "✓ ";
+            color: var(--secondary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .payment-methods {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .payment-method {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--primary);
+        }
+        
+        .payment-method.active {
+            border-color: var(--primary);
+            background: rgba(42, 82, 152, 0.1);
+        }
+        
+        .payment-method input[type="radio"] {
+            margin-right: 0.5rem;
+        }
+        
+        .card-icons {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 0.5rem;
+            font-size: 1.5rem;
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 1.25rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-button:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .submit-button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .security-note {
+            text-align: center;
+            margin-top: 1rem;
+            color: #666;
+            font-size: 0.875rem;
+        }
+        
+        .security-note::before {
+            content: "🔒 ";
+        }
+        
+        .promo-code {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .promo-code input {
+            flex: 1;
+        }
+        
+        .promo-code button {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .promo-code button:hover {
+            background: var(--primary-dark);
+        }
+        
+        .guarantee-badge {
+            background: linear-gradient(135deg, var(--secondary) 0%, #27ae60 100%);
+            color: var(--white);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+        
+        .guarantee-badge h4 {
+            margin-bottom: 0.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="checkout-container">
+        <div class="header">
+            <div class="logo">☁️</div>
+            <h1>Complete Your Purchase</h1>
+            <p class="subtitle">Secure, Sharia-compliant payment processing</p>
+        </div>
+        
+        <div class="checkout-grid">
+            <!-- Left Column: Payment Form -->
+            <div class="card">
+                <h2>💳 Payment Information</h2>
+                
+                <!-- Payment Method Selection -->
+                <div class="payment-methods">
+                    <div class="payment-method active" onclick="selectPaymentMethod('card')">
+                        <input type="radio" name="payment" value="card" checked>
+                        <div>💳 Card</div>
+                        <div class="card-icons">
+                            <span>💳</span>
+                        </div>
+                    </div>
+                    <div class="payment-method" onclick="selectPaymentMethod('crypto')">
+                        <input type="radio" name="payment" value="crypto">
+                        <div>⛓️ Crypto</div>
+                        <div class="card-icons">
+                            <span>₿</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Card Payment Form -->
+                <form id="paymentForm" onsubmit="handlePayment(event)">
+                    <div id="cardPayment">
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input type="text" id="cardNumber" name="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="expiry">Expiry Date</label>
+                                <input type="text" id="expiry" name="expiry" placeholder="MM/YY" maxlength="5" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cvc">CVC</label>
+                                <input type="text" id="cvc" name="cvc" placeholder="123" maxlength="4" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="cardName">Cardholder Name</label>
+                            <input type="text" id="cardName" name="cardName" placeholder="John Doe" required>
+                        </div>
+                    </div>
+                    
+                    <!-- Crypto Payment (Hidden by default) -->
+                    <div id="cryptoPayment" style="display: none;">
+                        <p>Select your preferred cryptocurrency:</p>
+                        <div class="form-group">
+                            <select id="cryptoCurrency">
+                                <option value="btc">Bitcoin (BTC)</option>
+                                <option value="eth">Ethereum (ETH)</option>
+                                <option value="usdc">USDC</option>
+                                <option value="dai">DAI</option>
+                            </select>
+                        </div>
+                        <p style="color: #666; font-size: 0.9rem; margin-top: 1rem;">
+                            You'll receive a payment address after clicking "Complete Purchase"
+                        </p>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="billingEmail">Billing Email</label>
+                        <input type="email" id="billingEmail" name="billingEmail" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="billingAddress">Billing Address</label>
+                        <input type="text" id="billingAddress" name="billingAddress" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="zipCode">ZIP Code</label>
+                            <input type="text" id="zipCode" name="zipCode" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <select id="country" name="country" required>
+                            <option value="">Select Country</option>
+                            <option value="US">United States</option>
+                            <option value="MX">Mexico</option>
+                            <option value="JO">Jordan</option>
+                            <option value="SA">Saudi Arabia</option>
+                            <option value="AE">United Arab Emirates</option>
+                            <option value="UK">United Kingdom</option>
+                            <option value="CA">Canada</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="submit-button" id="submitButton">
+                        Complete Purchase 🔒
+                    </button>
+                    
+                    <p class="security-note">
+                        256-bit SSL encryption. PCI DSS compliant. Sharia-compliant processing.
+                    </p>
+                </form>
+            </div>
+            
+            <!-- Right Column: Order Summary -->
+            <div class="card">
+                <h2>📦 Order Summary</h2>
+                
+                <div class="plan-summary">
+                    <h3 id="planName">Professional Plan</h3>
+                    <div class="plan-details">
+                        <span>Billing Cycle:</span>
+                        <strong id="billingCycle">Monthly</strong>
+                    </div>
+                    <div class="plan-details">
+                        <span>Started:</span>
+                        <strong id="startDate">Today</strong>
+                    </div>
+                    <div class="plan-details">
+                        <span>Next Billing:</span>
+                        <strong id="nextBilling">March 18, 2026</strong>
+                    </div>
+                </div>
+                
+                <!-- Features Included -->
+                <h3>✨ What's Included</h3>
+                <ul class="features-included" id="featuresList">
+                    <li>Unlimited API requests</li>
+                    <li>All AI models (Llama 3.1, Mistral, SD XL)</li>
+                    <li>OliveExpress™ logistics platform</li>
+                    <li>QuranChain™ blockchain integration</li>
+                    <li>Multi-region support (USA, Mexico, Jordan)</li>
+                    <li>Real-time analytics dashboard</li>
+                    <li>Priority support (24-48h response)</li>
+                    <li>99.99% uptime SLA</li>
+                </ul>
+                
+                <!-- Promo Code -->
+                <div class="form-group" style="margin-top: 2rem;">
+                    <label for="promoCode">Promo Code (Optional)</label>
+                    <div class="promo-code">
+                        <input type="text" id="promoCode" placeholder="Enter code">
+                        <button type="button" onclick="applyPromoCode()">Apply</button>
+                    </div>
+                </div>
+                
+                <!-- Price Breakdown -->
+                <div class="price-breakdown">
+                    <div class="price-row">
+                        <span>Subtotal:</span>
+                        <strong id="subtotal">$99.00</strong>
+                    </div>
+                    <div class="price-row" id="discountRow" style="display: none;">
+                        <span>Discount:</span>
+                        <strong id="discount" style="color: var(--secondary);">-$0.00</strong>
+                    </div>
+                    <div class="price-row">
+                        <span>Tax (if applicable):</span>
+                        <strong id="tax">$0.00</strong>
+                    </div>
+                    <div class="price-row total-row">
+                        <span>Total:</span>
+                        <span id="total">$99.00</span>
+                    </div>
+                </div>
+                
+                <!-- Money-Back Guarantee -->
+                <div class="guarantee-badge">
+                    <h4>✓ 30-Day Money-Back Guarantee</h4>
+                    <p style="font-size: 0.9rem;">Not satisfied? Get a full refund within 30 days, no questions asked.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Get plan from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const plan = urlParams.get('plan') || 'professional';
+        
+        // Plan configurations
+        const plans = {
+            starter: {
+                name: 'Starter Plan',
+                price: 0,
+                features: [
+                    'API access (1000 requests/month)',
+                    'Basic AI features',
+                    'Community support',
+                    'Dashboard access',
+                    'Single region'
+                ]
+            },
+            professional: {
+                name: 'Professional Plan',
+                price: 99,
+                features: [
+                    'Unlimited API requests',
+                    'All AI models (Llama 3.1, Mistral, SD XL)',
+                    'OliveExpress™ logistics platform',
+                    'QuranChain™ blockchain integration',
+                    'Multi-region support (USA, Mexico, Jordan)',
+                    'Real-time analytics dashboard',
+                    'Priority support (24-48h response)',
+                    '99.99% uptime SLA'
+                ]
+            },
+            enterprise: {
+                name: 'Enterprise Plan',
+                price: 'Custom',
+                features: [
+                    'Everything in Professional',
+                    'Dedicated infrastructure',
+                    'Custom AI models',
+                    'White-label options',
+                    'SLA guarantees',
+                    '24/7 phone support',
+                    'Custom integrations',
+                    'Dedicated account manager'
+                ]
+            }
+        };
+        
+        // Initialize page with plan data
+        const currentPlan = plans[plan];
+        document.getElementById('planName').textContent = currentPlan.name;
+        
+        if (currentPlan.price === 'Custom') {
+            document.querySelector('.price-breakdown').innerHTML = '<p style="text-align: center; padding: 2rem;">Please contact sales for custom pricing</p>';
+            document.getElementById('submitButton').textContent = 'Contact Sales';
+        } else {
+            document.getElementById('subtotal').textContent = '$' + currentPlan.price.toFixed(2);
+            document.getElementById('total').textContent = '$' + currentPlan.price.toFixed(2);
+        }
+        
+        // Update features list
+        const featuresList = document.getElementById('featuresList');
+        featuresList.innerHTML = currentPlan.features.map(f => `<li>${f}</li>`).join('');
+        
+        // Set dates
+        const today = new Date();
+        const nextMonth = new Date(today);
+        nextMonth.setMonth(nextMonth.getMonth() + 1);
+        document.getElementById('startDate').textContent = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        document.getElementById('nextBilling').textContent = nextMonth.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+        
+        // Payment method selection
+        function selectPaymentMethod(method) {
+            document.querySelectorAll('.payment-method').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            
+            if (method === 'card') {
+                document.getElementById('cardPayment').style.display = 'block';
+                document.getElementById('cryptoPayment').style.display = 'none';
+            } else {
+                document.getElementById('cardPayment').style.display = 'none';
+                document.getElementById('cryptoPayment').style.display = 'block';
+            }
+        }
+        
+        // Format card number
+        document.getElementById('cardNumber')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\s/g, '');
+            let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+            e.target.value = formattedValue;
+        });
+        
+        // Format expiry date
+        document.getElementById('expiry')?.addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length >= 2) {
+                e.target.value = value.slice(0, 2) + '/' + value.slice(2, 4);
+            } else {
+                e.target.value = value;
+            }
+        });
+        
+        // Apply promo code
+        function applyPromoCode() {
+            const code = document.getElementById('promoCode').value.toUpperCase();
+            const discountRow = document.getElementById('discountRow');
+            const discountEl = document.getElementById('discount');
+            const totalEl = document.getElementById('total');
+            const subtotal = currentPlan.price;
+            
+            // Valid promo codes
+            const promoCodes = {
+                'LAUNCH2026': 0.20,  // 20% off
+                'HALAL10': 0.10,     // 10% off
+                'DARCLOUD': 0.15     // 15% off
+            };
+            
+            if (promoCodes[code]) {
+                const discountAmount = subtotal * promoCodes[code];
+                const newTotal = subtotal - discountAmount;
+                
+                discountRow.style.display = 'flex';
+                discountEl.textContent = '-$' + discountAmount.toFixed(2);
+                totalEl.textContent = '$' + newTotal.toFixed(2);
+                
+                alert('✓ Promo code applied! ' + (promoCodes[code] * 100) + '% discount');
+            } else if (code) {
+                alert('Invalid promo code');
+            }
+        }
+        
+        // Handle payment submission
+        async function handlePayment(event) {
+            event.preventDefault();
+            
+            const submitButton = document.getElementById('submitButton');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Processing...';
+            
+            // Get payment method
+            const paymentMethod = document.querySelector('input[name="payment"]:checked').value;
+            
+            // Collect payment data
+            const paymentData = {
+                plan: plan,
+                paymentMethod: paymentMethod,
+                amount: currentPlan.price,
+                billingEmail: document.getElementById('billingEmail').value,
+                billingAddress: document.getElementById('billingAddress').value,
+                city: document.getElementById('city').value,
+                zipCode: document.getElementById('zipCode').value,
+                country: document.getElementById('country').value,
+                timestamp: new Date().toISOString()
+            };
+            
+            if (paymentMethod === 'card') {
+                paymentData.cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+                paymentData.expiry = document.getElementById('expiry').value;
+                paymentData.cvc = document.getElementById('cvc').value;
+                paymentData.cardName = document.getElementById('cardName').value;
+            } else {
+                paymentData.cryptoCurrency = document.getElementById('cryptoCurrency').value;
+            }
+            
+            try {
+                // Process payment via API
+                const response = await fetch('/api/payments/process', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('darcloud_token')
+                    },
+                    body: JSON.stringify(paymentData)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Store subscription info
+                    localStorage.setItem('darcloud_subscription', JSON.stringify(data.subscription));
+                    
+                    // Redirect to success page
+                    window.location.href = '/dashboard.html?welcome=true';
+                } else {
+                    const error = await response.json();
+                    alert('Payment failed: ' + (error.message || 'Unknown error'));
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Complete Purchase 🔒';
+                }
+            } catch (error) {
+                console.error('Payment error:', error);
+                alert('An error occurred. Please try again.');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Complete Purchase 🔒';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - DarCloud™</title>
+    <meta name="description" content="Create your DarCloud™ account and start building with halal cloud infrastructure">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #2a5298;
+            --primary-dark: #1e3c72;
+            --secondary: #2ecc71;
+            --accent: #f39c12;
+            --text: #2c3e50;
+            --light: #ecf0f1;
+            --white: #ffffff;
+            --error: #e74c3c;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+        
+        .signup-container {
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.2);
+            max-width: 500px;
+            width: 100%;
+            padding: 3rem;
+        }
+        
+        .logo {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+            font-size: 2rem;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+        
+        .plan-selector {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .plan-selector label {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .plan-selector select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            background: var(--white);
+            cursor: pointer;
+        }
+        
+        .plan-selector select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-group input.error {
+            border-color: var(--error);
+        }
+        
+        .error-message {
+            color: var(--error);
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            margin-right: 0.5rem;
+            margin-top: 0.25rem;
+        }
+        
+        .checkbox-group label {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .checkbox-group a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+        
+        .checkbox-group a:hover {
+            text-decoration: underline;
+        }
+        
+        .submit-button {
+            width: 100%;
+            padding: 1rem;
+            background: var(--secondary);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .submit-button:hover {
+            background: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(46, 204, 113, 0.4);
+        }
+        
+        .submit-button:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 2rem 0;
+            color: #999;
+            position: relative;
+        }
+        
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 45%;
+            height: 1px;
+            background: #ddd;
+        }
+        
+        .divider::before {
+            left: 0;
+        }
+        
+        .divider::after {
+            right: 0;
+        }
+        
+        .social-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-button {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            background: var(--white);
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .social-button:hover {
+            border-color: var(--primary);
+            background: var(--light);
+        }
+        
+        .signin-link {
+            text-align: center;
+            margin-top: 2rem;
+            color: #666;
+        }
+        
+        .signin-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .signin-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .features-list {
+            background: var(--light);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .features-list h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--primary-dark);
+        }
+        
+        .features-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .features-list li {
+            padding: 0.5rem 0;
+            color: #666;
+        }
+        
+        .features-list li::before {
+            content: "✓ ";
+            color: var(--secondary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+        
+        .loading.active {
+            display: block;
+        }
+        
+        .spinner {
+            border: 3px solid var(--light);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 600px) {
+            .signup-container {
+                padding: 2rem;
+            }
+            
+            .social-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <div class="logo">☁️</div>
+        <h1>Create Your Account</h1>
+        <p class="subtitle">Start building with DarCloud™ today</p>
+        
+        <!-- Plan Selection -->
+        <div class="plan-selector">
+            <label for="plan">Select Your Plan</label>
+            <select id="plan" name="plan">
+                <option value="starter">Starter - Free</option>
+                <option value="professional" selected>Professional - $99/month</option>
+                <option value="enterprise">Enterprise - Custom Pricing</option>
+            </select>
+        </div>
+        
+        <!-- Social Sign Up -->
+        <div class="social-buttons">
+            <button class="social-button" onclick="signUpWithGoogle()">
+                <span>🔵</span> Google
+            </button>
+            <button class="social-button" onclick="signUpWithGitHub()">
+                <span>⚫</span> GitHub
+            </button>
+        </div>
+        
+        <div class="divider">or sign up with email</div>
+        
+        <!-- Sign Up Form -->
+        <form id="signupForm" onsubmit="handleSignUp(event)">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" name="fullName" required>
+                <span class="error-message" id="fullNameError">Please enter your full name</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="company">Company Name (Optional)</label>
+                <input type="text" id="company" name="company">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+                <span class="error-message" id="emailError">Please enter a valid email</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required minlength="8">
+                <span class="error-message" id="passwordError">Password must be at least 8 characters</span>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                <span class="error-message" id="confirmPasswordError">Passwords do not match</span>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" name="terms" required>
+                <label for="terms">
+                    I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>, and confirm this platform is Sharia-compliant.
+                </label>
+            </div>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="newsletter" name="newsletter">
+                <label for="newsletter">
+                    Send me product updates and offers (optional)
+                </label>
+            </div>
+            
+            <button type="submit" class="submit-button" id="submitButton">
+                Create Account
+            </button>
+        </form>
+        
+        <!-- Loading State -->
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Creating your account...</p>
+        </div>
+        
+        <!-- Already Have Account -->
+        <div class="signin-link">
+            Already have an account? <a href="/login.html">Sign In</a>
+        </div>
+        
+        <!-- Features -->
+        <div class="features-list">
+            <h3>✓ What's Included</h3>
+            <ul>
+                <li>Instant API access</li>
+                <li>AI-powered tools</li>
+                <li>QuranChain™ integration</li>
+                <li>24/7 support dashboard</li>
+                <li>30-day money-back guarantee</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Get plan from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const planParam = urlParams.get('plan');
+        if (planParam) {
+            document.getElementById('plan').value = planParam;
+        }
+        
+        // Form validation
+        function validateForm() {
+            let isValid = true;
+            
+            const email = document.getElementById('email');
+            const password = document.getElementById('password');
+            const confirmPassword = document.getElementById('confirmPassword');
+            const fullName = document.getElementById('fullName');
+            
+            // Reset errors
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+            document.querySelectorAll('input').forEach(el => el.classList.remove('error'));
+            
+            // Validate full name
+            if (!fullName.value.trim()) {
+                fullName.classList.add('error');
+                document.getElementById('fullNameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email.value)) {
+                email.classList.add('error');
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            if (password.value.length < 8) {
+                password.classList.add('error');
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password match
+            if (password.value !== confirmPassword.value) {
+                confirmPassword.classList.add('error');
+                document.getElementById('confirmPasswordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            return isValid;
+        }
+        
+        // Handle form submission
+        async function handleSignUp(event) {
+            event.preventDefault();
+            
+            if (!validateForm()) {
+                return;
+            }
+            
+            const form = document.getElementById('signupForm');
+            const loading = document.getElementById('loading');
+            const submitButton = document.getElementById('submitButton');
+            
+            // Show loading
+            form.style.display = 'none';
+            loading.classList.add('active');
+            submitButton.disabled = true;
+            
+            // Collect form data
+            const formData = {
+                fullName: document.getElementById('fullName').value,
+                company: document.getElementById('company').value,
+                email: document.getElementById('email').value,
+                password: document.getElementById('password').value,
+                plan: document.getElementById('plan').value,
+                newsletter: document.getElementById('newsletter').checked,
+                timestamp: new Date().toISOString()
+            };
+            
+            try {
+                // Create account via API
+                const response = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Store auth token
+                    localStorage.setItem('darcloud_token', data.token);
+                    localStorage.setItem('darcloud_user', JSON.stringify(data.user));
+                    
+                    // Redirect based on plan
+                    if (formData.plan === 'starter') {
+                        window.location.href = '/dashboard.html';
+                    } else {
+                        window.location.href = '/checkout.html?plan=' + formData.plan;
+                    }
+                } else {
+                    const error = await response.json();
+                    alert('Sign up failed: ' + (error.message || 'Unknown error'));
+                    form.style.display = 'block';
+                    loading.classList.remove('active');
+                    submitButton.disabled = false;
+                }
+            } catch (error) {
+                console.error('Sign up error:', error);
+                alert('An error occurred. Please try again.');
+                form.style.display = 'block';
+                loading.classList.remove('active');
+                submitButton.disabled = false;
+            }
+        }
+        
+        // Social sign up functions
+        function signUpWithGoogle() {
+            window.location.href = '/api/auth/google?redirect=/dashboard.html&plan=' + document.getElementById('plan').value;
+        }
+        
+        function signUpWithGitHub() {
+            window.location.href = '/api/auth/github?redirect=/dashboard.html&plan=' + document.getElementById('plan').value;
+        }
+        
+        // Real-time password validation
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            const strength = document.createElement('div');
+            // Add password strength indicator if needed
+        });
+        
+        // Real-time confirm password validation
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            
+            if (confirmPassword && password !== confirmPassword) {
+                this.classList.add('error');
+                document.getElementById('confirmPasswordError').style.display = 'block';
+            } else {
+                this.classList.remove('error');
+                document.getElementById('confirmPasswordError').style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

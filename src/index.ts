@@ -6,6 +6,7 @@ import { oliveexpressRouter } from "./endpoints/oliveexpress/router";
 import { fungiRouter } from "./endpoints/fungi/router";
 import { networkRouter } from "./endpoints/network/router";
 import { agentsRouter } from "./endpoints/agents/router";
+import { aiRouter } from "./endpoints/ai/router";
 import { ContentfulStatusCode } from "hono/utils/http-status";
 import { DummyEndpoint } from "./endpoints/dummyEndpoint";
 import { ChatGPTEndpoint } from "./endpoints/chatgpt";
@@ -50,10 +51,27 @@ const openapi = fromHono(app, {
 	docs_url: "/",
 	schema: {
 		info: {
-			title: "OliveExpress™ Logistics Platform API",
+			title: "DarCloud™ Platform API",
 			version: "1.0.0",
-			description: "Production logistics platform for Dar Al-Nas ecosystem with QuranChain integration, AI-powered dispatch, and multi-regional operations (USA, Mexico, Jordan).",
+			description: "Production platform for DarCloud ecosystem with OliveExpress™ Logistics, QuranChain™ integration, Fungi Mesh monitoring, AI-powered services, and multi-regional operations (USA, Mexico, Jordan). Domain: darcloud.host",
 		},
+		servers: [
+			{
+				url: "https://darcloud.host",
+				descriptAI Services (Workers AI)
+openapi.route("/", aiRouter);
+
+// Register ion: "Production (DarCloud.host)",
+			},
+			{
+				url: "https://api.darcloud.host",
+				description: "API endpoint",
+			},
+			{
+				url: "https://daralnas-chatgpt.oabu77.workers.dev",
+				description: "Cloudflare Workers",
+			},
+		],
 	},
 });
 
