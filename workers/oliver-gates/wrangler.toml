@@ -1,0 +1,24 @@
+name = "oliver-gates-publishing"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+account_id = "3bfc21f5baba642160ec706818e3a19f"
+workers_dev = true
+
+[vars]
+ENVIRONMENT = "production"
+KDP_ACCOUNT_ID = "A2xq3izrirvour"
+AUTHOR_NAME = "Oliver Gates"
+PUBLISHER_NAME = "Dar Al-Nas Publishing"
+ENGINE_ORIGIN = "https://publishing-origin.darcloud.host"
+
+[[routes]]
+pattern = "books.darcloud.host/*"
+zone_name = "darcloud.host"
+
+[[routes]]
+pattern = "publishing.darcloud.host/*"
+zone_name = "darcloud.host"
+
+[[routes]]
+pattern = "olivergates.darcloud.host/*"
+zone_name = "darcloud.host"
