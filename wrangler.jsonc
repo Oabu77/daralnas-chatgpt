@@ -9,15 +9,15 @@
 	},
 	"routes": [
 		{
-			"pattern": "darcloud.host/*",
+			"pattern": "darcloud.host",
 			"custom_domain": true
 		},
 		{
-			"pattern": "www.darcloud.host/*",
+			"pattern": "www.darcloud.host",
 			"custom_domain": true
 		},
 		{
-			"pattern": "api.darcloud.host/*",
+			"pattern": "api.darcloud.host",
 			"custom_domain": true
 		}
 	],
