@@ -32,9 +32,14 @@ RESPONSE=$(curl -s -X POST "$API_URL/network/tools/discover" \
     \"auto_connect\": $AUTO_CONNECT
   }")
 
-# Parse response
-DEVICES_FOUND=$(echo "$RESPONSE" | grep -o '"devices_found":[0-9]*' | grep -o '[0-9]*' || echo "0")
-CONNECTIONS_ESTABLISHED=$(echo "$RESPONSE" | grep -o '"connections_established":[0-9]*' | grep -o '[0-9]*' || echo "0")
+# Parse response (use jq if available, fallback to grep)
+if command -v jq &> /dev/null; then
+    DEVICES_FOUND=$(echo "$RESPONSE" | jq -r '.devices_found // 0' 2>/dev/null || echo "0")
+    CONNECTIONS_ESTABLISHED=$(echo "$RESPONSE" | jq -r '.connections_established // 0' 2>/dev/null || echo "0")
+else
+    DEVICES_FOUND=$(echo "$RESPONSE" | grep -o '"devices_found":[0-9]*' | grep -o '[0-9]*' || echo "0")
+    CONNECTIONS_ESTABLISHED=$(echo "$RESPONSE" | grep -o '"connections_established":[0-9]*' | grep -o '[0-9]*' || echo "0")
+fi
 
 echo ""
 echo "✅ Device Discovery Complete!"
@@ -61,9 +66,15 @@ echo ""
 
 # Display device status
 echo "📱 Connected Devices:"
-echo "$RESPONSE" | grep -o '"name":"[^"]*"' | sed 's/"name":"//g' | sed 's/"//g' | while read -r device; do
-  echo "   • $device"
-done
+if command -v jq &> /dev/null; then
+    echo "$RESPONSE" | jq -r '.devices[].name // empty' 2>/dev/null | while read -r device; do
+        [ -n "$device" ] && echo "   • $device"
+    done
+else
+    echo "$RESPONSE" | grep -o '"name":"[^"]*"' | sed 's/"name":"//g' | sed 's/"//g' | while read -r device; do
+        echo "   • $device"
+    done
+fi
 
 echo ""
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
