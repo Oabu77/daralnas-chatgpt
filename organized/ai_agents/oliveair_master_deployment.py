@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🚚 OLIVEAIR EXPRESS - MASTER DEPLOYMENT ORCHESTRATOR
 Deploy All 3 Options Simultaneously
 Option 1: Aggressive Scaling | Option 2: Full Integration | Option 3: Geographic Expansion

@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 📱🌐 MESHTALK TELECOM REVENUE COLLECTION SYSTEM - V1.0
 Global Cell Phone and Internet Services Revenue Engine
 Collect payments for MeshTalk telecom services worldwide

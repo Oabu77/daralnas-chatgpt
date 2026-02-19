@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * Social Media Campaign Generator
  * Creates pre-written posts for Twitter, LinkedIn, Facebook, Instagram
  */

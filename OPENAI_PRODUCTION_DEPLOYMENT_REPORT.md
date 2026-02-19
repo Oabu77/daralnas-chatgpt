@@ -1,3 +1,11 @@
+<!--
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+-->
+
 # OpenAI Production Deployment Report
 ## QuranChain + DarCloud AI Fleet — v2.0 Production
 

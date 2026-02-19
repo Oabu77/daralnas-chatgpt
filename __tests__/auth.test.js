@@ -1,3 +1,10 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
 const request = require('supertest');
 const app = require('../src/index');
 const User = require('../src/models/User');

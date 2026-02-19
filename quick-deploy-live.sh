@@ -1,4 +1,9 @@
 #!/bin/bash
+# ╔═══════════════════════════════════════════════════════════════════════════════╗
+# ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+# ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+# ║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+# ╚═══════════════════════════════════════════════════════════════════════════════╝
 
 # Quick Live Deployment Script
 # Run this to deploy FungiMesh Gaming Auto-Healing to production

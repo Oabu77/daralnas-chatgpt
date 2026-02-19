@@ -1,4 +1,11 @@
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * QuranChain™ Billing Ledger
  * ===========================
  * Immutable, cryptographically-verifiable billing records on-chain.

@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * 🌊🍄 HOT-PATCH: Data Ocean Capacity ← External Device Scaling
  * ==============================================================
  * Sends a live patch to the running blockchain server process via

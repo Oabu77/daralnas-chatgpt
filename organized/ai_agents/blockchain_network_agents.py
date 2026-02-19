@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🤖 BLOCKCHAIN NETWORK AGENTS - DIRECT NETWORK DEPLOYMENT
 AI agents deploy to external blockchains, intercept transactions,
 accelerate via QuranChain, auto-deduct fees from network gas

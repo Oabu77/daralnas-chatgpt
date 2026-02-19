@@ -1,4 +1,11 @@
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * agentTaskRunner.js  –  Autonomous task execution engine
  *
  * Takes a Task, breaks the goal into steps, executes sequentially,

@@ -1,3 +1,11 @@
+<!--
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+-->
+
 # GitHub CI/CD Secrets Configuration Guide
 **Purpose:** Enable automated deployment from GitHub Actions  
 **Time to Complete:** 5 minutes  

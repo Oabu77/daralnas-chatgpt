@@ -1,4 +1,9 @@
 #!/bin/bash
+# ╔═══════════════════════════════════════════════════════════════════════════════╗
+# ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+# ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+# ║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+# ╚═══════════════════════════════════════════════════════════════════════════════╝
 # Stop All AI Agents Script
 
 echo "🛑 Stopping all QuranChain-OS AI agents..."

@@ -1,20 +1,20 @@
 {
-  "backup_timestamp": "2026-02-18T00:00:04.417085",
+  "backup_timestamp": "2026-02-18T06:00:13.888915",
   "backup_type": "full_ecosystem_auto",
   "version": "2.0",
   "founder_royalty_rate": 0.3,
   "archives": {
     "quranchain": {
-      "filename": "quranchain_20260218_000003.tar.gz",
-      "files": 389,
-      "size_bytes": 1435067,
-      "sha256": "8f09e1241d6b15920d5b6cb20021451f24b26b7488ccc702df2dfc5b6b4419a3"
+      "filename": "quranchain_20260218_060002.tar.gz",
+      "files": 399,
+      "size_bytes": 1577430,
+      "sha256": "e890f3be5c7953d94669abb47005e79536af56295f355cb6fb5ef3442028f152"
     },
     "quranchain_os": {
-      "filename": "quranchain_os_20260218_000004.tar.gz",
-      "files": 90,
-      "size_bytes": 300462,
-      "sha256": "fdc6fd66eec315a0646868d9bc123d4a3cdcf84302abafb1e484600124ed9957"
+      "filename": "quranchain_os_20260218_060009.tar.gz",
+      "files": 92,
+      "size_bytes": 302429,
+      "sha256": "079735681d5d07d86831b68444b8c7f75c6509b2fe3be8233ba7f8c8686be35a"
     }
   },
   "upload_results": {
@@ -43,7 +43,7 @@
     "openai_assistants": 76,
     "cloudflare_workers": 8,
     "node_bots": 36,
-    "python_agents_backed_up": 389,
+    "python_agents_backed_up": 399,
     "domains": [
       "darcloud.host",
       "darcloud.net"

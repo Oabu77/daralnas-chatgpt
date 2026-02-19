@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🕌 MUSLIM WALLET CORE
 Complete Islamic wallet system with transaction engine, ledger, routing, and auto-healing
 Founder: Omar Mohammad Abunadi™

@@ -1,4 +1,11 @@
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * Dar Al Nas Real Estate — Cloudflare Edge Worker
  * Routes: realestate.darcloud.host/*, property.darcloud.host/*
  * Serves landing page + proxies to origin (localhost:9020)

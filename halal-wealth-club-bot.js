@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * 🤖 Halal Wealth Club — AI Membership Sign-Up Bot
  * ==================================================
  * Autonomous AI agent that recruits Muslim members globally.

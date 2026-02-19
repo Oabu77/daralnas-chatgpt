@@ -1,3 +1,11 @@
+<!--
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+-->
+
 # 🎯 QURANCHAIN-OS: COMPLETE CUSTOMER ACQUISITION SYSTEM DEPLOYED
 
 ## ✅ PHASE 1-5 COMPLETE: INFRASTRUCTURE → PAYMENTS → WORKERS → REVENUE → ACQUISITION

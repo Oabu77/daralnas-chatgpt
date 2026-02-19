@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * 🕌 QuranChain-OS — Unified Mainnet Server
  * ============================================
  * Full-stack decentralized server:
@@ -43,25 +50,34 @@ let TxModel = null;
 let UserModel = null;
 
 async function connectMongo() {
-  try {
-    mongoose = require('mongoose');
-    const MONGO_URI = process.env.MONGODB_URI || 'mongodb://admin:QuranChain2026!@localhost:27018/quranchain?authSource=admin';
-    await mongoose.connect(MONGO_URI);
-    mongoConnected = true;
-    console.log('  💾 MongoDB connected');
+  const MAX_RETRIES = 5;
+  const RETRY_DELAY_MS = 3000;
+  
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      mongoose = require('mongoose');
+      const MONGO_URI = process.env.MONGODB_URI;
+      if (!MONGO_URI) {
+        console.error('  ⚠️  CRITICAL: MONGODB_URI not set in environment — blockchain data will only persist in chain.json!');
+        console.error('  ⚠️  Set MONGODB_URI in .env for data redundancy');
+        return;
+      }
+      await mongoose.connect(MONGO_URI);
+      mongoConnected = true;
+      console.log('  💾 MongoDB connected');
 
-    // Define schemas for blockchain persistence
-    const blockSchema = new mongoose.Schema({
-      index: { type: Number, unique: true, index: true },
-      hash: { type: String, unique: true, index: true },
-      previousHash: String,
-      timestamp: Number,
-      transactions: [mongoose.Schema.Types.Mixed],
-      nonce: Number,
-      difficulty: Number,
-      merkleRoot: String,
-      miner: String,
-    }, { timestamps: true });
+      // Define schemas for blockchain persistence
+      const blockSchema = new mongoose.Schema({
+        index: { type: Number, unique: true, index: true },
+        hash: { type: String, unique: true, index: true },
+        previousHash: String,
+        timestamp: Number,
+        transactions: [mongoose.Schema.Types.Mixed],
+        nonce: Number,
+        difficulty: Number,
+        merkleRoot: String,
+        miner: String,
+      }, { timestamps: true });
 
     const txSchema = new mongoose.Schema({
       txId: { type: String, unique: true, index: true },
@@ -86,9 +102,17 @@ async function connectMongo() {
     BlockModel = mongoose.model('Block', blockSchema);
     TxModel = mongoose.model('Transaction', txSchema);
     UserModel = mongoose.model('User', userSchema);
+    return; // success
   } catch (err) {
-    console.log(`  💾 MongoDB not available (${err.message}) — running in-memory`);
+    if (attempt < MAX_RETRIES) {
+      console.warn(`  💾 MongoDB connection attempt ${attempt}/${MAX_RETRIES} failed (${err.message}) — retrying in ${RETRY_DELAY_MS/1000}s...`);
+      await new Promise(r => setTimeout(r, RETRY_DELAY_MS));
+    } else {
+      console.error(`  ⚠️  CRITICAL: MongoDB unavailable after ${MAX_RETRIES} attempts — blockchain data will only persist in chain.json!`);
+      console.error(`  ⚠️  Last error: ${err.message}`);
+    }
   }
+  } // end for loop
 }
 
 // === IPFS (optional — graceful fallback) ===

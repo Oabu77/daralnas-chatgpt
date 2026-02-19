@@ -1,4 +1,11 @@
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * QuranChain Blockchain — Mainnet
  * ================================
  * The QuranChain is a nomadic, decentralized blockchain designed for:
@@ -159,6 +166,7 @@ class Blockchain extends EventEmitter {
 
   _saveChain() {
     const chainFile = path.join(this.dataDir, 'chain.json');
+    const tmpFile = chainFile + '.tmp';
     const data = {
       chainId: this.chainId,
       version: '1.0.0',
@@ -167,7 +175,10 @@ class Blockchain extends EventEmitter {
       savedAt: Date.now(),
       nodeId: this.nodeId,
     };
-    fs.writeFileSync(chainFile, JSON.stringify(data, null, 2));
+    // Atomic write: write to temp file first, then rename
+    // Prevents corruption if process crashes mid-write
+    fs.writeFileSync(tmpFile, JSON.stringify(data, null, 2));
+    fs.renameSync(tmpFile, chainFile);
   }
 
   /**

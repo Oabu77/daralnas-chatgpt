@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🚚 OLIVEAIR EXPRESS - OPTION 3: GEOGRAPHIC EXPANSION
 25+ US Corridors | Canada-US Routes | Mexico-US Routes | International
 """

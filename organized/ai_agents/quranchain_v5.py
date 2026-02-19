@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🕌⚛️ QURANCHAIN™ V5.0 - QUANTUM-READY ISLAMIC BLOCKCHAIN
 ═══════════════════════════════════════════════════════════════════════════════
 The world's first quantum-resistant, Sharia-compliant blockchain platform

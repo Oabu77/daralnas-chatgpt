@@ -1,4 +1,9 @@
 #!/bin/bash
+# ╔═══════════════════════════════════════════════════════════════════════════════╗
+# ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+# ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+# ║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+# ╚═══════════════════════════════════════════════════════════════════════════════╝
 # FungiMesh Live Network Monitor Launcher
 # Shows real-time peer communications and growth
 

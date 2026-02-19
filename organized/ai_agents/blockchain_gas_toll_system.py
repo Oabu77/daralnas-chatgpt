@@ -1,4 +1,11 @@
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 QuranChain™ Blockchain Gas Toll System - v3.0
 Real-world blockchain transaction fee collection and distribution
 Settlement: Omar's Sovereign Founder Authority

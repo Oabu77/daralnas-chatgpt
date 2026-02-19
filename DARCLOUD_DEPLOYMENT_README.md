@@ -1,3 +1,11 @@
+<!--
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+-->
+
 # DarCloud FungiMesh Primary Server Deployment
 
 This guide explains how to deploy the primary FungiMesh server to DarCloud web hosting instead of running on localhost.

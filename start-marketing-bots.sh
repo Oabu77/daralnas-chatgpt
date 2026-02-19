@@ -1,4 +1,9 @@
 #!/bin/bash
+# ╔═══════════════════════════════════════════════════════════════════════════════╗
+# ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+# ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+# ║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+# ╚═══════════════════════════════════════════════════════════════════════════════╝
 # Start marketing bots in background (dry-run by default)
 
 set -e

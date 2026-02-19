@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🍄 FUNGI MESH DEVICE EXPANSION - QuranChain™
 Expanding Fungi Mesh to ALL 340,000+ Connected Devices
 © QuranChain™ | Fungi Mesh™ | Dar Al-Nas™ | Omar Mohammad Abunadi™

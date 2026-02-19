@@ -1,0 +1,30 @@
+# ╔═══════════════════════════════════════════════════════════════════════════════╗
+# ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+# ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+# ║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+# ╚═══════════════════════════════════════════════════════════════════════════════╝
+name = "oliver-gates-ai"
+main = "src/index.js"
+compatibility_date = "2024-09-23"
+account_id = "3bfc21f5baba642160ec706818e3a19f"
+workers_dev = true
+
+[ai]
+binding = "AI"
+
+[vars]
+ENVIRONMENT = "production"
+KDP_ACCOUNT_ID = "A2xq3izrirvour"
+AUTHOR_NAME = "Oliver Gates"
+PUBLISHER_NAME = "Dar Al-Nas Publishing"
+ENGINE_ORIGIN = "https://publishing-origin.darcloud.host"
+FOUNDER = "Omar Mohammad Abunadi"
+FOUNDER_ROYALTY_RATE = "0.30"
+
+[[routes]]
+pattern = "ai-publishing.darcloud.host/*"
+zone_name = "darcloud.host"
+
+[[routes]]
+pattern = "ai-books.darcloud.host/*"
+zone_name = "darcloud.host"

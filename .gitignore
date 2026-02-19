@@ -132,3 +132,7 @@ __pycache__/
 minikube-linux-amd64
 awscliv2.zip
 
+
+# Backup archives
+backups/minehut/*.tar.gz
+*.tar.gz

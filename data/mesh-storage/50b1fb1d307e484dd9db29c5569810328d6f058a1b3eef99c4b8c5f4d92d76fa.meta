@@ -1,0 +1,12 @@
+{
+  "fileHash": "50b1fb1d307e484dd9db29c5569810328d6f058a1b3eef99c4b8c5f4d92d76fa",
+  "index": 0,
+  "totalChunks": 1,
+  "size": 174,
+  "storedAt": 1771499291574,
+  "quantumHash": "bb191058402b700e295899b3645cb719f6e8ee730a8944802b2a99fa7a7cd281",
+  "type": "meshtalk-telecom-backup",
+  "dataType": "telecom-snapshot",
+  "nodeId": "meshtalk-os-9001",
+  "uploadedAt": 1771499291517
+}

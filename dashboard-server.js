@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * QuranChain-OS Live Dashboard Server
  * Real-time monitoring dashboard for all system components
  */
@@ -9,7 +16,7 @@ const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const port = 8081;
+const port = process.env.DASHBOARD_PORT || 8082;
 
 // Middleware
 app.use(cors());

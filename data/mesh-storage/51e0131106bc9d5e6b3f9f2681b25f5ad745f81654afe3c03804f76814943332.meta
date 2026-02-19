@@ -1,0 +1,13 @@
+{
+  "fileHash": "51e0131106bc9d5e6b3f9f2681b25f5ad745f81654afe3c03804f76814943332",
+  "index": 0,
+  "totalChunks": 1,
+  "size": 56,
+  "storedAt": 1771496934636,
+  "quantumHash": "2d63470fd8afedc27267636abd613d478bd5b1fbc35b5ca04f618a3d779a099e",
+  "originalName": "quantum_test.txt",
+  "mimeType": "text/plain",
+  "bucket": "default",
+  "objectKey": "quantum_test.txt",
+  "uploadedAt": 1771496934608
+}

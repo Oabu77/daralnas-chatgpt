@@ -1,4 +1,11 @@
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * 🌐 DarCloud Services — Domain Registration + Email Provisioning
  * Full-service domain registration (.com, .net, .org, .io, .info, .host, .dev, .app, .cloud)
  * Customer email addresses on @darcloud.host and @darcloud.net

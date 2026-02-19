@@ -1,4 +1,9 @@
 #!/bin/bash
+# ╔═══════════════════════════════════════════════════════════════════════════════╗
+# ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+# ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+# ║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+# ╚═══════════════════════════════════════════════════════════════════════════════╝
 
 ################################################################################
 # MongoDB Atlas Automated Backup & Restore Configuration
@@ -20,9 +25,7 @@ echo ""
 
 BACKUP_DIR="/var/backups/mongodb"
 BACKUP_LOG="/var/log/quranchain/mongodb-backup.log"
-MONGODB_URI="${MONGODB_URI:-mongodb+srv://admin:password@cluster.mongodb.net/}"
-
-# Create backup directories
+MONGODB_URI="${MONGODB_URI:-mongodb://admin:QuranChain2026!@localhost:27018/quranchain?authSource=admin}"
 echo -e "${BLUE}Creating backup infrastructure...${NC}"
 sudo mkdir -p "$BACKUP_DIR"
 sudo mkdir -p "/var/log/quranchain"

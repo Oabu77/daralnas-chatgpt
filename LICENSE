@@ -1,0 +1,188 @@
+═══════════════════════════════════════════════════════════════════════════════
+QURANCHAIN™ PROPRIETARY SOFTWARE LICENSE
+Version 2.0 — Effective January 1, 2024
+═══════════════════════════════════════════════════════════════════════════════
+
+Copyright (C) 2024-2026 Omar Mohammad Abunadi™
+All Rights Reserved Worldwide.
+
+OWNER & LICENSOR
+  Omar Mohammad Abunadi™ ("Founder", "Owner", "Licensor")
+
+COVERED SOFTWARE
+  This license applies to all source code, object code, documentation,
+  algorithms, protocols, data structures, network architectures, AI models,
+  cryptographic implementations, and related materials in the QuranChain™
+  ecosystem, including but not limited to:
+
+  BLOCKCHAIN & CORE INFRASTRUCTURE:
+    • QuranChain™ — Blockchain Network & Consensus Layer
+    • Fungi Mesh Network™ — Decentralized mesh infrastructure
+    • MeshTalk OS™ — Mesh communication operating system
+    • DarCloud™ — Distributed cloud storage platform
+    • WhisperNet™ — Encrypted peer-to-peer messaging
+    • Gas Toll Highway™ — Multi-chain revenue collection
+    • Quantum Storage Engine™ — Post-quantum cryptographic layer
+    • SuperpositionRouter™ — Quantum-probabilistic routing
+    • AMĀN Control Plane™ — Infrastructure security orchestration
+
+  FINANCIAL & PAYMENT SERVICES:
+    • DarPay™ — Islamic payment processing
+    • MuslimWallet™ — Islamic digital wallet
+    • Dar Al-Nas™ — Payment network and merchant services
+    • QuranChain Exchange™ (QEX) — Digital asset exchange
+    • Halal Card™ — Sharia-compliant payment card
+    • Halal Wealth Club™ — Islamic investment platform
+    • Takaful™ — Islamic insurance platform
+    • DarCommerce™ — Islamic e-commerce marketplace
+    • Dar Marketplace™ — Decentralized marketplace
+
+  ENTERPRISE PLATFORM SERVICES ("Dar-Suite"):
+    • DarLaw™ — AI-powered legal & IP protection platform
+    • DarGit™ — Code hosting & version control
+    • DarFlare™ — CDN & edge compute platform
+    • DarHealth™ — Healthcare services platform
+    • DarPharma™ — Pharmaceutical services platform
+    • DarStore™ — Object storage service
+    • DarVPN™ — Encrypted network access
+    • Dar Education™ — Islamic learning platform
+    • Dar Media™ — Media & content platform
+    • Dar Radio™ — Streaming & broadcast platform  
+    • Dar Real Estate™ — Property management platform
+    • Dar App Store™ — Application marketplace
+    • Dar ID™ — Decentralized identity management
+    • Dar Infrastructure™ — Cloud infrastructure services
+    • Dar Cybersecurity™ — Security operations platform
+    • Dar Fresh™ — Halal food delivery platform
+    • OliveAir™ — Logistics & shipping platform
+    • OliveAir Express™ — Express delivery service
+    • OliveRCare™ — Customer care platform
+
+  AI AGENTS & ASSISTANTS:
+    • Omar AI™ — Autonomous monitoring & validation agent
+    • QuranChain AI™ — Network health & validation agent
+    • DarCloud AI™ — Cloud infrastructure intelligence agent
+    • DarLaw AI™ — Legal AI agent & IP enforcement
+    • Revenue Engine AI™ — Revenue optimization agent
+    • FungiMesh Agent™ — Mesh network management agent
+    • MeshTalk OS Agent™ — Operating system management agent
+    • AI Orchestrator Agent™ — Multi-agent coordination system
+    • Hydra Pro AI™ — Multi-headed autonomous agent
+    • Ultra Bug Hunter™ — Automated vulnerability detection
+    • Quran Scholar AI™ — Islamic knowledge assistant
+    • Compliance AI Agent™ — Regulatory compliance agent
+    • Security AI Agent™ — Threat detection & response agent
+
+  TOKENS & DIGITAL ASSETS:
+    • QCOIN — Native QuranChain blockchain token
+    • QLEARN — AI Agent School education token
+    • DARGIT — DarGit service access token
+    • DARFLARE — DarFlare CDN access token
+    • DARLAW — DarLaw legal services token
+    • DARHEALTH — DarHealth healthcare token
+    • MESHTALK — MeshTalk OS communication token
+    • QEX — QuranChain Exchange utility token
+
+GRANT OF LICENSE
+  Subject to the terms below, Licensor grants you a limited, non-exclusive,
+  non-transferable, revocable license to:
+    ✓ Run validator nodes (subject to 30% Founder Royalty)
+    ✓ Use published APIs for integration purposes
+    ✓ Study the code for personal, non-commercial, educational use
+
+RESTRICTIONS — YOU MAY NOT:
+  ✗ Copy, redistribute, sublicense, or make available the Software
+  ✗ Modify, remove, or circumvent the 30% Founder Royalty mechanism
+  ✗ Remove or alter any copyright, trademark, or proprietary notices
+  ✗ Use the Software for commercial purposes without a written license
+  ✗ Reverse engineer, decompile, or disassemble proprietary algorithms
+  ✗ White-label, rebrand, or create derivative products
+  ✗ Use any trademark, logo, or brand name of the Licensor
+  ✗ Deploy competing blockchain networks using this codebase
+  ✗ Train AI/ML models on this codebase without written permission
+  ✗ Extract or re-use cryptographic implementations in other projects
+
+IMMUTABLE FOUNDER ROYALTY
+  Thirty percent (30%) of all gross revenue, transaction fees, gas tolls,
+  subscription payments, API charges, and any other monetary flows generated
+  by the Software or derivative works thereof shall be irrevocably allocated
+  to the Founder. This royalty:
+    — Is permanently encoded in blockchain consensus rules
+    — Cannot be modified by governance votes, hard forks, or upgrades
+    — Survives termination of this license
+    — Applies to all downstream deployments and integrations
+
+REVENUE DISTRIBUTION MODEL (Immutable)
+    30% — Founder (Omar Mohammad Abunadi™)
+    40% — AI Validators (Omar AI™ & QuranChain AI™)
+    10% — Hardware Hosts
+    18% — Ecosystem Development
+     2% — Zakat (Islamic charitable obligation)
+
+INTELLECTUAL PROPERTY
+  All patents, copyrights, trademarks, trade secrets, know-how, and other
+  intellectual property rights in the Software are and shall remain the
+  exclusive property of Omar Mohammad Abunadi™. No transfer of ownership
+  is implied or granted under this license.
+
+PATENT NOTICE
+  The Software may be protected by one or more pending or issued patents.
+  The technologies implemented herein, including but not limited to:
+    — Quantum-resistant storage protocols (lattice-based hashing)
+    — Mesh network entanglement verification
+    — Superposition-based routing algorithms (Born rule P=|ψ|²)
+    — Blockchain gas toll collection across 47+ networks
+    — AI workforce orchestration and Proof-of-Learning consensus
+    — Islamic financial compliance engine (Sharia-compliant smart contracts)
+    — Decentralized mesh telecom infrastructure
+    — AI-powered legal & IP enforcement (DarLaw AI™)
+    — Cross-chain revenue aggregation with immutable founder royalty
+    — Halal payment processing and Takaful insurance protocols
+  are claimed as proprietary inventions of the Licensor.
+
+TRADEMARK NOTICE
+  All names listed under COVERED SOFTWARE above, including but not limited to
+  QuranChain™, Fungi Mesh Network™, MeshTalk OS™, DarCloud™, DarPay™,
+  MuslimWallet™, Dar Al-Nas™, Gas Toll Highway™, Omar AI™, QuranChain AI™,
+  DarLaw™, DarLaw AI™, DarGit™, DarFlare™, DarHealth™, DarPharma™,
+  DarCommerce™, Dar Education™, Dar ID™, WhisperNet™, AMĀN Control Plane™,
+  Quantum Storage Engine™, SuperpositionRouter™, Hydra Pro AI™,
+  Ultra Bug Hunter™, QuranChain Exchange™, Halal Wealth Club™, Takaful™,
+  and all "Dar-" prefixed brand names are trademarks and service marks of
+  Omar Mohammad Abunadi™. All rights reserved worldwide.
+
+  The QCOIN, QLEARN, DARGIT, DARFLARE, DARLAW, DARHEALTH, MESHTALK, and
+  QEX token symbols are proprietary digital asset identifiers owned by
+  Omar Mohammad Abunadi™.
+
+CONFIDENTIALITY
+  The Software contains trade secrets and proprietary information. You agree
+  to maintain confidentiality and not disclose any non-public aspects of the
+  Software to third parties.
+
+TERMINATION
+  This license terminates automatically upon any breach of its terms.
+  Upon termination, you must destroy all copies of the Software and certify
+  destruction in writing.
+
+WARRANTY DISCLAIMER
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+  OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+LIMITATION OF LIABILITY
+  IN NO EVENT SHALL THE LICENSOR BE LIABLE FOR ANY INDIRECT, INCIDENTAL,
+  SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES ARISING FROM THE USE OF THE
+  SOFTWARE.
+
+GOVERNING LAW
+  This license is governed by the laws of the Kingdom of Saudi Arabia and
+  applicable international intellectual property treaties. Any disputes
+  shall be resolved in the courts of Riyadh, Kingdom of Saudi Arabia.
+
+CONTACT
+  Licensing: licensing@quranchain.network
+  Legal:     legal@quranchain.network
+  Founder:   omar@quranchain.network
+
+═══════════════════════════════════════════════════════════════════════════════

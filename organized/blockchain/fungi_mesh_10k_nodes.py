@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🍄 FUNGI MESH NETWORK - 10,000 REAL NODES + 159K TPS
 Enterprise-grade distributed mesh with real node data and high-throughput settlement
 © QuranChain™ | Fungi Mesh™ | Dar Al-Nas™ | Omar Mohammad Abunadi™

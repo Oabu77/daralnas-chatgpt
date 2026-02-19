@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🔒 WHISPERNET STEALTH DEPLOYMENT - QuranChain™
 Stealth Connectivity Layer for All Network Devices
 © QuranChain™ | WhisperNet™ | Dar Al-Nas™ | Omar Mohammad Abunadi™

@@ -1,5 +1,12 @@
 #!/usr/bin/env python3
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 🤖 OMAR AI™ - FOUNDER'S AUTONOMOUS AI AGENT
 ═══════════════════════════════════════════════════════════════════════════════
 Sovereign AI Agent for System Oversight, Revenue Optimization & Business Intelligence

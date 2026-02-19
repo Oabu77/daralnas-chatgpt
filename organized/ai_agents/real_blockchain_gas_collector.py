@@ -1,4 +1,11 @@
 """
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+"""
+"""
 Real Blockchain Gas Collector - PRODUCTION VERSION
 ═══════════════════════════════════════════════════════════════════════════════
 Connects to 50+ REAL blockchain networks and collects gas/transaction fees

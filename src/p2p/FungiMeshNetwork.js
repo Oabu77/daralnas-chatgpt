@@ -1,4 +1,11 @@
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * FungiMesh Network — Decentralized Computing Infrastructure
  * =========================================================
  * Auto-expanding mesh network for distributed computing across QuranChain-OS
@@ -37,6 +44,7 @@ const EventEmitter = require('events');
 const { BLOCKCHAIN_SEED_NODES, NETWORK_CONFIG, GAMING_SERVER_ENDPOINTS, HEALING_CONFIG } = require('../config/meshConfig');
 const { ValidatorHardwareCollector } = require('../services/validatorHardwareCollector');
 const { MeshExpander } = require('../services/meshExpander');
+const { QuantumStorageEngine, SuperpositionRouter, QuantumHash } = require('../quantum/quantumStorageEngine');
 
 const PEERS_FILE = path.join(__dirname, '..', '..', 'data', 'mesh-peers.json');
 const DISCOVERY_PORT = 7777; // UDP broadcast for LAN discovery
@@ -70,6 +78,25 @@ const MSG_TYPES = {
   HARDWARE_REQUEST: 'HARDWARE_REQUEST',
   HARDWARE_REPORT: 'HARDWARE_REPORT',
   VALIDATOR_HEARTBEAT: 'VALIDATOR_HEARTBEAT',
+  // ── Distributed Storage Protocol (DarCloud ↔ FungiMesh) ──
+  STORE_CHUNK: 'STORE_CHUNK',           // Request peer to store a data chunk
+  STORE_CHUNK_ACK: 'STORE_CHUNK_ACK',   // Peer confirms chunk stored
+  RETRIEVE_CHUNK: 'RETRIEVE_CHUNK',     // Request peer to return a chunk
+  CHUNK_DATA: 'CHUNK_DATA',             // Peer sends chunk data back
+  CHUNK_NOT_FOUND: 'CHUNK_NOT_FOUND',   // Peer doesn't have the chunk
+  DELETE_CHUNK: 'DELETE_CHUNK',          // Request peer to delete a chunk
+  DELETE_CHUNK_ACK: 'DELETE_CHUNK_ACK', // Peer confirms chunk deleted
+  STORAGE_REPORT: 'STORAGE_REPORT',     // Peer reports storage capacity
+  STORAGE_QUERY: 'STORAGE_QUERY',       // Query peers for storage availability
+  DHT_LOOKUP: 'DHT_LOOKUP',             // Look up chunk location in DHT
+  DHT_RESPONSE: 'DHT_RESPONSE',         // DHT lookup result
+  DHT_ANNOUNCE: 'DHT_ANNOUNCE',         // Announce chunk ownership to DHT
+  REPLICATE_CHUNK: 'REPLICATE_CHUNK',   // Instruct peer to replicate chunk to another peer
+  // ── MeshTalk OS Integration (Telecom ↔ FungiMesh) ──
+  MESHTALK_HANDSHAKE: 'MESHTALK_HANDSHAKE',     // MeshTalk node announces itself
+  MESHTALK_HEARTBEAT: 'MESHTALK_HEARTBEAT',     // MeshTalk periodic health pulse
+  MESHTALK_TELECOM_DATA: 'MESHTALK_TELECOM_DATA', // Telecom data backup to mesh
+  MESHTALK_NODE_STATUS: 'MESHTALK_NODE_STATUS',   // MeshTalk node status report
 };
 
 class FungiMeshNetwork extends EventEmitter {
@@ -93,11 +120,50 @@ class FungiMeshNetwork extends EventEmitter {
       hasGPU: this._detectGPU(),
       nodeId: this.nodeId,
       version: '1.0.0',
+      // Distributed storage capabilities
+      diskTotal: this._getDiskTotal(),
+      diskFree: this._getDiskFree(),
+      storageContributed: 0,    // bytes currently storing for mesh
+      storageCapacity: this._getStorageCapacity(), // max bytes willing to store
     };
 
     // Task management
     this.activeTasks = new Map(); // taskId → task info
     this.completedTasks = new Map();
+    this.taskQueue = [];
+    this.workloadStats = {
+      totalTasks: 0,
+      completedTasks: 0,
+      failedTasks: 0,
+      activeWorkers: 0,
+    };
+
+    // ── Distributed Storage System ──
+    this.CHUNK_SIZE = 256 * 1024; // 256 KB chunks
+    this.REPLICATION_FACTOR = 3;  // 3 copies across mesh
+    this.chunkStore = new Map();  // chunkHash → { data, metadata }
+    this.dht = new Map();         // chunkHash → Set<peerId> (which peers have this chunk)
+    this.storageDir = path.join(__dirname, '..', '..', 'data', 'mesh-storage');
+    this.pendingRetrievals = new Map(); // chunkHash → { resolve, reject, timeout }
+    this.storageStats = {
+      chunksStored: 0,
+      bytesStored: 0,
+      chunksServed: 0,
+      bytesServed: 0,
+      replicationEvents: 0,
+    };
+    // ── Quantum Storage Engine ──
+    this.quantumEngine = new QuantumStorageEngine({
+      nodeKey: crypto.createHash('sha256').update(this.nodeId).digest(),
+      enabled: true,
+    });
+
+    // Ensure mesh storage directory exists
+    if (!fs.existsSync(this.storageDir)) {
+      fs.mkdirSync(this.storageDir, { recursive: true });
+    }
+    // Load persisted chunks on startup
+    this._loadPersistedChunks();
     this.taskQueue = [];
     this.workloadStats = {
       totalTasks: 0,
@@ -134,6 +200,17 @@ class FungiMeshNetwork extends EventEmitter {
       peersRecruited: 0,
       networksExpanded: 0,
       growthEvents: 0,
+    };
+
+    // ── MeshTalk OS Integration ──
+    this.meshtalkNodes = new Map(); // nodeId → { region, city, protocols, telecomStatus, ... }
+    this.meshtalkTelecomBackups = 0;
+    this.meshtalkStats = {
+      nodesRegistered: 0,
+      heartbeatsReceived: 0,
+      telecomDataBackups: 0,
+      telecomBytesStored: 0,
+      lastHeartbeat: null,
     };
 
     // Validator hardware registry
@@ -291,14 +368,13 @@ class FungiMeshNetwork extends EventEmitter {
     this.validatorRegistry.set(this.nodeId, this.localHardware);
     this._hwCollector.save(this.localHardware);
 
-    // Start MeshExpander (disabled to conserve memory — was scanning 500+ devices)
-    // this.meshExpander.attach(this);
-    // this.meshExpander.start().then(() => {
-    //   console.log('🕸️  MeshExpander started — scanning all networks for external devices');
-    // }).catch(err => {
-    //   console.error('🕸️  MeshExpander start error:', err.message);
-    // });
-    console.log('🕸️  MeshExpander skipped — conserving memory for revenue operations');
+    // Start MeshExpander — lightweight mode (maxDevices capped at 50)
+    this.meshExpander.attach(this);
+    this.meshExpander.start().then(() => {
+      console.log('🕸️  MeshExpander ACTIVE — scanning all networks for external devices');
+    }).catch(err => {
+      console.error('🕸️  MeshExpander start error:', err.message);
+    });
   }
 
   /**
@@ -841,6 +917,76 @@ class FungiMeshNetwork extends EventEmitter {
       case MSG_TYPES.VALIDATOR_HEARTBEAT:
         // liveness update — lastSeen already set above
         break;
+
+      // ── Distributed Storage Protocol ──
+      case MSG_TYPES.STORE_CHUNK:
+        this._handleStoreChunk(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.STORE_CHUNK_ACK:
+        this._handleStoreChunkAck(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.RETRIEVE_CHUNK:
+        this._handleRetrieveChunk(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.CHUNK_DATA:
+        this._handleChunkData(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.CHUNK_NOT_FOUND:
+        this._handleChunkNotFound(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.DELETE_CHUNK:
+        this._handleDeleteChunk(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.DELETE_CHUNK_ACK:
+        this._handleDeleteChunkAck(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.STORAGE_REPORT:
+        this._handleStorageReport(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.STORAGE_QUERY:
+        this._handleStorageQuery(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.DHT_LOOKUP:
+        this._handleDHTLookup(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.DHT_RESPONSE:
+        this._handleDHTResponse(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.DHT_ANNOUNCE:
+        this._handleDHTAnnounce(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.REPLICATE_CHUNK:
+        this._handleReplicateChunk(peerId, msg.data);
+        break;
+
+      // ── MeshTalk OS Integration ──
+      case MSG_TYPES.MESHTALK_HANDSHAKE:
+        this._handleMeshTalkHandshake(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.MESHTALK_HEARTBEAT:
+        this._handleMeshTalkHeartbeat(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.MESHTALK_TELECOM_DATA:
+        this._handleMeshTalkTelecomData(peerId, msg.data);
+        break;
+
+      case MSG_TYPES.MESHTALK_NODE_STATUS:
+        this._handleMeshTalkNodeStatus(peerId, msg.data);
+        break;
     }
   }
 
@@ -997,12 +1143,20 @@ class FungiMeshNetwork extends EventEmitter {
 
   _handleResourceQuery(peerId) {
     const peer = this.peers.get(peerId);
+    this._refreshDiskStats();
     this._send(peer.ws, {
       type: MSG_TYPES.RESOURCE_RESPONSE,
       data: {
         capabilities: this.capabilities,
         currentWorkload: this._calculateWorkload(),
         availableCapacity: 1 - this._calculateWorkload(),
+        storage: {
+          diskFree: this.capabilities.diskFree,
+          diskTotal: this.capabilities.diskTotal,
+          storageContributed: this.storageStats.bytesStored,
+          storageCapacity: this._getStorageCapacity(),
+          chunksStored: this.storageStats.chunksStored,
+        },
       },
     });
   }
@@ -1285,6 +1439,117 @@ class FungiMeshNetwork extends EventEmitter {
     console.log(`⚡ Hardware collected: ${data.nodeId.substring(0, 12)} | ${data.hardware.name || 'unknown'} | IP: ${data.hardware.ip?.primary || '?'} | Type: ${data.hardware.type?.chassis || '?'}`);
   }
 
+  // ===== MESHTALK OS INTEGRATION HANDLERS =====
+
+  _handleMeshTalkHandshake(peerId, data) {
+    const peer = this.peers.get(peerId);
+    if (!peer) return;
+    peer.role = 'meshtalk-node';
+
+    const nodeInfo = {
+      nodeId: data.nodeId || peerId,
+      region: data.region || 'unknown',
+      city: data.city || 'unknown',
+      protocols: data.protocols || ['Open5G', 'WiFi6', 'Bluetooth5.2', 'FM Radio'],
+      telecomStatus: data.telecomStatus || {},
+      nodesCount: data.nodesCount || 0,
+      port: data.port || 9001,
+      status: 'connected',
+      connectedAt: Date.now(),
+      lastSeen: Date.now(),
+    };
+
+    this.meshtalkNodes.set(data.nodeId || peerId, nodeInfo);
+    this.meshtalkStats.nodesRegistered = this.meshtalkNodes.size;
+
+    console.log(`📡 MeshTalk node registered: ${(data.nodeId || peerId).substring(0, 12)} | ${data.region}/${data.city} | ` +
+      `Protocols: ${nodeInfo.protocols.join(', ')} | Nodes: ${data.nodesCount}`);
+
+    // Respond with mesh info
+    this._send(peer.ws, {
+      type: MSG_TYPES.MESHTALK_HANDSHAKE,
+      data: {
+        nodeId: this.nodeId,
+        role: 'fungi-mesh',
+        peersConnected: this.peers.size,
+        storageAvailable: this.capabilities.diskFree,
+        quantumEnabled: !!this.quantumEngine?.enabled,
+      },
+    });
+  }
+
+  _handleMeshTalkHeartbeat(peerId, data) {
+    const nodeId = data.nodeId || peerId;
+    const node = this.meshtalkNodes.get(nodeId);
+    if (node) {
+      node.lastSeen = Date.now();
+      node.status = 'active';
+      node.telecomStatus = data.telecomStatus || node.telecomStatus;
+      node.activeSubscribers = data.activeSubscribers || 0;
+      node.totalSmsSent = data.totalSmsSent || 0;
+      node.totalDataGb = data.totalDataGb || 0;
+    }
+    this.meshtalkStats.heartbeatsReceived++;
+    this.meshtalkStats.lastHeartbeat = Date.now();
+  }
+
+  _handleMeshTalkTelecomData(peerId, data) {
+    // Store telecom data (SMS logs, session data) in the mesh for distributed backup
+    if (!data.payload) return;
+
+    const telecomBuffer = Buffer.from(JSON.stringify(data.payload));
+    this.storeFile(telecomBuffer, {
+      type: 'meshtalk-telecom-backup',
+      nodeId: data.nodeId || peerId,
+      dataType: data.dataType || 'telecom-general',
+      timestamp: Date.now(),
+    }).then(result => {
+      this.meshtalkStats.telecomDataBackups++;
+      this.meshtalkStats.telecomBytesStored += telecomBuffer.length;
+      console.log(`📡 MeshTalk telecom data backed up: ${data.dataType || 'general'} | ` +
+        `${telecomBuffer.length} bytes → ${result.totalChunks} chunks`);
+    }).catch(err => {
+      console.error(`📡 MeshTalk telecom backup failed: ${err.message}`);
+    });
+  }
+
+  _handleMeshTalkNodeStatus(peerId, data) {
+    const nodeId = data.nodeId || peerId;
+    const node = this.meshtalkNodes.get(nodeId);
+    if (node) {
+      Object.assign(node, {
+        lastSeen: Date.now(),
+        nodesCount: data.nodesCount || node.nodesCount,
+        healthPercent: data.healthPercent || 100,
+        revenue: data.revenue || 0,
+        connectivity: data.connectivity || {},
+      });
+    }
+  }
+
+  /**
+   * Get MeshTalk OS network status from the mesh perspective.
+   */
+  getMeshTalkStats() {
+    const nodes = [];
+    for (const [nodeId, info] of this.meshtalkNodes) {
+      nodes.push({
+        nodeId: nodeId.substring(0, 12),
+        region: info.region,
+        city: info.city,
+        protocols: info.protocols,
+        status: info.status,
+        activeSubscribers: info.activeSubscribers || 0,
+        connectedFor: Math.floor((Date.now() - info.connectedAt) / 1000) + 's',
+      });
+    }
+
+    return {
+      ...this.meshtalkStats,
+      connectedNodes: nodes,
+    };
+  }
+
   /**
    * Return the full validator hardware registry
    */
@@ -1389,9 +1654,16 @@ class FungiMeshNetwork extends EventEmitter {
           cpu: p.capabilities.cpuCores,
           memory: (p.capabilities.totalMemory / 1024 / 1024 / 1024).toFixed(1) + 'GB',
           gpu: p.capabilities.hasGPU,
+          diskFree: p.capabilities.diskFree ? (p.capabilities.diskFree / 1024 / 1024 / 1024).toFixed(1) + 'GB' : 'N/A',
+          storageContributed: p.capabilities.storageContributed ? (p.capabilities.storageContributed / 1024 / 1024).toFixed(1) + 'MB' : '0',
         } : null,
         connectedFor: Math.floor((Date.now() - p.connectedAt) / 1000) + 's',
       })),
+      // Distributed storage statistics
+      storage: this.getStorageStats(),
+      // MeshTalk OS integration
+      meshtalkNodes: this.meshtalkNodes.size,
+      meshtalkStats: this.getMeshTalkStats(),
     };
   }
 
@@ -2027,6 +2299,733 @@ class FungiMeshNetwork extends EventEmitter {
     };
   }
 
+  // ══════════════════════════════════════════════════════════════════════════
+  // ██ DISTRIBUTED STORAGE PROTOCOL — DarCloud ↔ FungiMesh Bridge
+  // ══════════════════════════════════════════════════════════════════════════
+
+  /**
+   * Get total disk space on this node
+   */
+  _getDiskTotal() {
+    try {
+      if (os.platform() === 'linux') {
+        const out = execSync("df -B1 / | tail -1 | awk '{print $2}'", { timeout: 3000 }).toString().trim();
+        return parseInt(out, 10) || 0;
+      } else if (os.platform() === 'darwin') {
+        const out = execSync("df -b / | tail -1 | awk '{print $2}'", { timeout: 3000 }).toString().trim();
+        return parseInt(out, 10) * 512 || 0;
+      }
+    } catch {}
+    return 0;
+  }
+
+  /**
+   * Get free disk space on this node
+   */
+  _getDiskFree() {
+    try {
+      if (os.platform() === 'linux') {
+        const out = execSync("df -B1 / | tail -1 | awk '{print $4}'", { timeout: 3000 }).toString().trim();
+        return parseInt(out, 10) || 0;
+      } else if (os.platform() === 'darwin') {
+        const out = execSync("df -b / | tail -1 | awk '{print $4}'", { timeout: 3000 }).toString().trim();
+        return parseInt(out, 10) * 512 || 0;
+      }
+    } catch {}
+    return 0;
+  }
+
+  /**
+   * Storage capacity this node contributes (50% of free space, max 50GB)
+   */
+  _getStorageCapacity() {
+    const free = this._getDiskFree();
+    const maxContribution = 50 * 1024 * 1024 * 1024; // 50 GB cap
+    return Math.min(Math.floor(free * 0.5), maxContribution);
+  }
+
+  /**
+   * Load persisted chunks from disk on startup
+   */
+  _loadPersistedChunks() {
+    try {
+      const chunkFiles = fs.readdirSync(this.storageDir).filter(f => f.endsWith('.chunk'));
+      for (const file of chunkFiles) {
+        const chunkHash = file.replace('.chunk', '');
+        const chunkPath = path.join(this.storageDir, file);
+        const metaPath = path.join(this.storageDir, `${chunkHash}.meta`);
+        const stat = fs.statSync(chunkPath);
+
+        let metadata = { size: stat.size, storedAt: stat.mtimeMs };
+        if (fs.existsSync(metaPath)) {
+          try { metadata = JSON.parse(fs.readFileSync(metaPath, 'utf8')); } catch {}
+        }
+
+        this.chunkStore.set(chunkHash, { path: chunkPath, metadata });
+        // Register in local DHT
+        if (!this.dht.has(chunkHash)) this.dht.set(chunkHash, new Set());
+        this.dht.get(chunkHash).add(this.nodeId);
+
+        this.storageStats.chunksStored++;
+        this.storageStats.bytesStored += stat.size;
+      }
+      if (this.storageStats.chunksStored > 0) {
+        console.log(`🍄 💾 Loaded ${this.storageStats.chunksStored} persisted chunks (${(this.storageStats.bytesStored / 1024 / 1024).toFixed(1)} MB)`);
+      }
+    } catch (err) {
+      console.error('🍄 💾 Failed to load persisted chunks:', err.message);
+    }
+  }
+
+  /**
+   * Refresh disk stats periodically (called from heartbeat)
+   */
+  _refreshDiskStats() {
+    this.capabilities.diskFree = this._getDiskFree();
+    this.capabilities.storageContributed = this.storageStats.bytesStored;
+  }
+
+  // ── Store Chunk ──────────────────────────────────────────────────────────
+
+  /**
+   * Store a file across the mesh with chunking, replication, and quantum security.
+   * Called by the mesh storage backend (HTTP API).
+   * Returns { fileHash, chunkHashes, replicationMap, quantum }.
+   */
+  async storeFile(fileBuffer, metadata = {}) {
+    const fileHash = crypto.createHash('sha256').update(fileBuffer).digest('hex');
+    const chunks = this._splitIntoChunks(fileBuffer);
+    const chunkHashes = [];
+    const replicationMap = {};
+
+    // ── Quantum Layer 1: Process file with quantum security ──
+    const quantumFile = this.quantumEngine.processFileForStorage(fileBuffer, metadata);
+    const quantumHashId = quantumFile.quantumEnabled
+      ? quantumFile.quantumHash.quantumHash.substring(0, 12)
+      : fileHash.substring(0, 12);
+
+    // Collect chunk info for entanglement
+    const chunkInfos = [];
+
+    for (let i = 0; i < chunks.length; i++) {
+      const chunkHash = crypto.createHash('sha256').update(chunks[i]).digest('hex');
+      chunkHashes.push(chunkHash);
+      chunkInfos.push({ hash: chunkHash, data: chunks[i] });
+
+      // ── Quantum Layer 2: Superposition routing for peer selection ──
+      const targetPeers = this.quantumEngine.enabled
+        ? this.quantumEngine.selectQuantumPeers(this.peers, this.REPLICATION_FACTOR, new Set(), {
+            chunkIndex: i,
+            totalChunks: chunks.length,
+          })
+        : this._selectStoragePeers(this.REPLICATION_FACTOR);
+
+      // Store locally as primary copy
+      this._persistChunk(chunkHash, chunks[i], {
+        fileHash,
+        index: i,
+        totalChunks: chunks.length,
+        size: chunks[i].length,
+        storedAt: Date.now(),
+        quantumHash: quantumFile.quantumEnabled ? QuantumHash.hash(chunks[i]).quantumHash : undefined,
+        ...metadata,
+      });
+
+      // Replicate to remote peers
+      const holders = [this.nodeId];
+      for (const [peerId, peer] of targetPeers) {
+        this._send(peer.ws, {
+          type: MSG_TYPES.STORE_CHUNK,
+          data: {
+            chunkHash,
+            fileHash,
+            index: i,
+            totalChunks: chunks.length,
+            size: chunks[i].length,
+            chunk: chunks[i].toString('base64'),
+            metadata,
+          },
+        });
+        holders.push(peerId);
+      }
+
+      // Update DHT
+      this.dht.set(chunkHash, new Set(holders));
+      replicationMap[chunkHash] = holders;
+
+      // Announce to all peers
+      this.broadcast({
+        type: MSG_TYPES.DHT_ANNOUNCE,
+        data: { chunkHash, holders },
+      });
+    }
+
+    // ── Quantum Layer 3: Process chunks for entanglement & signatures ──
+    const quantumChunks = this.quantumEngine.processChunks(chunkInfos, fileHash);
+
+    console.log(`🍄 ⚛️  Stored file ${quantumHashId} → ${chunks.length} chunks × ${this.REPLICATION_FACTOR} replicas [QUANTUM: ${quantumFile.quantumEnabled ? `hash=${quantumFile.quantumHash.quantumHash.substring(0, 16)}, ${quantumChunks.entanglementPairs?.length || 0} entangled pairs` : 'disabled'}]`);
+
+    return {
+      fileHash,
+      chunkHashes,
+      totalChunks: chunks.length,
+      totalSize: fileBuffer.length,
+      replicationMap,
+      quantum: quantumFile.quantumEnabled ? {
+        quantumHash: quantumFile.quantumHash,
+        signature: quantumFile.signature,
+        chunks: quantumChunks.quantumChunks,
+        entanglementPairs: quantumChunks.entanglementPairs,
+        version: quantumFile.version,
+      } : null,
+    };
+  }
+
+  /**
+   * Retrieve a complete file from the mesh.
+   * Fetches chunks from local store or remote peers.
+   */
+  async retrieveFile(chunkHashes) {
+    const chunks = [];
+
+    for (const chunkHash of chunkHashes) {
+      const chunk = await this._getChunk(chunkHash);
+      if (!chunk) {
+        throw new Error(`Chunk ${chunkHash.substring(0, 12)} not found in mesh`);
+      }
+
+      // ── Quantum verification: validate chunk integrity ──
+      if (this.quantumEngine.enabled) {
+        const chunkEntry = this.chunkStore.get(chunkHash);
+        const qHash = chunkEntry?.metadata?.quantumHash;
+        if (qHash) {
+          const valid = this.quantumEngine.verifyChunkIntegrity(chunk, qHash);
+          if (!valid) {
+            console.warn(`🍄 ⚛️  ⚠️ Quantum integrity FAILED for chunk ${chunkHash.substring(0, 12)} — attempting recovery from mesh`);
+            // Try another peer
+            const altChunk = await this._getChunkFromAlternatePeer(chunkHash);
+            if (altChunk && this.quantumEngine.verifyChunkIntegrity(altChunk, qHash)) {
+              chunks.push(altChunk);
+              continue;
+            }
+          }
+        }
+      }
+
+      chunks.push(chunk);
+    }
+
+    return Buffer.concat(chunks);
+  }
+
+  /**
+   * Try to get chunk from an alternate peer when quantum verification fails
+   * @private
+   */
+  async _getChunkFromAlternatePeer(chunkHash) {
+    const holders = this.dht.get(chunkHash);
+    if (!holders) return null;
+    for (const peerId of holders) {
+      if (peerId === this.nodeId) continue;
+      const peer = this.peers.get(peerId);
+      if (peer) {
+        try {
+          return await this._requestChunkFromPeer(peer, chunkHash);
+        } catch { continue; }
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Delete a file's chunks from the entire mesh
+   */
+  async deleteFile(chunkHashes) {
+    for (const chunkHash of chunkHashes) {
+      // Delete local copy
+      this._deleteLocalChunk(chunkHash);
+
+      // Request remote peers to delete
+      const holders = this.dht.get(chunkHash);
+      if (holders) {
+        for (const peerId of holders) {
+          if (peerId === this.nodeId) continue;
+          const peer = this.peers.get(peerId);
+          if (peer) {
+            this._send(peer.ws, {
+              type: MSG_TYPES.DELETE_CHUNK,
+              data: { chunkHash },
+            });
+          }
+        }
+        this.dht.delete(chunkHash);
+      }
+    }
+  }
+
+  /**
+   * Split file buffer into chunks
+   */
+  _splitIntoChunks(buffer) {
+    const chunks = [];
+    for (let offset = 0; offset < buffer.length; offset += this.CHUNK_SIZE) {
+      chunks.push(buffer.slice(offset, offset + this.CHUNK_SIZE));
+    }
+    return chunks;
+  }
+
+  /**
+   * Get chunk — local first, then remote peers
+   */
+  async _getChunk(chunkHash) {
+    // Try local store first
+    const local = this.chunkStore.get(chunkHash);
+    if (local) {
+      try {
+        const data = fs.readFileSync(local.path);
+        this.storageStats.chunksServed++;
+        this.storageStats.bytesServed += data.length;
+        return data;
+      } catch {}
+    }
+
+    // Ask DHT for holders
+    const holders = this.dht.get(chunkHash);
+    if (holders) {
+      for (const peerId of holders) {
+        if (peerId === this.nodeId) continue;
+        const peer = this.peers.get(peerId);
+        if (peer) {
+          try {
+            return await this._requestChunkFromPeer(peer, chunkHash);
+          } catch {
+            continue; // Try next holder
+          }
+        }
+      }
+    }
+
+    // Broadcast DHT lookup to find the chunk
+    return await this._broadcastDHTLookup(chunkHash);
+  }
+
+  /**
+   * Request a chunk from a specific peer, returns a promise
+   */
+  _requestChunkFromPeer(peer, chunkHash) {
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        this.pendingRetrievals.delete(chunkHash);
+        reject(new Error(`Chunk retrieval timed out: ${chunkHash.substring(0, 12)}`));
+      }, 15000); // 15s timeout
+
+      this.pendingRetrievals.set(chunkHash, { resolve, reject, timeout });
+
+      this._send(peer.ws, {
+        type: MSG_TYPES.RETRIEVE_CHUNK,
+        data: { chunkHash },
+      });
+    });
+  }
+
+  /**
+   * Broadcast DHT lookup to find a chunk nobody claims
+   */
+  _broadcastDHTLookup(chunkHash) {
+    return new Promise((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        this.pendingRetrievals.delete(chunkHash);
+        reject(new Error(`DHT lookup failed: ${chunkHash.substring(0, 12)} not found in mesh`));
+      }, 20000);
+
+      this.pendingRetrievals.set(chunkHash, { resolve, reject, timeout });
+
+      this.broadcast({
+        type: MSG_TYPES.DHT_LOOKUP,
+        data: { chunkHash, requesterId: this.nodeId },
+      });
+    });
+  }
+
+  /**
+   * Persist a chunk to local disk storage
+   */
+  _persistChunk(chunkHash, data, metadata = {}) {
+    const chunkPath = path.join(this.storageDir, `${chunkHash}.chunk`);
+    const metaPath = path.join(this.storageDir, `${chunkHash}.meta`);
+
+    // Don't store duplicates
+    if (this.chunkStore.has(chunkHash)) return;
+
+    fs.writeFileSync(chunkPath, data);
+    fs.writeFileSync(metaPath, JSON.stringify(metadata, null, 2));
+
+    this.chunkStore.set(chunkHash, { path: chunkPath, metadata });
+
+    if (!this.dht.has(chunkHash)) this.dht.set(chunkHash, new Set());
+    this.dht.get(chunkHash).add(this.nodeId);
+
+    this.storageStats.chunksStored++;
+    this.storageStats.bytesStored += data.length;
+    this.capabilities.storageContributed = this.storageStats.bytesStored;
+  }
+
+  /**
+   * Delete a chunk from local disk
+   */
+  _deleteLocalChunk(chunkHash) {
+    const entry = this.chunkStore.get(chunkHash);
+    if (!entry) return;
+
+    try {
+      fs.unlinkSync(entry.path);
+      const metaPath = entry.path.replace('.chunk', '.meta');
+      if (fs.existsSync(metaPath)) fs.unlinkSync(metaPath);
+    } catch {}
+
+    this.storageStats.bytesStored -= (entry.metadata?.size || 0);
+    this.storageStats.chunksStored--;
+    this.chunkStore.delete(chunkHash);
+
+    const holders = this.dht.get(chunkHash);
+    if (holders) {
+      holders.delete(this.nodeId);
+      if (holders.size === 0) this.dht.delete(chunkHash);
+    }
+  }
+
+  /**
+   * Select best peers for storage based on available disk space
+   */
+  _selectStoragePeers(count) {
+    const candidates = [];
+    for (const [peerId, peer] of this.peers) {
+      if (peer.capabilities && peer.capabilities.diskFree > this.CHUNK_SIZE * 10) {
+        candidates.push([peerId, peer]);
+      }
+    }
+    // Sort by most free space descending
+    candidates.sort((a, b) => (b[1].capabilities.diskFree || 0) - (a[1].capabilities.diskFree || 0));
+    return candidates.slice(0, count);
+  }
+
+  // ── Message Handlers for Storage Protocol ────────────────────────────────
+
+  _handleStoreChunk(peerId, data) {
+    // A peer is asking us to store a chunk
+    const availableSpace = this._getStorageCapacity() - this.storageStats.bytesStored;
+    if (availableSpace < data.size) {
+      console.log(`🍄 💾 Rejected chunk ${data.chunkHash.substring(0, 12)} — insufficient space`);
+      return;
+    }
+
+    const chunkBuffer = Buffer.from(data.chunk, 'base64');
+    // Verify integrity
+    const hash = crypto.createHash('sha256').update(chunkBuffer).digest('hex');
+    if (hash !== data.chunkHash) {
+      console.log(`🍄 💾 Rejected chunk — hash mismatch (expected ${data.chunkHash.substring(0, 12)}, got ${hash.substring(0, 12)})`);
+      return;
+    }
+
+    this._persistChunk(data.chunkHash, chunkBuffer, {
+      fileHash: data.fileHash,
+      index: data.index,
+      totalChunks: data.totalChunks,
+      size: data.size,
+      storedAt: Date.now(),
+      fromPeer: peerId,
+      ...data.metadata,
+    });
+
+    // Send ACK
+    const peer = this.peers.get(peerId);
+    if (peer) {
+      this._send(peer.ws, {
+        type: MSG_TYPES.STORE_CHUNK_ACK,
+        data: {
+          chunkHash: data.chunkHash,
+          nodeId: this.nodeId,
+          success: true,
+        },
+      });
+    }
+
+    console.log(`🍄 💾 Stored chunk ${data.chunkHash.substring(0, 12)} (${data.size} bytes) from ${peerId.substring(0, 8)}`);
+  }
+
+  _handleStoreChunkAck(peerId, data) {
+    if (data.success) {
+      // Update DHT — this peer now holds the chunk
+      if (!this.dht.has(data.chunkHash)) this.dht.set(data.chunkHash, new Set());
+      this.dht.get(data.chunkHash).add(data.nodeId || peerId);
+      this.storageStats.replicationEvents++;
+    }
+    this.emit('chunkStored', { chunkHash: data.chunkHash, peerId, success: data.success });
+  }
+
+  _handleRetrieveChunk(peerId, data) {
+    const entry = this.chunkStore.get(data.chunkHash);
+    const peer = this.peers.get(peerId);
+    if (!peer) return;
+
+    if (entry) {
+      try {
+        const chunkData = fs.readFileSync(entry.path);
+        this._send(peer.ws, {
+          type: MSG_TYPES.CHUNK_DATA,
+          data: {
+            chunkHash: data.chunkHash,
+            chunk: chunkData.toString('base64'),
+            size: chunkData.length,
+            metadata: entry.metadata,
+          },
+        });
+        this.storageStats.chunksServed++;
+        this.storageStats.bytesServed += chunkData.length;
+      } catch (err) {
+        this._send(peer.ws, {
+          type: MSG_TYPES.CHUNK_NOT_FOUND,
+          data: { chunkHash: data.chunkHash, reason: 'read_error' },
+        });
+      }
+    } else {
+      this._send(peer.ws, {
+        type: MSG_TYPES.CHUNK_NOT_FOUND,
+        data: { chunkHash: data.chunkHash, reason: 'not_stored' },
+      });
+    }
+  }
+
+  _handleChunkData(peerId, data) {
+    const pending = this.pendingRetrievals.get(data.chunkHash);
+    if (pending) {
+      clearTimeout(pending.timeout);
+      this.pendingRetrievals.delete(data.chunkHash);
+      const buffer = Buffer.from(data.chunk, 'base64');
+
+      // Verify hash
+      const hash = crypto.createHash('sha256').update(buffer).digest('hex');
+      if (hash !== data.chunkHash) {
+        pending.reject(new Error(`Chunk hash mismatch from ${peerId.substring(0, 8)}`));
+        return;
+      }
+
+      pending.resolve(buffer);
+    }
+  }
+
+  _handleChunkNotFound(peerId, data) {
+    // Remove this peer from DHT for this chunk
+    const holders = this.dht.get(data.chunkHash);
+    if (holders) {
+      holders.delete(peerId);
+    }
+    // Don't reject yet — the _getChunk loop will try next holder
+  }
+
+  _handleDeleteChunk(peerId, data) {
+    this._deleteLocalChunk(data.chunkHash);
+    const peer = this.peers.get(peerId);
+    if (peer) {
+      this._send(peer.ws, {
+        type: MSG_TYPES.DELETE_CHUNK_ACK,
+        data: { chunkHash: data.chunkHash, success: true },
+      });
+    }
+  }
+
+  _handleDeleteChunkAck(peerId, data) {
+    const holders = this.dht.get(data.chunkHash);
+    if (holders) {
+      holders.delete(peerId);
+      if (holders.size === 0) this.dht.delete(data.chunkHash);
+    }
+  }
+
+  _handleStorageReport(peerId, data) {
+    const peer = this.peers.get(peerId);
+    if (peer) {
+      peer.capabilities = peer.capabilities || {};
+      peer.capabilities.diskFree = data.diskFree;
+      peer.capabilities.diskTotal = data.diskTotal;
+      peer.capabilities.storageContributed = data.storageContributed;
+      peer.capabilities.storageCapacity = data.storageCapacity;
+    }
+  }
+
+  _handleStorageQuery(peerId, data) {
+    const peer = this.peers.get(peerId);
+    if (!peer) return;
+    this._refreshDiskStats();
+    this._send(peer.ws, {
+      type: MSG_TYPES.STORAGE_REPORT,
+      data: {
+        diskFree: this.capabilities.diskFree,
+        diskTotal: this.capabilities.diskTotal,
+        storageContributed: this.storageStats.bytesStored,
+        storageCapacity: this._getStorageCapacity(),
+        chunksStored: this.storageStats.chunksStored,
+        nodeId: this.nodeId,
+      },
+    });
+  }
+
+  _handleDHTLookup(peerId, data) {
+    const holders = this.dht.get(data.chunkHash);
+    const peer = this.peers.get(peerId);
+    if (!peer) return;
+
+    if (holders && holders.size > 0) {
+      this._send(peer.ws, {
+        type: MSG_TYPES.DHT_RESPONSE,
+        data: {
+          chunkHash: data.chunkHash,
+          holders: Array.from(holders),
+          found: true,
+        },
+      });
+    }
+
+    // If WE have the chunk and someone is looking, send it directly
+    if (this.chunkStore.has(data.chunkHash) && data.requesterId && data.requesterId !== this.nodeId) {
+      this._handleRetrieveChunk(peerId, { chunkHash: data.chunkHash });
+    }
+  }
+
+  _handleDHTResponse(peerId, data) {
+    if (data.found && data.holders) {
+      // Merge into local DHT
+      if (!this.dht.has(data.chunkHash)) this.dht.set(data.chunkHash, new Set());
+      const dhtEntry = this.dht.get(data.chunkHash);
+      for (const h of data.holders) dhtEntry.add(h);
+    }
+  }
+
+  _handleDHTAnnounce(peerId, data) {
+    // Merge announced chunk holders into local DHT
+    if (!this.dht.has(data.chunkHash)) this.dht.set(data.chunkHash, new Set());
+    const dhtEntry = this.dht.get(data.chunkHash);
+    if (data.holders) {
+      for (const h of data.holders) dhtEntry.add(h);
+    }
+  }
+
+  _handleReplicateChunk(peerId, data) {
+    // Peer is asking us to replicate a chunk to ourselves
+    if (data.chunk) {
+      const chunkBuffer = Buffer.from(data.chunk, 'base64');
+      const hash = crypto.createHash('sha256').update(chunkBuffer).digest('hex');
+      if (hash === data.chunkHash) {
+        this._persistChunk(data.chunkHash, chunkBuffer, data.metadata || {});
+        this.storageStats.replicationEvents++;
+      }
+    }
+  }
+
+  // ── Replication Manager ───────────────────────────────────────────────────
+
+  /**
+   * Check all stored chunks and ensure REPLICATION_FACTOR copies exist.
+   * Run periodically (e.g., every 60s).
+   */
+  async maintainReplication() {
+    let underReplicated = 0;
+    for (const [chunkHash, holders] of this.dht) {
+      const liveHolders = [];
+      for (const peerId of holders) {
+        if (peerId === this.nodeId || this.peers.has(peerId)) {
+          liveHolders.push(peerId);
+        }
+      }
+      // Update DHT with only live holders
+      this.dht.set(chunkHash, new Set(liveHolders));
+
+      if (liveHolders.length < this.REPLICATION_FACTOR) {
+        underReplicated++;
+        const needed = this.REPLICATION_FACTOR - liveHolders.length;
+        const candidates = this._selectStoragePeers(needed)
+          .filter(([pid]) => !liveHolders.includes(pid));
+
+        // Read chunk from local or request from a holder
+        let chunkData = null;
+        const local = this.chunkStore.get(chunkHash);
+        if (local) {
+          try { chunkData = fs.readFileSync(local.path); } catch {}
+        }
+
+        if (chunkData) {
+          for (const [peerId, peer] of candidates.slice(0, needed)) {
+            this._send(peer.ws, {
+              type: MSG_TYPES.REPLICATE_CHUNK,
+              data: {
+                chunkHash,
+                chunk: chunkData.toString('base64'),
+                metadata: local?.metadata || {},
+              },
+            });
+            this.dht.get(chunkHash).add(peerId);
+            this.storageStats.replicationEvents++;
+          }
+        }
+      }
+    }
+
+    if (underReplicated > 0) {
+      console.log(`🍄 💾 Replication: ${underReplicated} chunks under-replicated, repairs dispatched`);
+    }
+  }
+
+  /**
+   * Query all peers for their storage capacity
+   */
+  queryStorageCapacity() {
+    this.broadcast({ type: MSG_TYPES.STORAGE_QUERY, data: {} });
+  }
+
+  /**
+   * Get distributed storage statistics
+   */
+  getStorageStats() {
+    this._refreshDiskStats();
+    const peerStorage = [];
+    for (const [peerId, peer] of this.peers) {
+      if (peer.capabilities) {
+        peerStorage.push({
+          nodeId: peerId.substring(0, 8),
+          diskFree: peer.capabilities.diskFree || 0,
+          diskTotal: peer.capabilities.diskTotal || 0,
+          storageContributed: peer.capabilities.storageContributed || 0,
+        });
+      }
+    }
+
+    return {
+      local: {
+        chunksStored: this.storageStats.chunksStored,
+        bytesStored: this.storageStats.bytesStored,
+        chunksServed: this.storageStats.chunksServed,
+        bytesServed: this.storageStats.bytesServed,
+        replicationEvents: this.storageStats.replicationEvents,
+        diskFree: this.capabilities.diskFree,
+        diskTotal: this.capabilities.diskTotal,
+        storageCapacity: this._getStorageCapacity(),
+      },
+      dht: {
+        uniqueChunks: this.dht.size,
+        totalReplicas: Array.from(this.dht.values()).reduce((sum, s) => sum + s.size, 0),
+      },
+      quantum: this.quantumEngine.getStats(),
+      meshtalk: {
+        telecomDataBackups: this.meshtalkStats.telecomDataBackups,
+        telecomBytesStored: this.meshtalkStats.telecomBytesStored,
+        nodesContributing: this.meshtalkNodes.size,
+      },
+      peers: peerStorage,
+      replicationFactor: this.REPLICATION_FACTOR,
+      chunkSize: this.CHUNK_SIZE,
+    };
+  }
+
   _send(ws, msg) {
     if (ws.readyState === WebSocket.OPEN) {
       ws.send(JSON.stringify(msg));
@@ -2042,6 +3041,9 @@ class FungiMeshNetwork extends EventEmitter {
   async stop() {
     // Save peers before shutdown for future reconnection
     this._savePeers();
+
+    // Cleanup quantum engine
+    if (this.quantumEngine) this.quantumEngine.destroy();
 
     // Stop MeshExpander
     if (this.meshExpander) {
@@ -2070,6 +3072,9 @@ class FungiMeshNetwork extends EventEmitter {
       try { ws.close(); } catch {}
     }
     this.gamingServerConnections.clear();
+
+    // Clear MeshTalk OS node registry
+    this.meshtalkNodes.clear();
 
     // Close LAN discovery socket
     if (this.discoverySocket) {

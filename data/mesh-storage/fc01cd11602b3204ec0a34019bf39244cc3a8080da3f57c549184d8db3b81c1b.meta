@@ -1,0 +1,12 @@
+{
+  "fileHash": "fc01cd11602b3204ec0a34019bf39244cc3a8080da3f57c549184d8db3b81c1b",
+  "index": 0,
+  "totalChunks": 1,
+  "size": 4700,
+  "storedAt": 1771495793222,
+  "originalName": "test_mesh_file.txt",
+  "mimeType": "text/plain",
+  "bucket": "mesh-test",
+  "objectKey": "test_mesh_file.txt",
+  "uploadedAt": 1771495793188
+}

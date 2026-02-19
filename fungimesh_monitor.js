@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 /**
+ * ╔═══════════════════════════════════════════════════════════════════════════╗
+ * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
+ * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
+ * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
+ * ╚═══════════════════════════════════════════════════════════════════════════╝
+ */
+/**
  * FungiMesh Live Monitor — Real-time Network Growth & Message Viewer
  * Shows live peer communications, growth events, and message traffic
  */
@@ -111,6 +118,70 @@ class FungiMeshMonitor {
         // Server not available
       }
     }, 5000);
+
+    // Poll MeshExpander for device discovery stats
+    setInterval(async () => {
+      try {
+        const response = await fetch('http://localhost:7100/expander/stats');
+        if (response.ok) {
+          const stats = await response.json();
+          this.logMessage({
+            type: 'EXPANDER_STATS',
+            data: stats
+          }, 'mesh-expander', 'status');
+        }
+      } catch (e) {
+        // MeshExpander not available
+      }
+    }, 10000);
+
+    // Poll DarCloud storage health
+    setInterval(async () => {
+      try {
+        const response = await fetch('http://localhost:8086/health');
+        if (response.ok) {
+          const health = await response.json();
+          this.logMessage({
+            type: 'DARCLOUD_HEALTH',
+            data: health
+          }, 'darcloud-storage', 'status');
+        }
+      } catch (e) {
+        // DarCloud not available
+      }
+    }, 15000);
+
+    // Poll MeshTalk OS integration status
+    setInterval(async () => {
+      try {
+        const response = await fetch('http://localhost:9001/mesh-integration');
+        if (response.ok) {
+          const integration = await response.json();
+          this.logMessage({
+            type: 'MESHTALK_INTEGRATION',
+            data: integration
+          }, 'meshtalk-os', 'status');
+        }
+      } catch (e) {
+        // MeshTalk OS not available
+      }
+    }, 15000);
+
+    // Poll Agent coordination status
+    setInterval(async () => {
+      try {
+        const response = await fetch('http://localhost:7100/agents/status');
+        if (response.ok) {
+          const agentStatus = await response.json();
+          this.logMessage({
+            type: 'AGENT_COORDINATION',
+            data: agentStatus
+          }, 'agent-coordinator', 'status');
+        }
+      } catch (e) {
+        // Agent coordinator not available
+      }
+    }, 20000);
   }
 
   logMessage(message, source, direction) {
@@ -133,7 +204,8 @@ class FungiMeshMonitor {
     this.stats.messagesByType[msgType] = (this.stats.messagesByType[msgType] || 0) + 1;
 
     // Detect growth events
-    if (['NETWORK_SCALE', 'PEER_REQUEST', 'PEER_RECRUITMENT', 'GROWTH_ANNOUNCE'].includes(msgType)) {
+    if (['NETWORK_SCALE', 'PEER_REQUEST', 'PEER_RECRUITMENT', 'GROWTH_ANNOUNCE',
+         'EXPANDER_STATS', 'AGENT_COORDINATION'].includes(msgType)) {
       this.stats.growthEvents++;
     }
 
@@ -142,6 +214,22 @@ class FungiMeshMonitor {
     if (message.data) {
       console.log(`   └─ ${JSON.stringify(message.data).substring(0, 100)}...`);
     }
+  }
+
+  formatMessageHTMLServer(msg) {
+    const classes = ['message'];, 'EXPANDER_STATS'].includes(msg.message.type)) {
+      classes.push('growth');
+    } else if (msg.message && (msg.message.type === 'COMPUTE_TASK' || msg.message.type === 'TASK_RESULT')) {
+      classes.push('task');
+    } else if (msg.message && msg.message.type === 'MESH_HANDSHAKE') {
+      classes.push('handshake');
+    } else if (msg.message && ['DARCLOUD_HEALTH', 'MESHTALK_INTEGRATION', 'AGENT_COORDINATION'].includes(msg.message.type)) {
+      classes.push('task msg.message.type === 'MESH_HANDSHAKE') {
+      classes.push('handshake');
+    }
+    const type = (msg.message && msg.message.type) || 'UNKNOWN';
+    const data = (msg.message && msg.message.data) ? `<pre>${JSON.stringify(msg.message.data, null, 2)}</pre>` : '';
+    return `<div class="${classes.join(' ')}"><div class="timestamp">${msg.timestamp}</div><div><span class="source">${msg.source}</span> <span class="type">${type}</span></div>${data}</div>`;
   }
 
   generateHTML() {
@@ -194,7 +282,7 @@ class FungiMeshMonitor {
     <div class="messages">
         <h3>📨 Live Message Stream</h3>
         <div id="messageList">
-            ${this.messageLog.slice(-20).map(msg => this.formatMessageHTML(msg)).join('')}
+            ${this.messageLog.slice(-20).map(msg => this.formatMessageHTMLServer(msg)).join('')}
         </div>
     </div>
 
@@ -255,4 +343,4 @@ class FungiMeshMonitor {
 
 // Start the monitor
 const monitor = new FungiMeshMonitor();
-monitor.start(8080);
+monitor.start(process.env.FM_MONITOR_PORT || 8085);
