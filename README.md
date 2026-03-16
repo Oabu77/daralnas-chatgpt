@@ -83,6 +83,46 @@ To enable deployments:
    - Apply pending D1 migrations using `cloudflare/wrangler-action@v3`.
    - Deploy the Worker with the same action so the latest code goes live automatically.
 
+
+## Omar Ai 3.0 Launch Endpoint
+
+This project now includes a dedicated launch endpoint for **Omar Ai 3.0** in the **QuranChain** ecosystem.
+
+### Endpoint: POST /agent/launch
+
+**Request Body (optional):**
+```json
+{
+  "name": "Omar Ai 3.0",
+  "ecosystem": "QuranChain",
+  "mission": "Launch a production-ready AI agent with all available tools and skills"
+}
+```
+
+**Response (Success):**
+```json
+{
+  "success": true,
+  "result": {
+    "agent": {
+      "name": "Omar Ai 3.0",
+      "version": "3.0",
+      "status": "launched",
+      "mission": "Launch a production-ready AI agent with all available tools and skills"
+    },
+    "ecosystem": {
+      "name": "QuranChain",
+      "deployment_status": "deployed"
+    },
+    "capabilities": {
+      "tools": ["exec_command", "write_stdin", "..."],
+      "skills": ["skill-creator", "skill-installer"]
+    },
+    "launched_at": "2026-01-01T00:00:00.000Z"
+  }
+}
+```
+
 ## Testing
 
 This template includes integration tests using [Vitest](https://vitest.dev/). To run the tests locally:
