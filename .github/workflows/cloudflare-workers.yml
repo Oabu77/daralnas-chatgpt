@@ -1,0 +1,144 @@
+# ╔═══════════════════════════════════════════════════════════════════════════════╗
+# ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                         ║
+# ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                           ║
+# ║  Immutable Founder Royalty: 30% · License: See /LICENSE                      ║
+# ╚═══════════════════════════════════════════════════════════════════════════════╝
+name: Deploy Cloudflare Workers
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "workers/**"
+      - ".github/workflows/cloudflare-workers.yml"
+  workflow_dispatch:
+
+jobs:
+  deploy-workers:
+    name: Deploy All Workers to Cloudflare
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Deploy darcloud-www
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/www
+
+      - name: Deploy darcloud-api-gateway
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/api-gateway
+
+      - name: Deploy darcloud-ai-assistant
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/ai-assistant
+
+      - name: Deploy darcloud-blockchain
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/blockchain-landing
+
+      - name: Deploy darcloud-mesh-status
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/mesh-status
+
+      - name: Deploy darcloud-enterprise
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/enterprise-landing
+
+      - name: Deploy darcloud-hwc
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/hwc
+
+      - name: Deploy darcloud-realestate
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/realestate
+
+      - name: Deploy darcloud-revenue
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/revenue
+
+      - name: Deploy darcloud-webhook
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/webhook
+
+      - name: Deploy oliver-gates-publishing
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/oliver-gates
+
+      - name: Deploy oliver-gates-ai
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/oliver-gates-ai
+
+      - name: Deploy darcloud-net
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          workingDirectory: workers/darcloud-net
+
+      - name: Report deployment success
+        if: success()
+        run: |
+          echo "✅ All 13 Cloudflare Workers deployed successfully"
+          echo ""
+          echo "  Live endpoints:"
+          echo "    https://darcloud.host               → darcloud-www"
+          echo "    https://www.darcloud.host            → darcloud-www"
+          echo "    https://api.darcloud.host            → darcloud-api-gateway"
+          echo "    https://gateway.darcloud.host        → darcloud-api-gateway"
+          echo "    https://ai.darcloud.host             → darcloud-ai-assistant"
+          echo "    https://aiagents.darcloud.host       → darcloud-ai-assistant"
+          echo "    https://agents.darcloud.host/api     → darcloud-ai-assistant"
+          echo "    https://blockchain.darcloud.host     → darcloud-blockchain"
+          echo "    https://chain.darcloud.host          → darcloud-blockchain"
+          echo "    https://explorer.darcloud.host       → darcloud-blockchain"
+          echo "    https://mesh.darcloud.host           → darcloud-mesh-status"
+          echo "    https://fungi.darcloud.host          → darcloud-mesh-status"
+          echo "    https://enterprise.darcloud.host     → darcloud-enterprise"
+          echo "    https://halalwealthclub.darcloud.host → darcloud-hwc"
+          echo "    https://hwc.darcloud.host            → darcloud-hwc"
+          echo "    https://realestate.darcloud.host     → darcloud-realestate"
+          echo "    https://property.darcloud.host       → darcloud-realestate"
+          echo "    https://revenue.darcloud.host        → darcloud-revenue"
+          echo "    https://billing.darcloud.host        → darcloud-revenue"
+          echo "    https://tollgate.darcloud.host       → darcloud-revenue"
+          echo "    https://webhook.darcloud.host        → darcloud-webhook"
+          echo "    https://hooks.darcloud.host          → darcloud-webhook"
+          echo "    https://books.darcloud.host          → oliver-gates-publishing"
+          echo "    https://publishing.darcloud.host     → oliver-gates-publishing"
+          echo "    https://olivergates.darcloud.host    → oliver-gates-publishing"
+          echo "    https://ai-publishing.darcloud.host  → oliver-gates-ai"
+          echo "    https://ai-books.darcloud.host       → oliver-gates-ai"
+          echo "    https://darcloud.net                 → darcloud-net"
+          echo "    https://www.darcloud.net             → darcloud-net"
