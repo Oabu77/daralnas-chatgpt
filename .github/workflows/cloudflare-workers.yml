@@ -19,6 +19,8 @@ jobs:
     name: Deploy All Workers to Cloudflare
     runs-on: ubuntu-latest
     environment: production
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout code
