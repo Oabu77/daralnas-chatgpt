@@ -17,6 +17,13 @@ Creates AI assistants that manage & communicate with CF Workers:
   5. Analytics & SEO Bot (gpt-4o-mini) — Monitors performance, optimizes SEO
 
 Usage:
+  Required environment variables:
+    OPENAI_API_KEY
+    CLOUDFLARE_ACCOUNT_ID
+    CLOUDFLARE_API_TOKEN
+  Optional environment variable:
+    OPENAI_MINI_API_KEY  # falls back to OPENAI_API_KEY
+
   python3 deploy_landing_page_agents.py           # Create new
   python3 deploy_landing_page_agents.py --update   # Update existing
 """
@@ -26,13 +33,19 @@ from datetime import datetime, timezone
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
+def require_env(name):
+    value = os.environ.get(name)
+    if not value:
+        raise SystemExit(f"Missing required environment variable: {name}")
+    return value
+
 # Keys (core = gpt-4o, mini = gpt-4o-mini)
-CORE_KEY = "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"
-MINI_KEY = "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"
+CORE_KEY = require_env("OPENAI_API_KEY")
+MINI_KEY = os.environ.get("OPENAI_MINI_API_KEY") or CORE_KEY
 
 # Cloudflare credentials for worker management
-CF_ACCOUNT_ID = "3bfc21f5baba642160ec706818e3a19f"
-CF_API_TOKEN = "s18X59LFX6j_iJ88LdfiA124Uk_CQi7O33p8HJit"
+CF_ACCOUNT_ID = require_env("CLOUDFLARE_ACCOUNT_ID")
+CF_API_TOKEN = require_env("CLOUDFLARE_API_TOKEN")
 
 # All 8 landing page workers deployed
 WORKERS = {

@@ -13,12 +13,11 @@
 # Founder: Omar Mohammad Abunadi™
 # ═══════════════════════════════════════════════════════════════
 
-CF_API_KEY="1b781976c6025473c6218e1fc608328bca296"
-CF_API_EMAIL="omarabunadi28@gmail.com"
-CF_ZONE_ID="7b621a2a5e20fbd7c75a2f1daf51ae9f"
-CF_ACCOUNT_ID="3bfc21f5baba642160ec706818e3a19f"
-CF_TUNNEL_ID="e7247d58-41d4-4db7-b690-85d34ac99121"
-CF_DOMAIN="darcloud.host"
+CF_API_TOKEN="${CLOUDFLARE_API_TOKEN:?Missing CLOUDFLARE_API_TOKEN}"
+CF_ZONE_ID="${CLOUDFLARE_ZONE_ID:?Missing CLOUDFLARE_ZONE_ID}"
+CF_ACCOUNT_ID="${CLOUDFLARE_ACCOUNT_ID:?Missing CLOUDFLARE_ACCOUNT_ID}"
+CF_TUNNEL_ID="${CLOUDFLARE_TUNNEL_ID:?Missing CLOUDFLARE_TUNNEL_ID}"
+CF_DOMAIN="${CLOUDFLARE_DOMAIN:?Missing CLOUDFLARE_DOMAIN}"
 TUNNEL_CNAME="${CF_TUNNEL_ID}.cfargotunnel.com"
 API="https://api.cloudflare.com/client/v4"
 
@@ -47,8 +46,7 @@ cf_api() {
   local path="$2"
   shift 2
   curl -s -X "$method" "${API}${path}" \
-    -H "X-Auth-Email: ${CF_API_EMAIL}" \
-    -H "X-Auth-Key: ${CF_API_KEY}" \
+    -H "Authorization: Bearer ${CF_API_TOKEN}" \
     -H "Content-Type: application/json" \
     "$@"
 }

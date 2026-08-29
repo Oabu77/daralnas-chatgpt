@@ -35,9 +35,11 @@ if (fs.existsSync(envPath)) {
 }
 
 // Dual keys: core assistants under FungiMesh project, mini under OPENAI_API_KEY
-const CORE_KEY = process.env.OPENAI_FUNGIMESH_KEY || 
-    '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';
-const MINI_KEY = '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';
+const CORE_KEY = process.env.OPENAI_FUNGIMESH_KEY || process.env.OPENAI_API_KEY;
+const MINI_KEY = process.env.OPENAI_API_KEY;
+if (!CORE_KEY || !MINI_KEY) {
+    throw new Error('Missing OPENAI_API_KEY (and optionally OPENAI_FUNGIMESH_KEY)');
+}
 const OPENAI_KEYS = [CORE_KEY, MINI_KEY];
 
 // ── Function routing table ─────────────────────────────────────────

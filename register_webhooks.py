@@ -30,6 +30,7 @@ import os
 import sys
 import json
 import requests
+import subprocess
 from datetime import datetime
 
 # ═══════════════════════════════════════════
@@ -142,12 +143,23 @@ def store_webhook_secret(secret):
     print(f"  ✅ Saved OPENAI_WEBHOOK_SECRET to .env")
     
     # Deploy secret to Cloudflare Worker
-    print(f"  📤 Deploying secret to Cloudflare Worker...")
-    os.system(f'cd {os.path.dirname(os.path.abspath(__file__))}/workers/webhook && '
-              f'echo "{secret}" | CLOUDFLARE_API_KEY="1b781976c6025473c6218e1fc608328bca296" '
-              f'CLOUDFLARE_EMAIL="omarabunadi28@gmail.com" '
-              f'../../node_modules/.bin/wrangler secret put OPENAI_WEBHOOK_SECRET 2>&1')
-    print(f"  ✅ Worker secret configured")
+    cf_api_token = os.environ.get('CLOUDFLARE_API_TOKEN')
+    if not cf_api_token:
+        raise RuntimeError('Missing required environment variable: CLOUDFLARE_API_TOKEN')
+    worker_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'workers', 'webhook')
+    wrangler = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'node_modules', '.bin', 'wrangler')
+    worker_env = os.environ.copy()
+    worker_env['CLOUDFLARE_API_TOKEN'] = cf_api_token
+    print("  📤 Deploying secret to Cloudflare Worker...")
+    subprocess.run(
+        [wrangler, 'secret', 'put', 'OPENAI_WEBHOOK_SECRET'],
+        input=secret,
+        text=True,
+        cwd=worker_dir,
+        env=worker_env,
+        check=True,
+    )
+    print("  ✅ Worker secret configured")
 
 def print_registration_guide(projects):
     """Print step-by-step dashboard registration guide"""

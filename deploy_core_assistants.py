@@ -10,10 +10,13 @@
 Deploy the 21 remaining CORE assistants using the FungiMesh API key
 These are the gpt-4o tier assistants that failed with the other key
 """
+import os
 import json, sys, time, urllib.request, urllib.error
 from datetime import datetime
 
-API_KEY = "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"
+API_KEY = os.environ.get("OPENAI_FUNGIMESH_KEY") or os.environ.get("OPENAI_API_KEY")
+if not API_KEY:
+    raise SystemExit("Missing OPENAI_FUNGIMESH_KEY or OPENAI_API_KEY")
 
 def openai_req(method, path, data=None):
     url = f"https://api.openai.com/v1{path}"

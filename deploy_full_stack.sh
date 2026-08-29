@@ -14,10 +14,8 @@ cd "$SCRIPT_DIR"
 
 # Load env
 source .env 2>/dev/null || true
-CF_TOKEN="${CF_API_TOKEN:-s18X59LFX6j_iJ88LdfiA124Uk_CQi7O33p8HJit}"
-CF_ACCOUNT="${CF_ACCOUNT_ID:-3bfc21f5baba642160ec706818e3a19f}"
-CF_EMAIL="${CF_API_EMAIL:-omarabunadi28@gmail.com}"
-CF_KEY="${CF_API_KEY:-1b781976c6025473c6218e1fc608328bca296}"
+CF_TOKEN="${CLOUDFLARE_API_TOKEN:?Missing CLOUDFLARE_API_TOKEN}"
+CF_ACCOUNT="${CLOUDFLARE_ACCOUNT_ID:?Missing CLOUDFLARE_ACCOUNT_ID}"
 WRANGLER="./node_modules/.bin/wrangler"
 
 echo "╔══════════════════════════════════════════════════════════════╗"

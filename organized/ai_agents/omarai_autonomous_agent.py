@@ -461,7 +461,10 @@ def deploy_autonomous_agent():
     agent = OmarAIAutonomousAgent("OmarAI", memory)
     
     # Load Cloudflare credentials
-    agent.cloudflare_api_token = 'EMK3FTCc5TzkG9CegzLn58dbcVIIyBqoI9TYYZvF'
+    cloudflare_api_token = os.environ.get('CLOUDFLARE_API_TOKEN')
+    if not cloudflare_api_token:
+        raise RuntimeError('Missing required environment variable: CLOUDFLARE_API_TOKEN')
+    agent.cloudflare_api_token = cloudflare_api_token
     agent.memory.update_preference('cloudflare_api_token', agent.cloudflare_api_token)
     
     # Go live

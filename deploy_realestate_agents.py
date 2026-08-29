@@ -33,8 +33,10 @@ if os.path.exists(env_path):
                 os.environ.setdefault(k.strip(), v.strip())
 
 # Keys (core = FungiMesh gpt-4o, mini = OPENAI_API_KEY gpt-4o-mini)
-CORE_KEY = "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"
-MINI_KEY = "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"
+CORE_KEY = os.environ.get('OPENAI_FUNGIMESH_KEY') or os.environ.get('OPENAI_API_KEY')
+MINI_KEY = os.environ.get('OPENAI_API_KEY')
+if not CORE_KEY or not MINI_KEY:
+    raise SystemExit('Missing OPENAI_API_KEY (and optionally OPENAI_FUNGIMESH_KEY)')
 
 # Load Stripe payment links created by the bot
 stripe_config_path = os.path.join(BASE_DIR, 'data', 'realestate_stripe_config.json')

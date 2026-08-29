@@ -34,8 +34,14 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger('IslamicCoinPairing')
 
 # Kraken API Configuration (for price data only - NO selling)
-KRAKEN_API_KEY = 'KmQ13F3JGTj+Zzv+qBFmYPVCkI+RzenYh3P9XjfuQJKeL3kwZb4OqtKx'
-KRAKEN_API_SECRET = '3R+fRhuHeHsRMGu8PBOmj88JPQ/2V9D70hYuILUnsdbiXhT1raZEu09XCMJ6/aZ4WlJvK8lLkBUz7fCEtV6YVA=='
+def require_env(name: str) -> str:
+    value = os.environ.get(name)
+    if not value:
+        raise RuntimeError(f'Missing required environment variable: {name}')
+    return value
+
+KRAKEN_API_KEY = require_env('KRAKEN_API_KEY')
+KRAKEN_API_SECRET = require_env('KRAKEN_API_SECRET')
 
 # Founder wallet (Kraken Ethereum deposit address)
 FOUNDER_WALLET = '0x4e90944C093f7727ff89a30AF96A556deB95cCB8'

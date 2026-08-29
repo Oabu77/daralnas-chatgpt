@@ -30,10 +30,16 @@ const PORT = 9025;
 const BASE_DIR = __dirname;
 
 // ─── Credentials ──────────────────────────────────────────────────
-const CORE_KEY = "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";
-const MINI_KEY = "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";
-const CF_ACCOUNT = "3bfc21f5baba642160ec706818e3a19f";
-const CF_TOKEN = "s18X59LFX6j_iJ88LdfiA124Uk_CQi7O33p8HJit";
+function requireEnv(name, fallback = undefined) {
+    const value = process.env[name] || fallback;
+    if (!value) throw new Error(`Missing required environment variable: ${name}`);
+    return value;
+}
+
+const CORE_KEY = requireEnv('OPENAI_FUNGIMESH_KEY', process.env.OPENAI_API_KEY);
+const MINI_KEY = requireEnv('OPENAI_API_KEY');
+const CF_ACCOUNT = requireEnv('CLOUDFLARE_ACCOUNT_ID');
+const CF_TOKEN = requireEnv('CLOUDFLARE_API_TOKEN');
 
 // ─── Load Agent Config ────────────────────────────────────────────
 let AGENTS_CONFIG = {};
