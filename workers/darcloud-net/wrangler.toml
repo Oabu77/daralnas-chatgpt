@@ -11,10 +11,12 @@ account_id = "3bfc21f5baba642160ec706818e3a19f"
 [vars]
 ENVIRONMENT = "production"
 
+workers_dev = true
+
 [[routes]]
-pattern = "darcloud.net"
+pattern = "darcloud.net/*"
 zone_name = "darcloud.net"
 
 [[routes]]
-pattern = "www.darcloud.net"
+pattern = "www.darcloud.net/*"
 zone_name = "darcloud.net"
