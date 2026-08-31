@@ -1,0 +1,91 @@
+name: Configure TLT custom domain DNS
+
+on:
+  push:
+    branches:
+      - codex/tlt-domain-dns-20260831
+
+permissions:
+  contents: read
+
+jobs:
+  configure-dns:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      CF_API_TOKEN: \${{ secrets.CLOUDFLARE_API_TOKEN }}
+      ZONE_NAME: darcloud.net
+    steps:
+      - name: Upsert TLT custom-domain records
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [ -z "\${CF_API_TOKEN:-}" ]; then
+            echo "::error::CLOUDFLARE_API_TOKEN is not configured"
+            exit 1
+          fi
+
+          api() {
+            curl --fail-with-body --silent --show-error \
+              -H "Authorization: Bearer \${CF_API_TOKEN}" \
+              -H "Content-Type: application/json" \
+              "$@"
+          }
+
+          zone_json=$(api --get "https://api.cloudflare.com/client/v4/zones" \
+            --data-urlencode "name=\${ZONE_NAME}")
+          zone_id=$(jq -r 'if .success then (.result[0].id // empty) else empty end' <<<"\${zone_json}")
+          if [ -z "\${zone_id}" ]; then
+            echo "::error::The Cloudflare token cannot resolve the darcloud.net zone"
+            jq -c '{success,errors}' <<<"\${zone_json}"
+            exit 1
+          fi
+
+          upsert_record() {
+            local type="$1"
+            local name="$2"
+            local content="$3"
+            local list record_id payload response endpoint method
+
+            list=$(api --get "https://api.cloudflare.com/client/v4/zones/\${zone_id}/dns_records" \
+              --data-urlencode "type=\${type}" \
+              --data-urlencode "name=\${name}")
+            record_id=$(jq -r '.result[0].id // empty' <<<"\${list}")
+
+            if [ "\${type}" = "CNAME" ]; then
+              payload=$(jq -nc \
+                --arg type "\${type}" \
+                --arg name "\${name}" \
+                --arg content "\${content}" \
+                '{type:$type,name:$name,content:$content,ttl:1,proxied:false}')
+            else
+              payload=$(jq -nc \
+                --arg type "\${type}" \
+                --arg name "\${name}" \
+                --arg content "\${content}" \
+                '{type:$type,name:$name,content:$content,ttl:1}')
+            fi
+
+            if [ -n "\${record_id}" ]; then
+              method="PUT"
+              endpoint="https://api.cloudflare.com/client/v4/zones/\${zone_id}/dns_records/\${record_id}"
+            else
+              method="POST"
+              endpoint="https://api.cloudflare.com/client/v4/zones/\${zone_id}/dns_records"
+            fi
+
+            response=$(api -X "\${method}" "\${endpoint}" --data "\${payload}")
+            if [ "$(jq -r '.success' <<<"\${response}")" != "true" ]; then
+              echo "::error::Could not configure \${type} \${name}"
+              jq -c '{success,errors}' <<<"\${response}"
+              exit 1
+            fi
+            echo "Configured \${type} \${name}"
+          }
+
+          upsert_record CNAME "tlt.darcloud.net" "custom-domains.chatgpt.site"
+          upsert_record TXT "_openai-site-verification.tlt.darcloud.net" "openai-site-verification=R8eYCennJSVjtp513RfhLxGWjYvtA1Q0sptbBYIuMuA"
+          upsert_record TXT "_cf-custom-hostname.tlt.darcloud.net" "9aab5d73-fdf2-4ee7-beb6-23f3273e6041"
+
+          echo "TLT DNS records configured successfully"
