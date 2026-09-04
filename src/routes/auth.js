@@ -9,13 +9,13 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const { auth } = require('../middleware/auth');
 const User = require('../models/User');
-const stripeService = require('../services/stripeService');
-const winston = require('winston');
 
 const router = express.Router();
+const JWT_EXPIRE = process.env.JWT_EXPIRE || '1h';
 
 // @route   POST /api/auth/register
-// @desc    Register user
+// @desc    Register user identity only. Billing/customer provisioning belongs
+//          to authenticated payment/subscription flows, not public signup.
 // @access  Public
 router.post('/register', async (req, res, next) => {
   try {
@@ -27,20 +27,11 @@ router.post('/register', async (req, res, next) => {
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    // Create user
+    // Create local identity only. Do not make provider/billing requests here.
     const user = await User.create({ username, email, password });
 
-    // Create Stripe customer
-    try {
-      await stripeService.createCustomer(user);
-    } catch (stripeError) {
-      winston.error('Failed to create Stripe customer:', stripeError);
-      // Don't fail registration if Stripe fails, but log it
-    }
-
-    // Generate token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRE,
+      expiresIn: JWT_EXPIRE,
     });
 
     res.status(201).json({
@@ -79,7 +70,7 @@ router.post('/login', async (req, res, next) => {
 
     // Generate token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: process.env.JWT_EXPIRE,
+      expiresIn: JWT_EXPIRE,
     });
 
     res.json({
