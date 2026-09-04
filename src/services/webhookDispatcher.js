@@ -15,9 +15,11 @@
 'use strict';
 
 const crypto = require('crypto');
-const http   = require('http');
 const https  = require('https');
-const url    = require('url');
+const {
+  resolvePublicAddress,
+  validateWebhookTarget,
+} = require('../security/agentWebhookPolicy');
 
 let store = null;       // lazy-loaded to avoid circular deps
 let vault = null;
@@ -50,7 +52,7 @@ async function dispatch(agentId, event, payload) {
 
   for (const hook of hooks) {
     deliverWithRetry(hook, body, 0).catch((err) => {
-      console.error(`[WebhookDispatcher] failed delivery to ${hook.url}:`, err.message);
+      console.error(`[WebhookDispatcher] delivery blocked/failed for webhook ${hook.webhookId || 'unknown'}:`, err.message);
     });
   }
 }
@@ -68,15 +70,24 @@ async function deliverWithRetry(hook, body, attempt) {
   }
 }
 
-function post(targetUrl, body, secretId) {
-  return new Promise((resolve, reject) => {
-    const parsed = new URL(targetUrl);
-    const mod = parsed.protocol === 'https:' ? https : http;
+async function post(targetUrl, body, secretId) {
+  const policy = validateWebhookTarget(targetUrl);
+  if (!policy.ok) {
+    throw new Error(`Webhook target blocked by outbound policy: ${policy.reason}`);
+  }
 
+  // Resolve once, reject any private/reserved answer, then connect to the
+  // selected public address. This prevents a second DNS lookup from turning an
+  // allow-listed hostname into a loopback/private target during the request.
+  const resolvedAddress = await resolvePublicAddress(policy.hostname);
+  const parsed = new URL(policy.url);
+
+  return new Promise((resolve, reject) => {
     const headers = {
       'Content-Type':   'application/json',
-      'Content-Length':  Buffer.byteLength(body),
-      'User-Agent':     'QuranChain-Agent-Webhooks/1.0',
+      'Content-Length': Buffer.byteLength(body),
+      'User-Agent':     'QuranChain-Agent-Webhooks/1.1',
+      'Host':           policy.hostHeader,
     };
 
     // Sign if secret attached
@@ -88,14 +99,15 @@ function post(targetUrl, body, secretId) {
       }
     }
 
-    const req = mod.request(
+    const req = https.request(
       {
-        hostname: parsed.hostname,
-        port:     parsed.port || (parsed.protocol === 'https:' ? 443 : 80),
-        path:     parsed.pathname + parsed.search,
-        method:   'POST',
+        hostname: resolvedAddress,
+        servername: policy.hostname,
+        port: parsed.port || 443,
+        path: parsed.pathname + parsed.search,
+        method: 'POST',
         headers,
-        timeout:  10000,
+        timeout: 10000,
       },
       (res) => {
         let data = '';
@@ -104,7 +116,7 @@ function post(targetUrl, body, secretId) {
           if (res.statusCode >= 200 && res.statusCode < 300) {
             resolve({ statusCode: res.statusCode, body: data });
           } else {
-            reject(new Error(`HTTP ${res.statusCode}: ${data.substring(0, 200)}`));
+            reject(new Error(`Webhook endpoint returned HTTP ${res.statusCode}`));
           }
         });
       }
