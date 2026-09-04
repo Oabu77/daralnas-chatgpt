@@ -133,15 +133,17 @@ jobs:
         run: |
           scp -i ~/.ssh/darcloud_prod -r . ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/darcloud/quranchain-mesh/
           ssh -i ~/.ssh/darcloud_prod ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
+            set -euo pipefail
             cd /var/www/darcloud/quranchain-mesh
-            npm install --production
-            systemctl restart quranchain-app.service || true
-            systemctl restart quranchain-blockchain.service || true
+            npm ci --omit=dev
+            systemctl restart quranchain-app.service
+            systemctl restart quranchain-blockchain.service
           EOF
 
       - name: Run smoke tests on deployed application
         run: |
           ssh -i ~/.ssh/darcloud_prod ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
+            set -euo pipefail
             bash /var/www/darcloud/quranchain-mesh/production-smoke-tests.sh
           EOF
 
