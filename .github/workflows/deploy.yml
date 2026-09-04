@@ -46,6 +46,7 @@ jobs:
     env:
       MONGODB_URI: mongodb://localhost:27017/quranchain_test
       JWT_SECRET: ci-only-jwt-secret-do-not-use-in-production
+      JWT_EXPIRE: 1h
       NODE_ENV: test
 
     steps:
@@ -64,9 +65,6 @@ jobs:
       - name: Lint code
         run: npm run lint --if-present
 
-      - name: Run tests
-        run: npm test -- --runInBand
-
       - name: Capture dependency audit and enforce recorded ceiling
         shell: bash
         run: |
@@ -78,13 +76,15 @@ jobs:
           node scripts/check-audit-baseline.js npm-audit.json
 
       - name: Upload dependency audit evidence
-        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: npm-audit-${{ github.sha }}
           path: npm-audit.json
           if-no-files-found: error
           retention-days: 14
+
+      - name: Run tests
+        run: npm test -- --runInBand
 
   build:
     needs: test
