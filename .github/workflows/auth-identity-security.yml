@@ -1,0 +1,43 @@
+name: Auth Identity Security
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/routes/auth.js'
+      - '__tests__/auth.test.js'
+      - '.github/workflows/auth-identity-security.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  auth-identity-only:
+    runs-on: ubuntu-latest
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+
+    env:
+      MONGODB_URI: mongodb://localhost:27017/quranchain_auth_security_test
+      JWT_SECRET: ci-only-auth-security-secret
+      JWT_EXPIRE: 1h
+      NODE_ENV: test
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Verify public registration is identity-only
+        run: npx jest __tests__/auth.test.js --runInBand
