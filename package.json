@@ -10,7 +10,9 @@
     "blockchain:dev": "nodemon src/blockchain-server.js",
     "dev": "concurrently \"npm run server\" \"cd client && npm run dev\"",
     "mesh": "npm run blockchain",
+    "mesh-storage": "node src/services/secureMeshStorageBackend.js",
     "test": "jest",
+    "test:mesh-storage-security": "jest __tests__/meshStorageSecurity.test.js --runInBand",
     "setup-stripe": "node setup-stripe.js"
   },
   "keywords": [
