@@ -9,6 +9,7 @@ on:
       - '__tests__/meshStorageSecurity.test.js'
       - 'package.json'
       - 'package-lock.json'
+      - '.env.example'
       - '.github/workflows/mesh-storage-security.yml'
   workflow_dispatch:
 
