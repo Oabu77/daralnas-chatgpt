@@ -63,10 +63,11 @@ fi
 echo ""
 echo "🎯 STARTING SERVICES..."
 
-# Start Revenue Server if not running
+# Start Revenue Server if not running. Use the guarded entrypoint so caller-controlled
+# IPFS CIDs can never reach a shell command.
 if ! check_port 3000; then
     echo "1. Starting Revenue Server (port 3000)..."
-    nohup node revenue-server.js > revenue.log 2>&1 &
+    nohup node revenue-server-secure.js > revenue.log 2>&1 &
     REVENUE_PID=$!
     echo "   Revenue Server started (PID: $REVENUE_PID)"
     wait_for_service 3000 "Revenue Server"
