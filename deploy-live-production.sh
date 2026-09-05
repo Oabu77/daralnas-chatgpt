@@ -140,10 +140,10 @@ fi
 
 log "${BLUE}Phase 4: Starting Revenue and FungiMesh Services${NC}"
 
-# Start revenue server
+# Start revenue server through the IPFS command guard.
 log "Starting Revenue Server on port 3000"
 cd /home/omar/Desktop/QuranChain-OS
-nohup node revenue-server.js > logs/revenue-server.log 2>&1 &
+nohup node revenue-server-secure.js > logs/revenue-server.log 2>&1 &
 echo $! > revenue-server.pid
 
 # Start FungiMesh Python service
