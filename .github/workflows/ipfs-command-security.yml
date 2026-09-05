@@ -8,6 +8,9 @@ on:
       - 'security/test_ipfs_command_policy.js'
       - 'quick-deploy-live.sh'
       - 'start_all.sh'
+      - 'deploy-live-production.sh'
+      - 'deploy/aws/quranchain-revenue.service'
+      - 'deploy/systemd/quranchain-app.service'
       - '.github/workflows/ipfs-command-security.yml'
   workflow_dispatch:
 
@@ -26,3 +29,11 @@ jobs:
           node --check revenue-server-secure.js
       - name: Synthetic command-boundary regression
         run: node security/test_ipfs_command_policy.js
+      - name: Guard migrated service definitions
+        run: |
+          if grep -nE 'node ([^ ]*/)?revenue-server\.js([[:space:]]|$)' \
+            deploy/aws/quranchain-revenue.service \
+            deploy/systemd/quranchain-app.service; then
+            echo 'A system service bypasses revenue-server-secure.js' >&2
+            exit 1
+          fi
