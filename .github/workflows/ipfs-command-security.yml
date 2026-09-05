@@ -28,6 +28,7 @@ jobs:
         run: |
           node --check security/ipfs_command_policy.js
           node --check revenue-server-secure.js
+          bash -n deploy-servers-local.sh
       - name: Synthetic command-boundary regression
         run: node security/test_ipfs_command_policy.js
       - name: Guard migrated launch definitions
