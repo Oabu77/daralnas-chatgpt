@@ -1,0 +1,28 @@
+name: IPFS Command Boundary Security
+
+on:
+  pull_request:
+    paths:
+      - 'revenue-server-secure.js'
+      - 'security/ipfs_command_policy.js'
+      - 'security/test_ipfs_command_policy.js'
+      - 'quick-deploy-live.sh'
+      - 'start_all.sh'
+      - '.github/workflows/ipfs-command-security.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ipfs-command-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Syntax check
+        run: |
+          node --check security/ipfs_command_policy.js
+          node --check revenue-server-secure.js
+      - name: Synthetic command-boundary regression
+        run: node security/test_ipfs_command_policy.js
