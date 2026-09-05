@@ -9,6 +9,7 @@ const express = require('express');
 const stripeService = require('../services/stripeService');
 const User = require('../models/User');
 const { auth } = require('../middleware/auth');
+const { paymentMethodBelongsToCustomer } = require('../security/paymentMethodOwnership');
 const router = express.Router();
 
 // ACH Payment Collection Endpoint (using Stripe)
@@ -158,16 +159,26 @@ router.delete('/payment-methods/:paymentMethodId', auth, async (req, res) => {
     const { paymentMethodId } = req.params;
     const user = await User.findById(req.user.id);
 
-    if (!user.stripeCustomerId) {
-      return res.status(404).json({ error: 'No Stripe customer found' });
+    if (!user?.stripeCustomerId) {
+      return res.status(404).json({ error: 'Payment method not found' });
     }
 
-    // Detach payment method
+    // Resolve ownership server-side before performing the destructive Stripe action.
+    // Stripe may return the customer relationship as an ID string or an expanded object.
+    const paymentMethod = await stripeService.stripe.paymentMethods.retrieve(paymentMethodId);
+    if (!paymentMethodBelongsToCustomer(paymentMethod, user.stripeCustomerId)) {
+      return res.status(404).json({ error: 'Payment method not found' });
+    }
+
     await stripeService.stripe.paymentMethods.detach(paymentMethodId);
 
     res.json({ message: 'Payment method removed successfully' });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    // Avoid disclosing provider/account ownership details through the object-level authorization boundary.
+    if (error?.type === 'StripeInvalidRequestError') {
+      return res.status(404).json({ error: 'Payment method not found' });
+    }
+    res.status(500).json({ error: 'Failed to remove payment method' });
   }
 });
 
