@@ -1,0 +1,40 @@
+name: Private Key Guard
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reject-new-private-keys:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Reject newly added private-key material
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          base="${BASE_SHA:-HEAD^}"
+          if git diff --unified=0 "$base"...HEAD -- . \
+            | grep -qE '^\+.*-----BEGIN[[:space:]]+(RSA[[:space:]]+|EC[[:space:]]+|OPENSSH[[:space:]]+)?PRIVATE[[:space:]]+KEY-----'; then
+            echo 'Refusing commit: newly added private-key material detected.' >&2
+            exit 1
+          fi
+
+      - name: Reject new or modified wallet secret artifacts
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          base="${BASE_SHA:-HEAD^}"
+          if git diff --name-status --diff-filter=ACMRT "$base"...HEAD \
+            | awk '{print $NF}' \
+            | grep -qE '^data/wallets/.*\.json$'; then
+            echo 'Refusing commit: wallet JSON must remain runtime-only and untracked.' >&2
+            exit 1
+          fi
