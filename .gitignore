@@ -25,6 +25,10 @@ pids
 *.seed
 *.pid.lock
 
+# Wallet/key runtime artifacts
+# Wallet JSON may contain private signing material and must never be committed.
+data/wallets/*.json
+
 # Coverage directory used by tools like istanbul
 coverage/
 *.lcov
