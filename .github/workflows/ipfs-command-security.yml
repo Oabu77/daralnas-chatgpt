@@ -9,6 +9,7 @@ on:
       - 'quick-deploy-live.sh'
       - 'start_all.sh'
       - 'deploy-live-production.sh'
+      - 'deploy-servers-local.sh'
       - 'deploy/aws/quranchain-revenue.service'
       - 'deploy/systemd/quranchain-app.service'
       - '.github/workflows/ipfs-command-security.yml'
@@ -29,11 +30,12 @@ jobs:
           node --check revenue-server-secure.js
       - name: Synthetic command-boundary regression
         run: node security/test_ipfs_command_policy.js
-      - name: Guard migrated service definitions
+      - name: Guard migrated launch definitions
         run: |
           if grep -nE 'node ([^ ]*/)?revenue-server\.js([[:space:]]|$)' \
+            deploy-servers-local.sh \
             deploy/aws/quranchain-revenue.service \
             deploy/systemd/quranchain-app.service; then
-            echo 'A system service bypasses revenue-server-secure.js' >&2
+            echo 'A migrated launcher bypasses revenue-server-secure.js' >&2
             exit 1
           fi
