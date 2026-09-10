@@ -207,6 +207,7 @@ function toRef(entry) {
 }
 
 // ── Bootstrap ────────────────────────────────────────────────────────────────
+if (process.env.NODE_ENV === 'production') ensureKey();
 loadVault();
 
 module.exports = { store, retrieve, listRefs, deleteSecret, exists };
