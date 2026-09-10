@@ -29,6 +29,11 @@ pids
 # Wallet JSON may contain private signing material and must never be committed.
 data/wallets/*.json
 
+# Agent Actions vault runtime material
+# Never version the vault key or encrypted runtime vault beside application source.
+data/agent-actions/.vault-key
+data/agent-actions/secrets.enc.json
+
 # Coverage directory used by tools like istanbul
 coverage/
 *.lcov
