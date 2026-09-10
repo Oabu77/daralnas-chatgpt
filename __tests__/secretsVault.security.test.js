@@ -56,7 +56,6 @@ test('production stores only encrypted vault state in an external runtime direct
   const ref = vault.store('synthetic-agent', 'synthetic-name', 'SYNTHETIC_SECRET_ONLY', 'test');
 
   expect(ref).toEqual(expect.objectContaining({
-    agentId: undefined,
     name: 'synthetic-name',
     type: 'test',
   }));
@@ -65,5 +64,6 @@ test('production stores only encrypted vault state in an external runtime direct
   expect(fs.existsSync(vaultFile)).toBe(true);
   const serialized = fs.readFileSync(vaultFile, 'utf8');
   expect(serialized).not.toContain('SYNTHETIC_SECRET_ONLY');
-  expect(fs.existsSync(path.join(process.cwd(), 'data', 'agent-actions', '.vault-key'))).toBe(true);
+  expect(fs.existsSync(path.join(process.cwd(), 'data', 'agent-actions', '.vault-key'))).toBe(false);
+  expect(fs.existsSync(path.join(process.cwd(), 'data', 'agent-actions', 'secrets.enc.json'))).toBe(false);
 });
