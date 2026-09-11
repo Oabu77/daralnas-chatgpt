@@ -2,6 +2,8 @@ name: Private Key Guard
 
 on:
   pull_request:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -12,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           fetch-depth: 0
 
@@ -27,14 +29,14 @@ jobs:
             exit 1
           fi
 
-      - name: Reject new or modified wallet secret artifacts
+      - name: Reject new or modified wallet and vault secret artifacts
         env:
           BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
           base="${BASE_SHA:-HEAD^}"
           if git diff --name-status --diff-filter=ACMRT "$base"...HEAD \
             | awk '{print $NF}' \
-            | grep -qE '^data/wallets/.*\.json$'; then
-            echo 'Refusing commit: wallet JSON must remain runtime-only and untracked.' >&2
+            | grep -qE '^(data/wallets/.*\.json|data/agent-actions/\.vault-key|data/agent-actions/secrets\.enc\.json)$'; then
+            echo 'Refusing commit: wallet/vault secret artifacts must remain runtime-only and untracked.' >&2
             exit 1
           fi
