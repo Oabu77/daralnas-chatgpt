@@ -6,24 +6,27 @@
  * ╚═══════════════════════════════════════════════════════════════════════════╝
  */
 const request = require('supertest');
+const stripeService = require('../src/services/stripeService');
+
+// A regression guard: public identity registration must not provision billing
+// provider resources. The spy also ensures any accidental future call is local.
+const createCustomerSpy = jest
+  .spyOn(stripeService, 'createCustomer')
+  .mockResolvedValue({ id: 'cus_should_not_be_called' });
+
 const app = require('../src/index');
 const User = require('../src/models/User');
 const mongoose = require('mongoose');
 
 describe('Auth Routes', () => {
-  beforeAll(async () => {
-    // Connect to test database if needed
-    // For now, we'll assume MongoDB is running
-  });
-
   afterAll(async () => {
-    // Clean up
     await User.deleteMany({});
     await mongoose.connection.close();
+    createCustomerSpy.mockRestore();
   });
 
   describe('POST /api/auth/register', () => {
-    it('should register a new user', async () => {
+    it('should register a local identity without Stripe provisioning', async () => {
       const userData = {
         username: 'testuser',
         email: 'test@example.com',
@@ -38,6 +41,7 @@ describe('Auth Routes', () => {
       expect(response.body.success).toBe(true);
       expect(response.body.token).toBeDefined();
       expect(response.body.user.username).toBe(userData.username);
+      expect(createCustomerSpy).not.toHaveBeenCalled();
     });
 
     it('should not register user with existing email', async () => {
@@ -51,6 +55,8 @@ describe('Auth Routes', () => {
         .post('/api/auth/register')
         .send(userData)
         .expect(400);
+
+      expect(createCustomerSpy).not.toHaveBeenCalled();
     });
   });
 
