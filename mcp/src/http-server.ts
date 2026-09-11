@@ -65,7 +65,7 @@ function createMcpServer(): Server {
   );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
-    const tools = [
+    const tools: any[] = [
       {
         name: "get_verse",
         description: "Retrieve a Quran verse by Surah and Ayah numbers from the QuranChain blockchain",
