@@ -12,6 +12,8 @@ account_id = "3bfc21f5baba642160ec706818e3a19f"
 ENVIRONMENT = "production"
 ORIGIN_URL = "http://localhost:8200"
 
+workers_dev = true
+
 [[routes]]
-pattern = "enterprise.darcloud.host"
+pattern = "enterprise.darcloud.host/*"
 zone_name = "darcloud.host"
