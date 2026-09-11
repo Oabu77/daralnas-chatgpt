@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 'use strict';
 
-// SECURITY BOUNDARY: keep the historical filename as the only supported
-// compatibility entrypoint so legacy launchers cannot bypass the IPFS guard.
-// The monolithic implementation is preserved in revenue-server-legacy.js.
+// Harden the legacy revenue server's IPFS read boundary without modifying its
+// large monolithic entrypoint. The legacy server imports child_process.exec
+// after this preload runs, so the guarded implementation is what it receives.
 const childProcess = require('child_process');
 const { createExecGuard } = require('./security/ipfs_command_policy');
 
@@ -12,4 +12,4 @@ childProcess.exec = createExecGuard(
   childProcess.execFile.bind(childProcess)
 );
 
-require('./revenue-server-legacy');
+require('./revenue-server');

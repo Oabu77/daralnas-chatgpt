@@ -35,9 +35,9 @@ echo -e "${CYAN}║     QuranChain-OS Local Deployment & DarCloud Testing      �
 echo -e "${CYAN}╚════════════════════════════════════════════════════════════╝${NC}"
 echo ""
 
-# Check if in correct directory
-if [ ! -f "$BASE_DIR/package.json" ] || [ ! -f "$BASE_DIR/revenue-server.js" ]; then
-    echo -e "${RED}❌ Error: Must run from QuranChain-OS root directory${NC}"
+# Check if in correct directory and if the hardened revenue entrypoint exists.
+if [ ! -f "$BASE_DIR/package.json" ] || [ ! -f "$BASE_DIR/revenue-server-secure.js" ]; then
+    echo -e "${RED}❌ Error: Must run from QuranChain-OS root directory with revenue-server-secure.js present${NC}"
     exit 1
 fi
 
@@ -49,6 +49,7 @@ echo -e "${GREEN}✓${NC} Production logs directory: $LOG_DIR"
 echo -e "${YELLOW}\n📋 Step 1: Cleaning up old processes...${NC}"
 pkill -f "node.*blockchain-server.js" 2>/dev/null || true
 pkill -f "node.*revenue-server.js" 2>/dev/null || true
+pkill -f "node.*revenue-server-secure.js" 2>/dev/null || true
 pkill -f "node.*gamingServer.js" 2>/dev/null || true
 
 sleep 2
@@ -65,9 +66,9 @@ echo -e "  Port: 3001 | Log: $LOG_DIR/blockchain-server.log"
 # Wait for server to initialize
 sleep 5
 
-# 2. START REVENUE SERVER (port 3000)
+# 2. START REVENUE SERVER (port 3000) THROUGH THE IPFS COMMAND GUARD
 echo -e "${YELLOW}\n📋 Step 3: Starting Revenue Server...${NC}"
-nohup node revenue-server.js > "$LOG_DIR/revenue-server.log" 2>&1 &
+nohup node revenue-server-secure.js > "$LOG_DIR/revenue-server.log" 2>&1 &
 REVENUE_PID=$!
 echo $REVENUE_PID > "$PID_DIR/revenue-server.pid"
 echo -e "${GREEN}✓${NC} Revenue Server started with PID: $REVENUE_PID"

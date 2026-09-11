@@ -33,9 +33,9 @@ nohup node src/blockchain-server.js > logs/blockchain-server.log 2>&1 &
 echo $! > blockchain-server.pid
 echo "FungiMesh Network started (PID: $!)"
 
-# Start Revenue Server
+# Start Revenue Server through the IPFS command guard.
 echo "Starting Revenue Server..."
-nohup node revenue-server.js > logs/revenue-server.log 2>&1 &
+nohup node revenue-server-secure.js > logs/revenue-server.log 2>&1 &
 echo $! > revenue-server.pid
 echo "Revenue Server started (PID: $!)"
 
