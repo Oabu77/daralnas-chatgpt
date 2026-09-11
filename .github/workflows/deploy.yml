@@ -25,133 +25,147 @@ on:
 
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 env:
   NODE_VERSION: "18"
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  # OCI repository names must be lowercase.
+  IMAGE_NAME: oabu77/daralnas-chatgpt
 
 jobs:
-  # Test job
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [16.x, 18.x]
-    
+    services:
+      mongodb:
+        image: mongo:6.0
+        ports:
+          - 27017:27017
+
+    env:
+      MONGODB_URI: mongodb://localhost:27017/quranchain_test
+      JWT_SECRET: ci-only-jwt-secret-do-not-use-in-production
+      JWT_EXPIRE: 1h
+      NODE_ENV: test
+
     steps:
-      - uses: actions/checkout@v3
-      
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+
       - name: Install dependencies
         run: npm ci
-      
-      - name: Lint code
-        run: npm run lint --if-present || true
-      
-      - name: Run tests
-        run: npm test --if-present || true
-      
-      - name: Run security audit
-        run: npm audit --audit-level=moderate || true
 
-  # Build job
+      - name: Lint code
+        run: npm run lint --if-present
+
+      - name: Capture dependency audit and enforce recorded ceiling
+        shell: bash
+        run: |
+          set +e
+          npm audit --json > npm-audit.json
+          audit_exit=$?
+          set -e
+          echo "npm audit exit code: ${audit_exit} (expected to be non-zero while issue #84 backlog remains)"
+          node scripts/check-audit-baseline.js npm-audit.json
+
+      - name: Upload dependency audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-${{ github.sha }}
+          path: npm-audit.json
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Run tests
+        run: npm test -- --runInBand
+
   build:
     needs: test
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    
+
     steps:
-      - uses: actions/checkout@v3
-      
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      
+        uses: docker/setup-buildx-action@v3
+
       - name: Build Docker image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: false
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   # Deploy job (production only)
   deploy:
     needs: [test, build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/production' && github.event_name == 'push'
-    
+
     steps:
-      - uses: actions/checkout@v3
-      
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/darcloud_prod
           chmod 600 ~/.ssh/darcloud_prod
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
-      
+
       - name: Download smoke tests
         run: |
           mkdir -p deploy-scripts
           cp production-smoke-tests.sh deploy-scripts/
           chmod +x deploy-scripts/production-smoke-tests.sh
-      
+
       - name: Deploy to production
         run: |
           scp -i ~/.ssh/darcloud_prod -r . ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/darcloud/quranchain-mesh/
           ssh -i ~/.ssh/darcloud_prod ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
+            set -euo pipefail
             cd /var/www/darcloud/quranchain-mesh
-            npm install --production
-            systemctl restart quranchain-app.service || true
-            systemctl restart quranchain-blockchain.service || true
+            npm ci --omit=dev
+            systemctl restart quranchain-app.service
+            systemctl restart quranchain-blockchain.service
           EOF
-      
+
       - name: Run smoke tests on deployed application
         run: |
           ssh -i ~/.ssh/darcloud_prod ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
+            set -euo pipefail
             bash /var/www/darcloud/quranchain-mesh/production-smoke-tests.sh
           EOF
-      
-      - name: Notify deployment success
-        if: success()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '✅ Deployment to production successful!'
-            })
-      
-      - name: Notify deployment failure
-        if: failure()
-        uses: actions/github-script@v6
-        with:
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '❌ Deployment failed. Check logs for details.'
-            })
 
-  # Notification job
+      - name: Record deployment success
+        if: success()
+        run: echo "Deployment to production successful." >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Record deployment failure
+        if: failure()
+        run: echo "Deployment failed. Check the preceding job logs." >> "$GITHUB_STEP_SUMMARY"
+
   notify:
     needs: [deploy]
     runs-on: ubuntu-latest
-    if: always()
-    
+    if: always() && github.event_name == 'push'
+    env:
+      SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+
     steps:
       - name: Send Slack notification
+        if: env.SLACK_WEBHOOK != ''
         uses: 8398a7/action-slack@v3
-        if: always()
         with:
           status: ${{ job.status }}
           text: |
@@ -159,4 +173,8 @@ jobs:
             Repository: ${{ github.repository }}
             Branch: ${{ github.ref }}
             Commit: ${{ github.sha }}
-          webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+          webhook_url: ${{ env.SLACK_WEBHOOK }}
+
+      - name: Record notification status when Slack is not configured
+        if: env.SLACK_WEBHOOK == ''
+        run: echo "Slack notification skipped because SLACK_WEBHOOK is not configured." >> "$GITHUB_STEP_SUMMARY"
