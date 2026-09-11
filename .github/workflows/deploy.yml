@@ -28,7 +28,9 @@ on:
 env:
   NODE_VERSION: "18"
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  # Container repository names must be lowercase even when the GitHub owner
+  # contains uppercase characters.
+  IMAGE_NAME: oabu77/daralnas-chatgpt
 
 jobs:
   # Test job

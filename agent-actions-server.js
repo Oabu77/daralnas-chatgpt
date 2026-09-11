@@ -11,14 +11,14 @@
  *
  * Port 6200  |  30+ endpoints  |  OpenAPI 3.1.0  |  Swagger UI at /docs
  *
- * Usage:
- *   AGENT_API_KEY=your-key node agent-actions-server.js
- *
- * If AGENT_API_KEY is not set, auth is disabled (local dev).
+ * Production requirements:
+ *   AGENT_API_KEY=<strong-random-secret>
+ *   AGENT_ACTIONS_HOST=<explicit bind host when non-loopback access is required>
  */
 
 'use strict';
 
+const crypto     = require('crypto');
 const express    = require('express');
 const helmet     = require('helmet');
 const cors       = require('cors');
@@ -39,6 +39,18 @@ webhooks.init(store, vault);
 // ── App ──────────────────────────────────────────────────────────────────────
 const app  = express();
 const PORT = parseInt(process.env.AGENT_ACTIONS_PORT, 10) || 6200;
+const HOST = (process.env.AGENT_ACTIONS_HOST || '127.0.0.1').trim();
+
+function configuredApiKey() {
+  return String(process.env.AGENT_API_KEY || '').trim();
+}
+
+function safeTokenEqual(actual, expected) {
+  const actualBuffer = Buffer.from(String(actual));
+  const expectedBuffer = Buffer.from(String(expected));
+  if (actualBuffer.length !== expectedBuffer.length) return false;
+  return crypto.timingSafeEqual(actualBuffer, expectedBuffer);
+}
 
 // Security
 app.use(helmet({ contentSecurityPolicy: false }));
@@ -54,18 +66,22 @@ app.use(rateLimit({
 }));
 
 // ── Auth middleware ───────────────────────────────────────────────────────────
-const API_KEY = process.env.AGENT_API_KEY;
-
 app.use('/v1', (req, res, next) => {
-  // Skip auth if no key configured (local dev mode)
-  if (!API_KEY) return next();
+  const apiKey = configuredApiKey();
+  if (!apiKey) {
+    return res.status(503).json({
+      error: 'authentication_not_configured',
+      message: 'Agent Actions API authentication is not configured',
+    });
+  }
 
   const authHeader = req.header('Authorization');
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'unauthorized', message: 'Bearer token required' });
   }
-  const token = authHeader.replace('Bearer ', '');
-  if (token !== API_KEY) {
+
+  const token = authHeader.slice('Bearer '.length);
+  if (!safeTokenEqual(token, apiKey)) {
     return res.status(403).json({ error: 'forbidden', message: 'Invalid API key' });
   }
   next();
@@ -94,7 +110,7 @@ app.get('/openapi.json', (_req, res) => {
   }
 });
 
-// ── Swagger UI ───────────────────────────────────────────────────────────────
+// ── Swagger UI ────────────────────────────────────────────────────────────────
 try {
   const swaggerUi = require('swagger-ui-express');
   const specDoc   = yaml.load(fs.readFileSync(specPath, 'utf8'));
@@ -113,7 +129,7 @@ try {
 app.get('/', (_req, res) => {
   res.json({
     service: 'QuranChain Omar Autonomous Agent Actions API',
-    version: '1.3.0',
+    version: '1.3.1',
     port: PORT,
     docs: `http://localhost:${PORT}/docs`,
     openapi: `http://localhost:${PORT}/openapi.yaml`,
@@ -159,22 +175,24 @@ app.use((_req, res) => {
 // ── Error handler ────────────────────────────────────────────────────────────
 app.use((err, _req, res, _next) => {
   console.error('[AgentActionsServer] error:', err);
-  res.status(500).json({ error: 'internal', message: err.message });
+  res.status(500).json({ error: 'internal', message: 'Internal server error' });
 });
 
 // ── Start ────────────────────────────────────────────────────────────────────
-app.listen(PORT, '0.0.0.0', () => {
-  console.log('');
-  console.log('╔═══════════════════════════════════════════════════════════════╗');
-  console.log('║   QuranChain Omar Autonomous Agent Actions API  v1.3.0       ║');
-  console.log('╠═══════════════════════════════════════════════════════════════╣');
-  console.log(`║   API:     http://localhost:${PORT}/v1                          ║`);
-  console.log(`║   Docs:    http://localhost:${PORT}/docs                        ║`);
-  console.log(`║   Spec:    http://localhost:${PORT}/openapi.yaml                ║`);
-  console.log(`║   Health:  http://localhost:${PORT}/health                      ║`);
-  console.log(`║   Auth:    ${API_KEY ? 'Bearer token ENABLED' : 'DISABLED (local dev)'}                        ║`);
-  console.log('╚═══════════════════════════════════════════════════════════════╝');
-  console.log('');
-});
+if (require.main === module) {
+  app.listen(PORT, HOST, () => {
+    console.log('');
+    console.log('╔═══════════════════════════════════════════════════════════════╗');
+    console.log('║   QuranChain Omar Autonomous Agent Actions API  v1.3.1       ║');
+    console.log('╠═══════════════════════════════════════════════════════════════╣');
+    console.log(`║   API:     http://${HOST}:${PORT}/v1`);
+    console.log(`║   Docs:    http://${HOST}:${PORT}/docs`);
+    console.log(`║   Spec:    http://${HOST}:${PORT}/openapi.yaml`);
+    console.log(`║   Health:  http://${HOST}:${PORT}/health`);
+    console.log(`║   Auth:    ${configuredApiKey() ? 'Bearer token ENABLED' : 'MISCONFIGURED — /v1 FAILS CLOSED'}`);
+    console.log('╚═══════════════════════════════════════════════════════════════╝');
+    console.log('');
+  });
+}
 
 module.exports = app;
