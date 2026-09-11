@@ -1,33 +1,13 @@
 #!/usr/bin/env node
 /**
- * ╔═══════════════════════════════════════════════════════════════════════════╗
- * ║  PROPRIETARY AND CONFIDENTIAL — ALL RIGHTS RESERVED                     ║
- * ║  © 2024-2026 Omar Mohammad Abunadi™ | QuranChain™                       ║
- * ║  Immutable Founder Royalty: 30% · License: See /LICENSE                  ║
- * ╚═══════════════════════════════════════════════════════════════════════════╝
- */
-/**
- * QuranChain MCP HTTP Server — OpenAI-Compatible
- * 
- * Exposes the QuranChain MCP tools over HTTP so OpenAI agents,
- * Claude Desktop, and any MCP-compatible client can connect remotely.
- * 
- * Endpoints:
- *   POST /mcp      — Streamable HTTP transport (OpenAI standard)
- *   GET  /mcp      — SSE stream for Streamable HTTP
- *   DELETE /mcp    — Session termination
- *   GET  /sse      — Legacy SSE transport (Claude Desktop compat)
- *   POST /messages — Legacy message endpoint for SSE transport
- *   GET  /health   — Health check
- * 
- * Port: 3100 (MCP_PORT env override)
- * 
- * Founder: Omar Mohammad Abunadi™
- * FOUNDER_ROYALTY_RATE = 0.30 (IMMUTABLE)
+ * QuranChain MCP HTTP Server — security-hardened transport boundary.
+ *
+ * Protected endpoints require a server-controlled bearer credential before
+ * request parsing, session creation, SSE setup, or backend/tool dispatch.
  */
 
 import express from "express";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID, timingSafeEqual } from "node:crypto";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
@@ -43,30 +23,49 @@ import axios from "axios";
 import keccak256 from "keccak256";
 
 const MCP_PORT = parseInt(process.env.MCP_PORT || "3100", 10);
+const MCP_BIND_HOST = (process.env.MCP_BIND_HOST || "127.0.0.1").trim();
+const MCP_ALLOW_REMOTE = process.env.MCP_ALLOW_REMOTE === "1";
+const MCP_CONTROL_TOKEN = process.env.MCP_CONTROL_TOKEN || "";
+const MCP_ALLOW_AUTH_TOOL = process.env.MCP_ALLOW_AUTH_TOOL === "1";
+const MCP_MAX_BODY_BYTES = 256 * 1024;
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3000/api";
 const BLOCKCHAIN_URL = process.env.BLOCKCHAIN_URL || "http://localhost:3001";
+const MCP_ALLOWED_ORIGINS = new Set(
+  (process.env.MCP_ALLOWED_ORIGINS || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
+);
 
-// ═══════════════════════════════════════════════════════════
-// MCP Server Factory — creates a fresh server instance per session
-// ═══════════════════════════════════════════════════════════
+function isLoopbackHost(host: string): boolean {
+  return host === "127.0.0.1" || host === "::1" || host.toLowerCase() === "localhost";
+}
+
+function hasStrongControlToken(): boolean {
+  return MCP_CONTROL_TOKEN.length >= 32;
+}
+
+function bearerToken(header: string | undefined): string | null {
+  if (!header) return null;
+  const match = header.match(/^Bearer\s+(.+)$/i);
+  return match?.[1]?.trim() || null;
+}
+
+function controlTokenMatches(candidate: string): boolean {
+  if (!hasStrongControlToken() || !candidate) return false;
+  const expected = createHash("sha256").update(MCP_CONTROL_TOKEN).digest();
+  const actual = createHash("sha256").update(candidate).digest();
+  return timingSafeEqual(expected, actual);
+}
 
 function createMcpServer(): Server {
   const server = new Server(
-    {
-      name: "quranchain-mcp-server",
-      version: "2.0.0",
-    },
-    {
-      capabilities: {
-        tools: {},
-        logging: {},
-      },
-    }
+    { name: "quranchain-mcp-server", version: "2.1.0" },
+    { capabilities: { tools: {}, logging: {} } },
   );
 
-  // ── Tool List ──────────────────────────────────────────
-  server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: [
+  server.setRequestHandler(ListToolsRequestSchema, async () => {
+    const tools: any[] = [
       {
         name: "get_verse",
         description: "Retrieve a Quran verse by Surah and Ayah numbers from the QuranChain blockchain",
@@ -84,9 +83,7 @@ function createMcpServer(): Server {
         description: "Get available translations for a specific Quran verse",
         inputSchema: {
           type: "object" as const,
-          properties: {
-            verseId: { type: "string", description: "The verse ID to get translations for" },
-          },
+          properties: { verseId: { type: "string", description: "The verse ID to get translations for" } },
           required: ["verseId"],
         },
       },
@@ -103,18 +100,6 @@ function createMcpServer(): Server {
         },
       },
       {
-        name: "authenticate_user",
-        description: "Authenticate a user against QuranChain and return a JWT token",
-        inputSchema: {
-          type: "object" as const,
-          properties: {
-            email: { type: "string", description: "User email" },
-            password: { type: "string", description: "User password" },
-          },
-          required: ["email", "password"],
-        },
-      },
-      {
         name: "get_blockchain_status",
         description: "Get QuranChain blockchain status — chain height, mesh peers, gas toll, validators, founder royalty",
         inputSchema: { type: "object" as const, properties: {}, required: [] },
@@ -126,7 +111,7 @@ function createMcpServer(): Server {
       },
       {
         name: "get_revenue_status",
-        description: "Get live revenue metrics — gas tolls, enterprise billing, fiat payments, founder royalty (30% IMMUTABLE)",
+        description: "Get live revenue metrics — gas tolls, enterprise billing, fiat payments, founder royalty",
         inputSchema: { type: "object" as const, properties: {}, required: [] },
       },
       {
@@ -134,10 +119,26 @@ function createMcpServer(): Server {
         description: "Get FungiMesh P2P network status — peer count, compute pool, edge nodes, enrolled devices",
         inputSchema: { type: "object" as const, properties: {}, required: [] },
       },
-    ],
-  }));
+    ];
 
-  // ── Tool Execution ─────────────────────────────────────
+    if (MCP_ALLOW_AUTH_TOOL) {
+      tools.push({
+        name: "authenticate_user",
+        description: "Authenticate a user against QuranChain and return the backend response to an authorized MCP operator",
+        inputSchema: {
+          type: "object" as const,
+          properties: {
+            email: { type: "string", description: "User email" },
+            password: { type: "string", description: "User password" },
+          },
+          required: ["email", "password"],
+        },
+      });
+    }
+
+    return { tools };
+  });
+
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { name, arguments: args } = request.params;
 
@@ -147,23 +148,22 @@ function createMcpServer(): Server {
           const r = await axios.get(`${API_BASE_URL}/verses/surah/${args!.surahNumber}/ayah/${args!.verseNumber}`);
           return { content: [{ type: "text", text: JSON.stringify(r.data.data ?? r.data, null, 2) }] };
         }
-
         case "get_translations": {
           const r = await axios.get(`${API_BASE_URL}/translations/verse/${args!.verseId}`);
           return { content: [{ type: "text", text: JSON.stringify(r.data.data ?? r.data, null, 2) }] };
         }
-
         case "verify_hash": {
           const computed = "0x" + keccak256(JSON.stringify(args!.data)).toString("hex");
           const isValid = computed === args!.hash;
           return { content: [{ type: "text", text: JSON.stringify({ isValid, computedHash: computed }, null, 2) }] };
         }
-
         case "authenticate_user": {
+          if (!MCP_ALLOW_AUTH_TOOL) {
+            throw new McpError(ErrorCode.MethodNotFound, "Unknown tool: authenticate_user");
+          }
           const r = await axios.post(`${API_BASE_URL}/auth/login`, { email: args!.email, password: args!.password });
           return { content: [{ type: "text", text: JSON.stringify(r.data, null, 2) }] };
         }
-
         case "get_blockchain_status": {
           try {
             const r = await axios.get(`${BLOCKCHAIN_URL}/health`, { timeout: 5000 });
@@ -182,18 +182,22 @@ function createMcpServer(): Server {
                 }, null, 2),
               }],
             };
-          } catch (e: any) {
-            return { content: [{ type: "text", text: JSON.stringify({ error: e.message, hint: "Blockchain server may be down on port 3001" }) }] };
+          } catch {
+            return { content: [{ type: "text", text: JSON.stringify({ error: "Blockchain status unavailable" }) }] };
           }
         }
-
         case "get_darcloud_services": {
           const services: Record<string, number> = {
-            web_hosting: 8080, domain_manager: 8081, cdn_distribution: 8083,
-            mesh_deployer: 8084, cloud_storage: 8086, blockchain_storage: 8087,
-            ssl_certificates: 8089, personal_cloud: 8091,
+            web_hosting: 8080,
+            domain_manager: 8081,
+            cdn_distribution: 8083,
+            mesh_deployer: 8084,
+            cloud_storage: 8086,
+            blockchain_storage: 8087,
+            ssl_certificates: 8089,
+            personal_cloud: 8091,
           };
-          const results: Record<string, any> = {};
+          const results: Record<string, unknown> = {};
           for (const [svc, port] of Object.entries(services)) {
             try {
               const r = await axios.get(`http://localhost:${port}/health`, { timeout: 2000 });
@@ -204,7 +208,6 @@ function createMcpServer(): Server {
           }
           return { content: [{ type: "text", text: JSON.stringify(results, null, 2) }] };
         }
-
         case "get_revenue_status": {
           try {
             const r = await axios.get(`${BLOCKCHAIN_URL}/health`, { timeout: 5000 });
@@ -232,11 +235,10 @@ function createMcpServer(): Server {
                 }, null, 2),
               }],
             };
-          } catch (e: any) {
-            return { content: [{ type: "text", text: JSON.stringify({ error: e.message }) }] };
+          } catch {
+            return { content: [{ type: "text", text: JSON.stringify({ error: "Revenue status unavailable" }) }] };
           }
         }
-
         case "get_fungi_mesh_status": {
           try {
             const r = await axios.get(`${BLOCKCHAIN_URL}/health`, { timeout: 5000 });
@@ -252,62 +254,83 @@ function createMcpServer(): Server {
                 }, null, 2),
               }],
             };
-          } catch (e: any) {
-            return { content: [{ type: "text", text: JSON.stringify({ error: e.message }) }] };
+          } catch {
+            return { content: [{ type: "text", text: JSON.stringify({ error: "FungiMesh status unavailable" }) }] };
           }
         }
-
         default:
           throw new McpError(ErrorCode.MethodNotFound, `Unknown tool: ${name}`);
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       if (error instanceof McpError) throw error;
-      throw new McpError(ErrorCode.InternalError, `Tool execution failed: ${error.message}`);
+      throw new McpError(ErrorCode.InternalError, "Tool execution failed");
     }
   });
 
   return server;
 }
 
-
-// ═══════════════════════════════════════════════════════════
-// Express App — Dual transport (StreamableHTTP + SSE)
-// ═══════════════════════════════════════════════════════════
-
 const app = express();
-app.use(express.json());
+app.disable("x-powered-by");
 
-// Allow cross-origin for OpenAI / browser clients
-app.use((_req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, mcp-session-id, Last-Event-ID");
-  res.header("Access-Control-Expose-Headers", "mcp-session-id");
+app.use((req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("Referrer-Policy", "no-referrer");
+
+  const origin = req.headers.origin;
+  if (origin && MCP_ALLOWED_ORIGINS.has(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Vary", "Origin");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, mcp-session-id, Last-Event-ID");
+    res.setHeader("Access-Control-Expose-Headers", "mcp-session-id");
+  }
+
+  if (req.method === "OPTIONS") {
+    if (!origin || !MCP_ALLOWED_ORIGINS.has(origin)) {
+      res.sendStatus(403);
+      return;
+    }
+    res.sendStatus(204);
+    return;
+  }
+
   next();
 });
-app.options("/{*path}", (_req, res) => res.sendStatus(204));
 
-// Transport storage
-const transports: Record<string, StreamableHTTPServerTransport | SSEServerTransport> = {};
-
-// ── Health Check ─────────────────────────────────────────
 app.get("/health", (_req, res) => {
-  res.json({
-    status: "healthy",
-    server: "quranchain-mcp-server",
-    version: "2.0.0",
-    transports: ["streamable-http", "sse"],
-    tools: 8,
-    activeSessions: Object.keys(transports).length,
-    founder: "Omar Mohammad Abunadi™",
-    royalty: "30% IMMUTABLE",
-  });
+  res.json({ status: "healthy", server: "quranchain-mcp-server", version: "2.1.0" });
 });
 
-// ── Streamable HTTP Transport (POST/GET/DELETE /mcp) ─────
-app.all("/mcp", async (req, res) => {
-  console.log(`[MCP] ${req.method} /mcp`);
+app.use((req, res, next) => {
+  if (!hasStrongControlToken()) {
+    res.status(503).json({ error: "MCP authentication is not configured" });
+    return;
+  }
 
+  const presented = bearerToken(req.headers.authorization);
+  if (!presented) {
+    res.setHeader("WWW-Authenticate", "Bearer");
+    res.status(401).json({ error: "Authentication required" });
+    return;
+  }
+
+  if (!controlTokenMatches(presented)) {
+    res.status(403).json({ error: "Forbidden" });
+    return;
+  }
+
+  next();
+});
+
+// Authentication is intentionally evaluated before body parsing.
+app.use(express.json({ limit: MCP_MAX_BODY_BYTES }));
+
+const transports: Record<string, StreamableHTTPServerTransport | SSEServerTransport> = {};
+
+app.all("/mcp", async (req, res) => {
   try {
     const sessionId = req.headers["mcp-session-id"] as string | undefined;
 
@@ -321,55 +344,43 @@ app.all("/mcp", async (req, res) => {
       return;
     }
 
-    // New session — only accept POST with initialize
-    if (req.method === "POST") {
-      const body = req.body;
-      if (isInitializeRequest(body)) {
-        const eventStore = new InMemoryEventStore();
-        const transport = new StreamableHTTPServerTransport({
-          sessionIdGenerator: () => randomUUID(),
-          eventStore,
-          onsessioninitialized: (sessionId) => {
-            transports[sessionId] = transport;
-            console.log(`[MCP] New StreamableHTTP session: ${sessionId}`);
-          },
-        });
+    if (req.method === "POST" && isInitializeRequest(req.body)) {
+      const eventStore = new InMemoryEventStore();
+      const transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => randomUUID(),
+        eventStore,
+        onsessioninitialized: (newSessionId) => {
+          transports[newSessionId] = transport;
+          console.log(`[MCP] StreamableHTTP session initialized: ${newSessionId}`);
+        },
+      });
 
-        transport.onclose = () => {
-          const sid = Object.keys(transports).find((k) => transports[k] === transport);
-          if (sid) {
-            delete transports[sid];
-            console.log(`[MCP] Session closed: ${sid}`);
-          }
-        };
+      transport.onclose = () => {
+        const sid = Object.keys(transports).find((key) => transports[key] === transport);
+        if (sid) delete transports[sid];
+      };
 
-        const server = createMcpServer();
-        await server.connect(transport);
-        await transport.handleRequest(req, res);
-        return;
-      }
+      const server = createMcpServer();
+      await server.connect(transport);
+      await transport.handleRequest(req, res);
+      return;
     }
 
-    // No valid session
-    res.status(400).json({ jsonrpc: "2.0", error: { code: -32000, message: "Bad Request: No valid session. Send an initialize request first." }, id: null });
-  } catch (error) {
-    console.error("[MCP] Error:", error);
+    res.status(400).json({ jsonrpc: "2.0", error: { code: -32000, message: "Bad Request" }, id: null });
+  } catch {
     if (!res.headersSent) {
       res.status(500).json({ jsonrpc: "2.0", error: { code: -32603, message: "Internal server error" }, id: null });
     }
   }
 });
 
-// ── Legacy SSE Transport (GET /sse + POST /messages) ─────
-app.get("/sse", async (req, res) => {
-  console.log("[MCP] Legacy SSE connection");
+app.get("/sse", async (_req, res) => {
   const server = createMcpServer();
   const transport = new SSEServerTransport("/messages", res);
   transports[transport.sessionId] = transport;
-  
+
   res.on("close", () => {
     delete transports[transport.sessionId];
-    console.log(`[MCP] SSE session closed: ${transport.sessionId}`);
   });
 
   await server.connect(transport);
@@ -386,28 +397,31 @@ app.post("/messages", async (req, res) => {
   await transport.handlePostMessage(req, res);
 });
 
+app.use((error: any, _req: express.Request, res: express.Response, next: express.NextFunction) => {
+  if (error?.type === "entity.too.large") {
+    res.status(413).json({ error: "Request body too large" });
+    return;
+  }
+  if (error instanceof SyntaxError) {
+    res.status(400).json({ error: "Invalid JSON" });
+    return;
+  }
+  next(error);
+});
 
-// ═══════════════════════════════════════════════════════════
-// Start
-// ═══════════════════════════════════════════════════════════
+if (!isLoopbackHost(MCP_BIND_HOST) && (!MCP_ALLOW_REMOTE || !hasStrongControlToken())) {
+  console.error("Refusing non-loopback MCP binding without MCP_ALLOW_REMOTE=1 and a strong MCP_CONTROL_TOKEN");
+  process.exit(1);
+}
 
-app.listen(MCP_PORT, () => {
-  console.log("═══════════════════════════════════════════════════════════");
-  console.log(" QuranChain MCP Server v2.0.0 — OpenAI Compatible");
-  console.log(` Listening on http://localhost:${MCP_PORT}`);
-  console.log(` Streamable HTTP: POST/GET/DELETE http://localhost:${MCP_PORT}/mcp`);
-  console.log(` Legacy SSE:      GET http://localhost:${MCP_PORT}/sse`);
-  console.log(` Health:          GET http://localhost:${MCP_PORT}/health`);
-  console.log(` Tools: 8 (get_verse, get_translations, verify_hash, authenticate_user,`);
-  console.log(`         get_blockchain_status, get_darcloud_services, get_revenue_status, get_fungi_mesh_status)`);
-  console.log(` API Backend: ${API_BASE_URL}`);
-  console.log(` Blockchain: ${BLOCKCHAIN_URL}`);
-  console.log(" Founder: Omar Mohammad Abunadi™ | Royalty: 30% IMMUTABLE");
-  console.log("═══════════════════════════════════════════════════════════");
+app.listen(MCP_PORT, MCP_BIND_HOST, () => {
+  console.log(`QuranChain MCP Server v2.1.0 listening on http://${MCP_BIND_HOST}:${MCP_PORT}`);
+  console.log(`Remote binding: ${isLoopbackHost(MCP_BIND_HOST) ? "disabled" : "explicitly enabled"}`);
+  console.log(`Browser origins configured: ${MCP_ALLOWED_ORIGINS.size}`);
+  console.log(`authenticate_user tool: ${MCP_ALLOW_AUTH_TOOL ? "explicitly enabled" : "disabled"}`);
 });
 
 process.on("SIGINT", async () => {
-  console.log("\nShutting down MCP server...");
   for (const sid of Object.keys(transports)) {
     try {
       await transports[sid].close?.();
