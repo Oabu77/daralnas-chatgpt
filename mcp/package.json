@@ -10,7 +10,8 @@
     "start:http": "node dist/http-server.js",
     "start:chatgpt": "node dist/chatgpt-app.js",
     "dev": "ts-node src/index.ts",
-    "dev:http": "ts-node src/http-server.ts"
+    "dev:http": "ts-node src/http-server.ts",
+    "test:security:http": "node security/http-security-guard.mjs"
   },
   "dependencies": {
     "@modelcontextprotocol/ext-apps": "^1.0.1",
