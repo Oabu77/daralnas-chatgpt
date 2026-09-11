@@ -35,7 +35,22 @@ jobs:
         run: npm ci
 
       - name: Compile hardened MCP HTTP entrypoint
-        run: npx tsc --noEmit --strict --target ES2020 --module ES2020 --moduleResolution bundler --esModuleInterop --skipLibCheck src/http-server.ts
+        run: |
+          set +e
+          npx tsc --noEmit --strict --target ES2020 --module ES2020 --moduleResolution bundler --esModuleInterop --skipLibCheck src/http-server.ts > tsc-output.txt 2>&1
+          status=$?
+          cat tsc-output.txt
+          exit $status
 
       - name: Run MCP HTTP security guard
+        if: always()
         run: npm run test:security:http
+
+      - name: Upload compiler diagnostics
+        if: always()
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: mcp-http-tsc-diagnostics
+          path: mcp/tsc-output.txt
+          if-no-files-found: error
+          retention-days: 1
