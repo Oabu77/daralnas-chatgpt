@@ -14,6 +14,7 @@ const path = require('path');
 const connectDB = require('./config/database');
 const winston = require('./config/logger');
 const errorHandler = require('./middleware/errorHandler');
+const { auth, adminAuth } = require('./middleware/auth');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -61,7 +62,10 @@ app.use('/api/verses', verseRoutes);
 app.use('/api/translations', translationRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/subscriptions', subscriptionRoutes);
-app.use('/api/cards', cardRoutes);
+// Stripe Issuing is a privileged financial control plane. Require a valid
+// active user and an explicit server-controlled administrator role before the
+// legacy card router can inspect caller-supplied provider IDs or call Stripe.
+app.use('/api/cards', auth, adminAuth, cardRoutes);
 
 // Payment Links API — serves the generated payment links for the storefront
 app.get('/api/payment-links', (req, res) => {
