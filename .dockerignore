@@ -114,3 +114,8 @@ coverage/
 
 # Memory bank (if not needed in container)
 memory-bank/
+
+# Keep private runtime wallet and vault material out of Docker build contexts.
+data/wallets/
+data/agent-actions/.vault-key
+data/agent-actions/secrets.enc.json
