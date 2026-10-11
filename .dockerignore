@@ -114,3 +114,7 @@ coverage/
 
 # Memory bank (if not needed in container)
 memory-bank/
+# Prevent local signing identities and vault state from entering Docker build context
+data/wallets/
+data/agent-actions/.vault-key
+data/agent-actions/secrets.enc.json
