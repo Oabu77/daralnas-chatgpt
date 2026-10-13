@@ -87,6 +87,12 @@ const WIDGET_JS = `
   const root = document.getElementById('qc-root');
   root.innerHTML = '<div class="qc-loading">\\u23F3 Loading QuranChain data...</div>';
 
+  function escapeHtml(value) {
+    return String(value ?? '').replace(/[&<>"']/g, function (char) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char];
+    });
+  }
+
   function renderDashboard(data) {
     if (!data) { root.innerHTML = '<div class="qc-loading">No data received</div>'; return; }
     let html = '';
@@ -101,19 +107,19 @@ const WIDGET_JS = `
     // Metric cards
     if (data.chain_height || data.mesh_peers || data.gas_toll_collected || data.agent_fleet) {
       html += '<div class="qc-grid">';
-      if (data.chain_height != null) html += '<div class="qc-card"><div class="label">Chain Height</div><div class="value">' + data.chain_height + '</div><div class="sub">Nomad Mainnet</div></div>';
-      if (data.mesh_peers != null) html += '<div class="qc-card"><div class="label">Mesh Peers</div><div class="value">' + data.mesh_peers + '</div><div class="sub">FungiMesh P2P</div></div>';
+      if (data.chain_height != null) html += '<div class="qc-card"><div class="label">Chain Height</div><div class="value">' + escapeHtml(data.chain_height) + '</div><div class="sub">Nomad Mainnet</div></div>';
+      if (data.mesh_peers != null) html += '<div class="qc-card"><div class="label">Mesh Peers</div><div class="value">' + escapeHtml(data.mesh_peers) + '</div><div class="sub">FungiMesh P2P</div></div>';
       if (data.gas_toll_collected != null) html += '<div class="qc-card"><div class="label">Gas Toll</div><div class="value">$' + Number(data.gas_toll_collected).toLocaleString() + '</div><div class="sub">47+ chains</div></div>';
-      if (data.agent_fleet != null) html += '<div class="qc-card"><div class="label">AI Agents</div><div class="value">' + data.agent_fleet + '</div><div class="sub">Active workforce</div></div>';
+      if (data.agent_fleet != null) html += '<div class="qc-card"><div class="label">AI Agents</div><div class="value">' + escapeHtml(data.agent_fleet) + '</div><div class="sub">Active workforce</div></div>';
       html += '</div>';
     }
 
     // Verse display
     if (data.verse) {
       html += '<div class="qc-verse">';
-      if (data.verse.arabic) html += '<div class="arabic">' + data.verse.arabic + '</div>';
-      if (data.verse.translation) html += '<div class="translation">' + data.verse.translation + '</div>';
-      if (data.verse.surah && data.verse.ayah) html += '<div class="ref">Surah ' + data.verse.surah + ', Ayah ' + data.verse.ayah + '</div>';
+      if (data.verse.arabic) html += '<div class="arabic">' + escapeHtml(data.verse.arabic) + '</div>';
+      if (data.verse.translation) html += '<div class="translation">' + escapeHtml(data.verse.translation) + '</div>';
+      if (data.verse.surah && data.verse.ayah) html += '<div class="ref">Surah ' + escapeHtml(data.verse.surah) + ', Ayah ' + escapeHtml(data.verse.ayah) + '</div>';
       html += '</div>';
     }
 
@@ -124,8 +130,8 @@ const WIDGET_JS = `
         const up = info.healthy;
         html += '<div class="qc-svc">';
         html += '<div class="dot ' + (up ? 'up' : 'down') + '"></div>';
-        html += '<span class="name">' + name.replace(/_/g, ' ') + '</span>';
-        html += '<span class="port">:' + (info.port || '?') + '</span>';
+        html += '<span class="name">' + escapeHtml(name.replace(/_/g, ' ')) + '</span>';
+        html += '<span class="port">:' + escapeHtml(info.port || '?') + '</span>';
         html += '</div>';
       }
       html += '</div>';
@@ -139,7 +145,7 @@ const WIDGET_JS = `
       let i = 0;
       for (const [key, val] of Object.entries(data.revenue_distribution)) {
         const pct = (Number(val) * 100).toFixed(0);
-        html += '<div class="qc-rev-bar"><span class="pct">' + pct + '%</span><div class="bar" style="width:' + pct + '%;background:' + colors[i % colors.length] + '"></div><span class="who">' + key.replace(/_/g, ' ') + '</span></div>';
+        html += '<div class="qc-rev-bar"><span class="pct">' + pct + '%</span><div class="bar" style="width:' + pct + '%;background:' + colors[i % colors.length] + '"></div><span class="who">' + escapeHtml(key.replace(/_/g, ' ')) + '</span></div>';
         i++;
       }
       html += '</div></div>';
@@ -147,7 +153,7 @@ const WIDGET_JS = `
 
     // Message
     if (data.message) {
-      html += '<div style="margin-top:12px;padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;font-size:14px;color:#10b981;">' + data.message + '</div>';
+      html += '<div style="margin-top:12px;padding:12px;background:rgba(16,185,129,0.08);border-radius:8px;font-size:14px;color:#10b981;">' + escapeHtml(data.message) + '</div>';
     }
 
     // Footer
